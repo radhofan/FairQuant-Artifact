@@ -1,11 +1,16 @@
-`models` contains the .nnet and .h5 files used to represent DNNs to verify (for FairQuant and Fairify, respectively).
+`models` contains the [.h5](https://www.tensorflow.org/guide) and [.nnet](https://github.com/sisl/NNet) files used to represent DNNs.
 
-- `adult`, `bank`, and `german` contain the TensorFlow networks, originally provided by Fairify in .h5 files which we turn into .nnet files. 
-- `compas` contain our newly trained TensorFlow networks in .h5 files which we turn into .nnet files.
-    - `compas-7` files are compressed as .tar.gz files, so please extract them by running the following command:
-    ```
-    cd compas
-    tar -xzvf compas/compas-7.h5.tar.gz 
-    tar -xzvf compas/compas-7.nnet.tar.gz
-    ```
+.h5 files are used to verify for Fairify, and .nnet files are used to verify for FairQuant.
+All the networks are trained in Tensorflow as .h5 files and were subsequently converted into .nnet files.
+
+- `adult`, `bank`, and `german` contain the TensorFlow .h5 networks provided by Fairify. 
+- `compas` contain our newly trained TensorFlow .h5 networks.
 - `example.nnet` is the toy network presented in the paper.
+
+
+`compas-7` files are compressed as .tar.gz files, so please extract them by running the following command:
+```shell
+cd compas
+tar -xzf compas-7.h5.tar.gz 
+tar -xzf compas-7.nnet.tar.gz
+```

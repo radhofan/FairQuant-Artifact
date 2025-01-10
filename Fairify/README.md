@@ -1,8 +1,8 @@
 # Fairify
 
-This repository contains the source code, benchmark models, and datasets for the paper - **"Fairify: Fairness Verification of Neural Networks"**, appeared in ICSE 2023 at Melbourne, Australia.
+The original repository can be found [here](https://github.com/sumonbis/Fairify).
 
-Original repository can be found [here](https://github.com/sumonbis/Fairify)
+This repository contains the source code, benchmark models, and datasets for the paper - **"Fairify: Fairness Verification of Neural Networks"**, appeared in ICSE 2023 at Melbourne, Australia.
 
 ### Authors
 * Sumon Biswas, Carnegie Mellon University (sumonb@cs.cmu.edu)
@@ -15,20 +15,6 @@ Original repository can be found [here](https://github.com/sumonbis/Fairify)
 
 ![The problem tackled by Fairify](./problem.jpg)
 
-## Index (modified for FairQuant)
-> 1. [Models](../models/)
-> 2. Datasets
-  >> * [German Credit (GC)](../data/german)
-  >> * [Adult Census (AC)](../data/adult)
-  >> * [Bank Marketing (BM)](../data/bank)
-  >> * [Compas Recidivism](../data/compas)
-> 3. Verification source code
-  >> * [Verify models](./src/)
-  >> * [Utilities](./utils/)
-
-## Installation
-
-To run the tool, please refer to the [installation file](./INSTALL.md) for detailed instructions. 
 
 ### Cite the paper as
 ```

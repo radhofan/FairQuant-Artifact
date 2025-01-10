@@ -1,9 +1,6 @@
 CC=gcc
-INSTALL_PREFIX=$(HOME)/OpenBLAS
-# or wherever you installed OpenBLAS
-
-CFLAGS = -I $(INSTALL_PREFIX)/include
-LDFLAGS = -L $(INSTALL_PREFIX)/lib -lopenblas -lm
+CFLAGS = -I include
+LDFLAGS = -L lib -lopenblas -lm
 
 all: network_test 
 all: CFLAGS += -O3
