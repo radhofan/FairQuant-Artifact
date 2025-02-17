@@ -99,6 +99,14 @@ python -m pip install -r requirements.txt
 ## Run the tool
 If you are using the VM or have installed everything locally, you can follow the instructions below to run the two tools.
 
+Before doing so, please note that the `compas-7` network files are compressed as .tar.gz files, so please extract them by running the following command:
+```shell
+cd models/compas
+tar -xzf compas-7.h5.tar.gz  # h5 for Fairify
+tar -xzf compas-7.nnet.tar.gz  # nnet for FairQuant 
+```
+
+
 ### FairQuant
 First, set up the paths so the compiler and runtime can find the headers and libraries:
 
