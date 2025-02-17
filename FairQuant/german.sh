@@ -17,7 +17,7 @@ else
     echo "Error: invalid PA provided for german: age or sex"
     exit 1
 fi
-s
+
 for ((i=1; i<=5; i++)); do # for each model 1 to 7
     echo -e "\n-----Running network GC-$i on $PA-----"
     ./network_test "../models/german/GC-$i.nnet" "$idx"
