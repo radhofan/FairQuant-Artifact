@@ -149,9 +149,20 @@ cd src/
 ./fairify.sh [dataset] # 'AC' for Adult, 'GC' for German, 'BM' for Bank, 'compas' for Compas
 ```
 
+As an aside, `Verify-compas.py` will only run `compas-1.h5` by default because it does not scale to other larger models. You can change this by setting `onlyRunFirstModel` variable to False.
+
 The results are saved under `Fairify/src/[dataset_name]/res` folder as .csv files.
+These are the raw results from the Fairify tool.
+
+To interpret the results in the format of Table 2, please run `interpret_fairify.py` file in the `Fairify/` folder.
+You can run it as follows: 
+```shell
+python3 interpret_fairify.py [dataset] [csv_file]
+```
+It will output the Certified, Falsified, Undecided rates as well as the number of counterexamples.
 
 Note that Fairify's original implementation randomly shuffles the order of partitions prior to verification step, causing the reproduced results to vary marginally with each run and may differ slightly from the Fairify results in Table 2 of the paper.  
+Furthermore, the tool continues the verification for a given partition if it started before the timeout is called; for the comparison in the paper, we manually interrupt its verification after the 30 minute timeout for fair comparison.
 
 
 ## Index
