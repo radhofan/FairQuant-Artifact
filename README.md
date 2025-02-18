@@ -131,7 +131,9 @@ Finally, run the desired verification on any of the four datasets using their co
 ./german.sh [PA] # 'age' (in paper) or 'sex'
 ./compas.sh [PA] # 'race' (in paper) or 'sex' / 'age'
 ```
-Running these scripts will reproduce the FairQuant results in Table 2 of the paper.  They are also saved under `FairQuant/res` folder as .txt files.
+The results of running these scripts are also saved under `FairQuant/res` folder as .txt files.
+Specifically, they report the time the verification problem took, number of counterexamples found, as well as final Certified, Falsified, and Undecided rates.
+These are the data reported as FairQuant results in Table 2 of the paper.
 
 
 ### Fairify (for comparison)
@@ -147,7 +149,9 @@ cd src/
 ./fairify.sh [dataset] # 'AC' for Adult, 'GC' for German, 'BM' for Bank, 'compas' for Compas
 ```
 
-Note that Fairify's original implementation randomly shuffles the order of partitions prior to verification step, causing the reproduced results to vary marginally with each run and may differ slightly from the Fairify results in Table 2 of the paper.  The results are saved under `Fairify/src/[dataset_name]/res` folder as .csv files.
+The results are saved under `Fairify/src/[dataset_name]/res` folder as .csv files.
+
+Note that Fairify's original implementation randomly shuffles the order of partitions prior to verification step, causing the reproduced results to vary marginally with each run and may differ slightly from the Fairify results in Table 2 of the paper.  
 
 
 ## Index
