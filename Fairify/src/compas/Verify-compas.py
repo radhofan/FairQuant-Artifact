@@ -3,6 +3,8 @@
 import sys
 sys.path.append('../../')
 
+onlyRunFirstModel = True
+
 from random import shuffle
 from z3 import *
 from utils.input_partition import *
@@ -51,8 +53,12 @@ shuffle(p_list)
 
 model_files = os.listdir(model_dir)
 for model_file in model_files:
-    if not model_file.endswith('.h5'):
-        continue;
+    if onlyRunFirstModel:
+        if not model_file.endswith('1.h5'): # only run compas-1.h5
+            continue
+    else:
+        if not model_file.endswith('.h5'): # try running all models - will take a long time or cause memory / timeout issues
+            continue
     print('==================  STARTING MODEL ' + model_file)
     model_name = model_file.split('.')[0]
     

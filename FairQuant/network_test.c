@@ -388,8 +388,8 @@ int main( int argc, char *argv[])
     rateUncer = (double) uncer_volume / (double) nnet->global_volume * 100;           // region for which we have not looked yet
     
     char buffer1[256];
-    snprintf(buffer1, sizeof(buffer1), "%.2f sec | %d solved subps | %llu advs\n",
-             time_spent, subproblem_total - subproblem_remaining, num_adv);
+    snprintf(buffer1, sizeof(buffer1), "Took %.2f seconds | %d solved subproblems | %llu #Cex\n",
+             time_spent, subproblem_total - subproblem_remaining, fals_volume + num_adv);
 
     char buffer2[256];
     snprintf(buffer2, sizeof(buffer2), "cer_rate: %.2f%%, fal_rate: %.2f%%, und_rate: %.2f%%\n",
