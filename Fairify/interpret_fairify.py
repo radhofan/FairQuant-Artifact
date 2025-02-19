@@ -36,6 +36,10 @@ elif dataset == "compas":
 else:
     raise ValueError("Invalid dataset")
 
+# Total time taken by the tool, sum up the "Total-Time" column
+total_seconds = data["Total-Time"].sum()
+print("Total time = {:.2f} (in seconds), or {:.2f} (in minutes)".format(total_seconds, total_seconds/60))
+
 # UNSAT partition means that the entire partition is Certified
 # We report the percentage of partitions that are Certified
 print("Cer (%) = {:.2f}".format(UNSAT_count/total_partitions*100))

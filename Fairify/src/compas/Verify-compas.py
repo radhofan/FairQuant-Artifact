@@ -22,7 +22,7 @@ single_input = X_test[0].reshape(1, num_features)
 
 # In[]
 model_dir = '../../../models/compas/'
-result_dir = './res/sex-'
+result_dir = './res/race-'
 PARTITION_THRESHOLD = 2
 
 SOFT_TIMEOUT = 100
@@ -40,7 +40,7 @@ range_dict['Female'] = [0, 1]
 range_dict['Misdemeanor'] = [0, 1]
 
 A = range_dict.keys()
-PA = ['Female'] # 'Age', 'Race', or 'Female'
+PA = ['Race'] # 'Age', 'Race', or 'Female'
 
 sim_size = 1 * 1000
 
