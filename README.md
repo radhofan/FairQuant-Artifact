@@ -5,7 +5,9 @@ This repository contains the source code, benchmark models, and datasets for the
 
 The PDF can be found at: https://arxiv.org/abs/2409.03220
 
-This artifact can also be found in Zenodo: [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.14629828.svg)](https://doi.org/10.5281/zenodo.14629828).
+This artifact can also be found in Zenodo: [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.14890262.svg)](https://doi.org/10.5281/zenodo.14890262)
+
+
 
 
 ### Authors
@@ -185,7 +187,7 @@ The source code for our tool FairQuant is adapted from the following projects:
 
 **Available**:
 Our artifact is publicly shared in the GitHub repository: https://github.com/briankim113/FairQuant-Artifact. 
-Additionally, we provide an archival release on Zenodo: [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.14629828.svg)](https://doi.org/10.5281/zenodo.14629828).
+Additionally, we provide an archival release on Zenodo: [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.14890262.svg)](https://doi.org/10.5281/zenodo.14890262).
 
 **Functional and Reusable**:
 Our artifact contains both the software components and the data with full functionality to reproduce the results from the associated paper. This includes the source code for FairQuant, the code we used for Fairify for comparison, the four datasets used for training, and the neural network models used for evaluation. We further release both the original h5 versions and the nnet-translated versions of the network models, for the different tool requirements.
