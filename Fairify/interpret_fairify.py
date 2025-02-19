@@ -32,7 +32,7 @@ elif dataset == "AC":
     total_partitions = 16000
 elif dataset == "compas":
     total_partitions = 20
-    total_individuals = 2496 # race (in paper), sex, or age (2*2*2*2*2*2*39)
+    total_pairs = 1248 # race (in paper), sex, or age (2*2*2*2*2*39)
 else:
     raise ValueError("Invalid dataset")
 
@@ -60,4 +60,4 @@ print("#Cex = {}".format(SAT_count))
 if dataset != "compas":
     print("Fals (%) = 0")
 else:
-    print("Fals (%) = {:.2f}".format(SAT_count/total_individuals*100))
+    print("Fals (%) = {:.2f}".format(SAT_count/total_pairs*100))
