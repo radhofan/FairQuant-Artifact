@@ -18,7 +18,7 @@ This artifact can also be found in Zenodo: [![DOI](https://zenodo.org/badge/DOI/
 These instructions assume that you are running Ubuntu 20.04.
 
 ### Using the VM
-For convenience, we provide a VirtualBox VM with FairQuant and Fairify working out-of-the-box [here](https://drive.google.com/file/d/1Qn2rx5Tzp5s7lIwhZ5sRSybgMXtiqSBK/view?usp=sharing).
+For convenience, we provide a VirtualBox VM with FairQuant and Fairify working out-of-the-box [here](https://drive.google.com/file/d/1tmTgk5DYLvVjayTvDOyDlGNj9mntyE3a/view?usp=drive_link).
 To use this VM, please download the [VirtualBox](https://www.virtualbox.org/) (the version we used is 7.0).
 Once you open the application, you can click "Add" and select the .vbox file inside the folder, which should open up the VM. The VM login username and password are both "fairquant".
 The contents of this repo can be found under `/home/fairquant/FairQuant-Artifact/` inside the VM.
