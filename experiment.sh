@@ -6,9 +6,8 @@ export OPENBLAS_SRC="$WORK_DIR/OpenBLAS-0.3.6"
 export OPENBLAS_INSTALL="$WORK_DIR/OpenBLAS"
 export FAIRQUANT_DIR="$WORK_DIR/FairQuant-Artifact"
 
-# Clean up any previous failed attempts
+# Clean up any previous failed OpenBLAS builds
 rm -rf "$OPENBLAS_SRC" "$OPENBLAS_INSTALL" OpenBLAS-0.3.6.tar.gz
-rm -rf "$FAIRQUANT_DIR"
 
 # Create install dir
 mkdir -p "$OPENBLAS_INSTALL"
@@ -51,12 +50,7 @@ export C_INCLUDE_PATH="$OPENBLAS_INSTALL/include:$C_INCLUDE_PATH"
 export LIBRARY_PATH="$OPENBLAS_INSTALL/lib:$LIBRARY_PATH"
 export LD_LIBRARY_PATH="$OPENBLAS_INSTALL/lib:$LD_LIBRARY_PATH"
 
-# Clone FairQuant-Artifact repo
-echo "Cloning FairQuant-Artifact..."
-cd "$WORK_DIR"
-git clone https://github.com/username/FairQuant-Artifact.git  "$FAIRQUANT_DIR"
-
-# Compile FairQuant
+# Compile FairQuant (we assume FairQuant-Artifact is already there)
 echo "Compiling FairQuant..."
 cd "$FAIRQUANT_DIR/FairQuant" || exit 1
 make clean
