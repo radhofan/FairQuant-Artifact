@@ -1,4 +1,8 @@
 #!/usr/bin/env bash
+set -x  # Show each command as it runs
+set -e  # Exit immediately if any command fails
+
+echo "Current directory: $(pwd)"
 
 # Download make and gcc
 sudo apt update
@@ -9,31 +13,38 @@ gcc --version
 make --version
 
 # Download the tar file
-wget https://github.com/OpenMathLib/OpenBLAS/releases/download/v0.3.6/OpenBLAS-0.3.6.tar.gz
+wget https://github.com/OpenMathLib/OpenBLAS/releases/download/v0.3.6/OpenBLAS-0.3.6.tar.gz   
 tar -xzf OpenBLAS-0.3.6.tar.gz
 
 # Set up installation path
-export INSTALL_PREFIX=$HOME/OpenBLAS # or wherever you want to install OpenBLAS
-mkdir $INSTALL_PREFIX
+export INSTALL_PREFIX=$HOME/OpenBLAS
+mkdir -p "$INSTALL_PREFIX"
 
-# Install
+# Install OpenBLAS
 cd OpenBLAS-0.3.6
 make
-make PREFIX=$INSTALL_PREFIX install
+make PREFIX="$INSTALL_PREFIX" install
 
-# Check that OpenBLAS has been installed correctly
-ls $INSTALL_PREFIX/include # you should see files such as cblas.h
-ls $INSTALL_PREFIX/lib # you should see files such as libopenblas.so
+# Set environment variables
+export LIBRARY_PATH="$INSTALL_PREFIX/lib:$LIBRARY_PATH"
+export C_INCLUDE_PATH="$INSTALL_PREFIX/include:$C_INCLUDE_PATH"
+export LD_LIBRARY_PATH="$INSTALL_PREFIX/lib:$LD_LIBRARY_PATH"
 
-export INSTALL_PREFIX=$HOME/OpenBLAS # or wherever you have installed OpenBLAS
-export LIBRARY_PATH=$LIBRARY_PATH:$INSTALL_PREFIX/lib
-export C_INCLUDE_PATH=$LD_LIBRARY_PATH:$INSTALL_PREFIX/include
-export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$INSTALL_PREFIX/lib
-
+# Build FairQuant
 make -C ./FairQuant-Artifact/FairQuant all
 
-chmod +x ./FairQuant-Artifact/FairQuant/adult.sh
-./FairQuant-Artifact/FairQuant/adult.sh sex # 'sex' (in paper)
-# ./FairQuant-Artifact/FairQuant/bank.sh age # 'age' (in paper)
-# ./FairQuant-Artifact/FairQuant/german.sh age # 'age' (in paper) or 'sex'
-# ./FairQuant-Artifact/FairQuant/compas.sh race
+# Verify adult.sh exists and is executable
+ADULT_SCRIPT="./FairQuant-Artifact/FairQuant/adult.sh"
+if [ ! -f "$ADULT_SCRIPT" ]; then
+    echo "ERROR: $ADULT_SCRIPT does not exist!" >&2
+    exit 1
+fi
+
+if [ ! -x "$ADULT_SCRIPT" ]; then
+    echo "ERROR: $ADULT_SCRIPT is not executable!" >&2
+    chmod +x "$ADULT_SCRIPT"
+fi
+
+# Run adult.sh
+echo "Running $ADULT_SCRIPT with argument 'sex'"
+"$ADULT_SCRIPT" sex
