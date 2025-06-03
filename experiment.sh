@@ -1,89 +1,68 @@
 #!/usr/bin/env bash
 
-# === Set up directories ===
+# Set up paths
 export WORK_DIR="$PWD"
-export LOCAL_INSTALL="$WORK_DIR/local"
 export OPENBLAS_SRC="$WORK_DIR/OpenBLAS-0.3.6"
 export OPENBLAS_INSTALL="$WORK_DIR/OpenBLAS"
-export FAIRQUANT_DIR="$WORK_DIR/FairQuant-Artifact/FairQuant"
+export FAIRQUANT_DIR="$WORK_DIR/FairQuant-Artifact"
 
-# Add local binaries and libraries to environment
-export PATH="$LOCAL_INSTALL/bin:$PATH"
-export C_INCLUDE_PATH="$LOCAL_INSTALL/include:$OPENBLAS_INSTALL/include:$C_INCLUDE_PATH"
-export LIBRARY_PATH="$LOCAL_INSTALL/lib:$LOCAL_INSTALL/lib64:$OPENBLAS_INSTALL/lib:$LIBRARY_PATH"
-export LD_LIBRARY_PATH="$LOCAL_INSTALL/lib:$LOCAL_INSTALL/lib64:$OPENBLAS_INSTALL/lib:$LD_LIBRARY_PATH"
+# Clean up any previous failed attempts
+rm -rf "$OPENBLAS_SRC" "$OPENBLAS_INSTALL" OpenBLAS-0.3.6.tar.gz
+rm -rf "$FAIRQUANT_DIR"
 
-mkdir -p "$LOCAL_INSTALL" "$OPENBLAS_INSTALL" "$FAIRQUANT_DIR"
+# Create install dir
+mkdir -p "$OPENBLAS_INSTALL"
 
-# === Check for make and gcc, install from source if missing ===
+# Download OpenBLAS
+echo "Downloading OpenBLAS..."
+wget -O OpenBLAS-0.3.6.tar.gz \
+  https://github.com/OpenMathLib/OpenBLAS/releases/download/v0.3.6/OpenBLAS-0.3.6.tar.gz 
 
-# ---- Install Make ----
-if ! command -v make &>/dev/null; then
-  echo "Installing make..."
-  wget -O "$WORK_DIR/make.tar.gz" https://ftp.gnu.org/gnu/make/make-4.3.tar.gz 
-  tar -xzf "$WORK_DIR/make.tar.gz" -C "$WORK_DIR"
-  MAKE_DIR="$WORK_DIR/make-4.3"
-  mkdir -p "$MAKE_DIR/build"
-  cd "$MAKE_DIR" && ./configure --prefix="$LOCAL_INSTALL" && make && make install
-  export PATH="$LOCAL_INSTALL/bin:$PATH"
+# Extract OpenBLAS
+echo "Extracting OpenBLAS..."
+tar -xzf OpenBLAS-0.3.6.tar.gz
+
+# Build OpenBLAS with safe settings
+cd "$OPENBLAS_SRC" || exit 1
+
+echo "Building OpenBLAS (generic target to avoid CPU-specific issues)..."
+make clean
+make -j$(nproc) USE_THREAD=0 TARGET=GENERIC_64
+
+# If GENERIC_64 fails, try PRESCOTT or GENERIC_32
+if [ $? -ne 0 ]; then
+  echo "Build failed with TARGET=GENERIC_64, trying TARGET=PRESCOTT..."
+  make clean
+  make -j$(nproc) USE_THREAD=0 TARGET=PRESCOTT
 fi
 
-# ---- Install GCC ----
-if ! command -v gcc &>/dev/null; then
-  echo "Installing GMP..."
-  wget -O "$WORK_DIR/gmp.tar.xz" https://ftp.gnu.org/gnu/gmp/gmp-6.2.1.tar.xz 
-  tar -xf "$WORK_DIR/gmp.tar.xz" -C "$WORK_DIR"
-  GMP_DIR="$WORK_DIR/gmp-6.2.1"
-  cd "$GMP_DIR" && ./configure --prefix="$LOCAL_INSTALL" && make && make install
-
-  echo "Installing MPFR..."
-  wget -O "$WORK_DIR/mpfr.tar.gz" https://www.mpfr.org/mpfr-current/mpfr-4.1.0.tar.gz 
-  tar -xzf "$WORK_DIR/mpfr.tar.gz" -C "$WORK_DIR"
-  MPFR_DIR="$WORK_DIR/mpfr-4.1.0"
-  cd "$MPFR_DIR" && ./configure --prefix="$LOCAL_INSTALL" --with-gmp="$LOCAL_INSTALL" && make && make install
-
-  echo "Installing MPC..."
-  wget -O "$WORK_DIR/mpc.tar.gz" https://ftp.gnu.org/gnu/mpc/mpc-1.2.1.tar.gz 
-  tar -xzf "$WORK_DIR/mpc.tar.gz" -C "$WORK_DIR"
-  MPC_DIR="$WORK_DIR/mpc-1.2.1"
-  cd "$MPC_DIR" && ./configure --prefix="$LOCAL_INSTALL" --with-gmp="$LOCAL_INSTALL" --with-mpfr="$LOCAL_INSTALL" && make && make install
-
-  echo "Installing GCC..."
-  wget -O "$WORK_DIR/gcc.tar.gz" https://ftp.gnu.org/gnu/gcc/gcc-11.2.0/gcc-11.2.0.tar.gz 
-  tar -xzf "$WORK_DIR/gcc.tar.gz" -C "$WORK_DIR"
-  GCC_DIR="$WORK_DIR/gcc-11.2.0"
-  mkdir -p "$WORK_DIR/gcc-build"
-  cd "$GCC_DIR" && ./contrib/download_prerequisites
-  cd "$WORK_DIR/gcc-build" && \
-    ../gcc-11.2.0/configure --prefix="$LOCAL_INSTALL" \
-      --enable-languages=c,c++ \
-      --disable-multilib \
-      --with-gmp="$LOCAL_INSTALL" \
-      --with-mpfr="$LOCAL_INSTALL" \
-      --with-mpc="$LOCAL_INSTALL"
-  make
-  make install
-  export PATH="$LOCAL_INSTALL/bin:$PATH"
+if [ $? -ne 0 ]; then
+  echo "Build failed with TARGET=PRESCOTT, trying TARGET=GENERIC_32..."
+  make clean
+  make -j$(nproc) USE_THREAD=0 TARGET=GENERIC_32
 fi
 
-# === Download and build OpenBLAS ===
-echo "Downloading and building OpenBLAS..."
-wget -O "$WORK_DIR/openblas.tar.gz" https://github.com/OpenMathLib/OpenBLAS/releases/download/v0.3.6/OpenBLAS-0.3.6.tar.gz 
-tar -xzf "$WORK_DIR/openblas.tar.gz" -C "$WORK_DIR"
+# Install OpenBLAS
+echo "Installing OpenBLAS to $OPENBLAS_INSTALL..."
+make PREFIX="$OPENBLAS_INSTALL" install
 
-cd "$OPENBLAS_SRC" && make USE_THREAD=0 PREFIX="$OPENBLAS_INSTALL" install
-
-# Update env vars again
+# Set environment variables for FairQuant
 export C_INCLUDE_PATH="$OPENBLAS_INSTALL/include:$C_INCLUDE_PATH"
 export LIBRARY_PATH="$OPENBLAS_INSTALL/lib:$LIBRARY_PATH"
 export LD_LIBRARY_PATH="$OPENBLAS_INSTALL/lib:$LD_LIBRARY_PATH"
 
-# === Build FairQuant ===
-cd "$WORK_DIR" && \
-  git clone https://github.com/yourusername/FairQuant-Artifact.git  || true
+# Clone FairQuant-Artifact repo
+echo "Cloning FairQuant-Artifact..."
+cd "$WORK_DIR"
+git clone https://github.com/username/FairQuant-Artifact.git  "$FAIRQUANT_DIR"
 
-cd "$FAIRQUANT_DIR" && make clean && make all
+# Compile FairQuant
+echo "Compiling FairQuant..."
+cd "$FAIRQUANT_DIR/FairQuant" || exit 1
+make clean
+make all
 
-# === Run FairQuant Example ===
-cd "$WORK_DIR/FairQuant-Artifact" && \
-  ./FairQuant/adult.sh sex
+# Run example
+echo "Running example: adult dataset with 'sex' attribute..."
+cd "$FAIRQUANT_DIR" || exit 1
+./FairQuant/adult.sh sex
