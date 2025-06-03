@@ -18,5 +18,6 @@ fi
 
 for ((i=1; i<=12; i++)); do # for each model 1 to 12
     echo -e "\n-----Running network AC-$i on $PA-----"
-    ./network_test "../models/adult/AC-$i.nnet" "$idx"
+    # ./network_test "../models/adult/AC-$i.nnet" "$idx"
+    ./FairQuant-Artifact/FairQuant/network_test "./FairQuant-Artifact/models/adult/AC-$i.nnet" "$idx"
 done
