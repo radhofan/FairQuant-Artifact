@@ -1,55 +1,34 @@
 #!/usr/bin/env bash
 
-# Set up paths
-export WORK_DIR="$PWD"
-export OPENBLAS_SRC="$WORK_DIR/OpenBLAS-0.3.6"
-export OPENBLAS_INSTALL="$WORK_DIR/OpenBLAS"
-export FAIRQUANT_DIR="$WORK_DIR/FairQuant-Artifact"
+# Download make and gcc
+apt update
+apt install -y build-essential
 
-# Clean up any previous failed builds
-rm -rf "$OPENBLAS_SRC" "$OPENBLAS_INSTALL" OpenBLAS-0.3.6.tar.gz
-
-# Create install dir
-mkdir -p "$OPENBLAS_INSTALL"
-
-# Download OpenBLAS
-echo "Downloading OpenBLAS..."
-wget -O OpenBLAS-0.3.6.tar.gz \
-  https://github.com/OpenMathLib/OpenBLAS/releases/download/v0.3.6/OpenBLAS-0.3.6.tar.gz 
-
-# Extract OpenBLAS
-echo "Extracting OpenBLAS..."
+# Download the tar file
+wget https://github.com/OpenMathLib/OpenBLAS/releases/download/v0.3.6/OpenBLAS-0.3.6.tar.gz
 tar -xzf OpenBLAS-0.3.6.tar.gz
 
-# Build OpenBLAS using safe generic 32-bit mode
-cd "$OPENBLAS_SRC" || exit 1
+# Set up installation path
+export INSTALL_PREFIX=$HOME/OpenBLAS # or wherever you want to install OpenBLAS
+mkdir $INSTALL_PREFIX
 
-echo "Building OpenBLAS in 32-bit generic mode..."
-make clean
-make -j$(nproc) USE_THREAD=0 BINARY=32
+# Install
+cd OpenBLAS-0.3.6
+make
+make PREFIX=$INSTALL_PREFIX install
 
-if [ $? -ne 0 ]; then
-  echo "Build failed in 32-bit mode. Trying single core build..."
-  make clean
-  make USE_THREAD=0 BINARY=32
-fi
+# Check that OpenBLAS has been installed correctly
+ls $INSTALL_PREFIX/include # you should see files such as cblas.h
+ls $INSTALL_PREFIX/lib # you should see files such as libopenblas.so
 
-# Install OpenBLAS
-echo "Installing OpenBLAS to $OPENBLAS_INSTALL..."
-make PREFIX="$OPENBLAS_INSTALL" install
+export INSTALL_PREFIX=$HOME/OpenBLAS # or wherever you have installed OpenBLAS
+export LIBRARY_PATH=$LIBRARY_PATH:$INSTALL_PREFIX/lib
+export C_INCLUDE_PATH=$LD_LIBRARY_PATH:$INSTALL_PREFIX/include
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$INSTALL_PREFIX/lib
 
-# Set environment variables for FairQuant
-export C_INCLUDE_PATH="$OPENBLAS_INSTALL/include:$C_INCLUDE_PATH"
-export LIBRARY_PATH="$OPENBLAS_INSTALL/lib:$LIBRARY_PATH"
-export LD_LIBRARY_PATH="$OPENBLAS_INSTALL/lib:$LD_LIBRARY_PATH"
+make -C FairQuant-Artifact/FairQuant all
 
-# Compile FairQuant (we assume FairQuant-Artifact is already there)
-echo "Compiling FairQuant..."
-cd "$FAIRQUANT_DIR/FairQuant" || exit 1
-make clean
-make all
-
-# Run example
-echo "Running example: adult dataset with 'sex' attribute..."
-cd "$FAIRQUANT_DIR" || exit 1
-./FairQuant/adult.sh sex
+./FairQuant-Artifact/FairQuant/adult.sh sex # 'sex' (in paper)
+# ./FairQuant-Artifact/FairQuant/bank.sh age # 'age' (in paper)
+# ./FairQuant-Artifact/FairQuant/german.sh age # 'age' (in paper) or 'sex'
+# ./FairQuant-Artifact/FairQuant/compas.sh race
