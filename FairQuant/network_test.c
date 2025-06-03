@@ -15,7 +15,6 @@
 #include <stdlib.h>
 #include <math.h>
 #include "split.h"
-#define OUTPUT_DIR "/home/cc/FairQuant-Artifact/FairQuant/res"
 
 
 
@@ -408,8 +407,9 @@ int main( int argc, char *argv[])
     char filePath[64];
     // snprintf(filePath, sizeof(filePath), "res/%s-%d.txt", 
     //          filenameWithoutExt, SENS_FEATURE_IDX);
-
-    snprintf(filePath, sizeof(filePath), "%s/%s-%d.txt", OUTPUT_DIR, filenameWithoutExt, SENS_FEATURE_IDX);
+    
+    snprintf(filePath, sizeof(filePath), "/home/cc/FairQuant-Artifact/FairQuant/res/%s-%d.txt",
+             filenameWithoutExt, SENS_FEATURE_IDX);
 
     FILE *file = fopen(filePath, "w");
     if (file == NULL) {
