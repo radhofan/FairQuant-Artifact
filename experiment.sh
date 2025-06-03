@@ -6,7 +6,7 @@ export OPENBLAS_SRC="$WORK_DIR/OpenBLAS-0.3.6"
 export OPENBLAS_INSTALL="$WORK_DIR/OpenBLAS"
 export FAIRQUANT_DIR="$WORK_DIR/FairQuant-Artifact"
 
-# Clean up any previous failed OpenBLAS builds
+# Clean up any previous failed builds
 rm -rf "$OPENBLAS_SRC" "$OPENBLAS_INSTALL" OpenBLAS-0.3.6.tar.gz
 
 # Create install dir
@@ -21,24 +21,17 @@ wget -O OpenBLAS-0.3.6.tar.gz \
 echo "Extracting OpenBLAS..."
 tar -xzf OpenBLAS-0.3.6.tar.gz
 
-# Build OpenBLAS with safe settings
+# Build OpenBLAS using safe generic 32-bit mode
 cd "$OPENBLAS_SRC" || exit 1
 
-echo "Building OpenBLAS (generic target to avoid CPU-specific issues)..."
+echo "Building OpenBLAS in 32-bit generic mode..."
 make clean
-make -j$(nproc) USE_THREAD=0 TARGET=GENERIC_64
-
-# If GENERIC_64 fails, try PRESCOTT or GENERIC_32
-if [ $? -ne 0 ]; then
-  echo "Build failed with TARGET=GENERIC_64, trying TARGET=PRESCOTT..."
-  make clean
-  make -j$(nproc) USE_THREAD=0 TARGET=PRESCOTT
-fi
+make -j$(nproc) USE_THREAD=0 BINARY=32
 
 if [ $? -ne 0 ]; then
-  echo "Build failed with TARGET=PRESCOTT, trying TARGET=GENERIC_32..."
+  echo "Build failed in 32-bit mode. Trying single core build..."
   make clean
-  make -j$(nproc) USE_THREAD=0 TARGET=GENERIC_32
+  make USE_THREAD=0 BINARY=32
 fi
 
 # Install OpenBLAS
