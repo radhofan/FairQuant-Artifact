@@ -30,7 +30,7 @@ export LIBRARY_PATH=$LIBRARY_PATH:$INSTALL_PREFIX/lib
 export C_INCLUDE_PATH=$LD_LIBRARY_PATH:$INSTALL_PREFIX/include
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$INSTALL_PREFIX/lib
 
-make -C FairQuant-Artifact/FairQuant all
+make -C ./FairQuant-Artifact/FairQuant all
 
 ./FairQuant-Artifact/FairQuant/adult.sh sex # 'sex' (in paper)
 # ./FairQuant-Artifact/FairQuant/bank.sh age # 'age' (in paper)
