@@ -31,7 +31,8 @@ export C_INCLUDE_PATH="$INSTALL_PREFIX/include:$C_INCLUDE_PATH"
 export LD_LIBRARY_PATH="$INSTALL_PREFIX/lib:$LD_LIBRARY_PATH"
 
 # Build FairQuant
-make -C ./FairQuant-Artifact/FairQuant all
+FAIRQUANT_DIR="$PWD/FairQuant-Artifact/FairQuant"
+make -C "$FAIRQUANT_DIR" all
 
 # Verify adult.sh exists and is executable
 ADULT_SCRIPT="./FairQuant-Artifact/FairQuant/adult.sh"
