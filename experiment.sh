@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # Download make and gcc
 sudo apt update
 sudo apt install -y build-essential
