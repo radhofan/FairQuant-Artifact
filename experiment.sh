@@ -32,6 +32,7 @@ export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$INSTALL_PREFIX/lib
 
 make -C ./FairQuant-Artifact/FairQuant all
 
+chmod +x ./FairQuant-Artifact/FairQuant/adult.sh
 ./FairQuant-Artifact/FairQuant/adult.sh sex # 'sex' (in paper)
 # ./FairQuant-Artifact/FairQuant/bank.sh age # 'age' (in paper)
 # ./FairQuant-Artifact/FairQuant/german.sh age # 'age' (in paper) or 'sex'
