@@ -30,6 +30,9 @@ export LIBRARY_PATH="$INSTALL_PREFIX/lib:$LIBRARY_PATH"
 export C_INCLUDE_PATH="$INSTALL_PREFIX/include:$C_INCLUDE_PATH"
 export LD_LIBRARY_PATH="$INSTALL_PREFIX/lib:$LD_LIBRARY_PATH"
 
+echo "Current directory: $(pwd)"
+ls -la FairQuant-Artifact/FairQuant || echo "Directory missing!"
+
 # Build FairQuant
 FAIRQUANT_DIR="$PWD/FairQuant-Artifact/FairQuant"
 make -C "$FAIRQUANT_DIR" all
