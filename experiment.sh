@@ -28,7 +28,9 @@ make PREFIX="$INSTALL_PREFIX" install
 # Set environment variables
 export LIBRARY_PATH="$INSTALL_PREFIX/lib:$LIBRARY_PATH"
 export C_INCLUDE_PATH="$INSTALL_PREFIX/include:$C_INCLUDE_PATH"
-export LD_LIBRARY_PATH="$INSTALL_PREFIX/lib:$LD_LIBRARY_PATH"
+export LD_LIBRARY_PATH="$INSTALL_PREFIX/lib:$LD_LIBRARY_PATH"  
+
+cd ..
 
 echo "Current directory: $(pwd)"
 ls -la FairQuant-Artifact/FairQuant || echo "Directory missing!"
