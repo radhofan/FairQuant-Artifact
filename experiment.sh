@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
 # Download make and gcc
-apt update
-apt install -y build-essential
+sudo apt update
+sudo apt install -y build-essential
 
 # Download the tar file
 wget https://github.com/OpenMathLib/OpenBLAS/releases/download/v0.3.6/OpenBLAS-0.3.6.tar.gz
