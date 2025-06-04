@@ -55,3 +55,22 @@ fi
 # Run adult.sh
 echo "Running $ADULT_SCRIPT with argument 'sex'"
 "$ADULT_SCRIPT" sex
+
+source ~/openrc
+
+bucket_name="bare_metal_experiment_pattern_data"  # Simple, static bucket name
+file_to_upload="FairQuant-Artifact/FairQuant/counterexamples.csv"
+
+echo
+echo "Uploading results to the object store container $bucket_name"
+# Create the bucket if it doesn't exist
+swift post $bucket_name
+
+# Upload just the counterexamples.csv file
+if [ -f "$file_to_upload" ]; then
+    echo "Uploading $file_to_upload"
+    swift upload "$bucket_name" "$file_to_upload" --object-name "counterexamples.csv"
+else
+    echo "ERROR: File $file_to_upload does not exist!" >&2
+    exit 1
+fi
