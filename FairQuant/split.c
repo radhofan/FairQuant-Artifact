@@ -154,15 +154,33 @@ int check_adv(struct NNet* nnet, struct Subproblem *subp)
 {
     static int counterexample_count = 0;  // Keep track of total counterexamples found
     static FILE* ce_file = NULL;
+    
+    // Feature names for the Adult dataset
+    static const char* feature_names[] = {
+        "age",
+        "workclass", 
+        "fnlwgt",
+        "education",
+        "education-num",
+        "marital-status",
+        "occupation",
+        "relationship",
+        "race",
+        "sex",
+        "capital-gain",
+        "capital-loss",
+        "hours-per-week",
+        "native-country"
+    };
    
     // Open file on first call
     if (ce_file == NULL) {
         ce_file = fopen("FairQuant-Artifact/FairQuant/counterexamples.csv", "w");
         if (ce_file != NULL) {
-            // Write CSV header
+            // Write CSV header with actual feature names
             fprintf(ce_file, "CE_ID,Sample_ID,PA,");
             for (int i=0; i<nnet->inputSize; i++) {
-                fprintf(ce_file, "Feature_%d,", i);
+                fprintf(ce_file, "%s,", feature_names[i]);
             }
             fprintf(ce_file, "Output,Decision\n");
         }
@@ -182,6 +200,7 @@ int check_adv(struct NNet* nnet, struct Subproblem *subp)
                 a1[i] = nnet->maxes[i]; //for PA=1
             }
             else {
+                // Fixed sampling logic using floating point arithmetic
                 float upper = subp->input.upper_matrix.data[i];
                 float lower = subp->input.lower_matrix.data[i];
                 float middle = lower + (float)n * (upper - lower) / 10.0f;
@@ -209,23 +228,23 @@ int check_adv(struct NNet* nnet, struct Subproblem *subp)
             // Save to CSV file silently
             if (ce_file != NULL) {
                 // Write two rows - one for each protected attribute group
-                
+               
                 // Row for PA=0 group
                 fprintf(ce_file, "%d,%d,0,", counterexample_count, n+1);
                 for (int i=0; i<nnet->inputSize; i++) {
                     fprintf(ce_file, "%.4f,", a0[i]);
                 }
-                fprintf(ce_file, "%.6f,%s\n", output0.data[0], 
+                fprintf(ce_file, "%.6f,%s\n", output0.data[0],
                         out0Pos ? "POSITIVE" : "NEGATIVE");
-                
+               
                 // Row for PA=1 group
                 fprintf(ce_file, "%d,%d,1,", counterexample_count, n+1);
                 for (int i=0; i<nnet->inputSize; i++) {
                     fprintf(ce_file, "%.4f,", a1[i]);
                 }
-                fprintf(ce_file, "%.6f,%s\n", output1.data[0], 
+                fprintf(ce_file, "%.6f,%s\n", output1.data[0],
                         out1Pos ? "POSITIVE" : "NEGATIVE");
-                
+               
                 fflush(ce_file);  // Ensure data is written immediately
             }
            
