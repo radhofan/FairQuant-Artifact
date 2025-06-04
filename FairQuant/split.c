@@ -182,11 +182,11 @@ int check_adv(struct NNet* nnet, struct Subproblem *subp)
                 a1[i] = nnet->maxes[i]; //for PA=1
             }
             else {
-                int upper = (int) subp->input.upper_matrix.data[i];
-                int lower = (int) subp->input.lower_matrix.data[i];
-                int middle = n*(lower+upper)/10; // floor
-                a0[i] = (float) middle;
-                a1[i] = (float) middle;
+                float upper = subp->input.upper_matrix.data[i];
+                float lower = subp->input.lower_matrix.data[i];
+                float middle = lower + (float)n * (upper - lower) / 10.0f;
+                a0[i] = middle;
+                a1[i] = middle;
             }
         }
        
