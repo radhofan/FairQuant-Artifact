@@ -160,15 +160,11 @@ int check_adv(struct NNet* nnet, struct Subproblem *subp)
         ce_file = fopen("FairQuant-Artifact/FairQuant/counterexamples.csv", "w");
         if (ce_file != NULL) {
             // Write CSV header
-            fprintf(ce_file, "CE_ID,Sample_ID,");
+            fprintf(ce_file, "CE_ID,Sample_ID,PA,");
             for (int i=0; i<nnet->inputSize; i++) {
-                if (i == nnet->sens_feature_idx) {
-                    fprintf(ce_file, "Protected_Attr_PA0,Protected_Attr_PA1,");
-                } else {
-                    fprintf(ce_file, "Feature_%d,", i);
-                }
+                fprintf(ce_file, "Feature_%d,", i);
             }
-            fprintf(ce_file, "Output_PA0,Output_PA1,Decision_PA0,Decision_PA1\n");
+            fprintf(ce_file, "Output,Decision\n");
         }
     }
    
@@ -212,20 +208,24 @@ int check_adv(struct NNet* nnet, struct Subproblem *subp)
            
             // Save to CSV file silently
             if (ce_file != NULL) {
-                fprintf(ce_file, "%d,%d,", counterexample_count, n+1);
+                // Write two rows - one for each protected attribute group
+                
+                // Row for PA=0 group
+                fprintf(ce_file, "%d,%d,0,", counterexample_count, n+1);
                 for (int i=0; i<nnet->inputSize; i++) {
-                    if (i == nnet->sens_feature_idx) {
-                        // For protected attribute, show both values
-                        fprintf(ce_file, "%.4f,%.4f,", a0[i], a1[i]);
-                    } else {
-                        // For other features, they're identical, so show only once
-                        fprintf(ce_file, "%.4f,", a0[i]);
-                    }
+                    fprintf(ce_file, "%.4f,", a0[i]);
                 }
-                fprintf(ce_file, "%.6f,%.6f,%s,%s\n",
-                        output0.data[0], output1.data[0],
-                        out0Pos ? "POSITIVE" : "NEGATIVE",
+                fprintf(ce_file, "%.6f,%s\n", output0.data[0], 
+                        out0Pos ? "POSITIVE" : "NEGATIVE");
+                
+                // Row for PA=1 group
+                fprintf(ce_file, "%d,%d,1,", counterexample_count, n+1);
+                for (int i=0; i<nnet->inputSize; i++) {
+                    fprintf(ce_file, "%.4f,", a1[i]);
+                }
+                fprintf(ce_file, "%.6f,%s\n", output1.data[0], 
                         out1Pos ? "POSITIVE" : "NEGATIVE");
+                
                 fflush(ce_file);  // Ensure data is written immediately
             }
            
