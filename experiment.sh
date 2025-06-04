@@ -8,7 +8,7 @@ echo "Current directory: $(pwd)"
 sudo apt update
 sudo apt install -y build-essential
 sudo apt install csvtool
-sudo apt install python3-swiftclient
+sudo apt install -y python3-swiftclient
 
 echo "Verifying installation..."
 gcc --version
