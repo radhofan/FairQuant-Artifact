@@ -75,6 +75,81 @@ struct timeval start, curr, finish, last_finish;
 //     return 0;
 // }
 
+// int check_adv(struct NNet* nnet, struct Subproblem *subp)
+// {
+//     static int counterexample_count = 0;  // Keep track of total counterexamples found
+//     static FILE* ce_file = NULL;
+   
+//     // Open file on first call
+//     if (ce_file == NULL) {
+//         ce_file = fopen("FairQuant-Artifact/FairQuant/counterexamples.csv", "w");
+//         if (ce_file != NULL) {
+//             // Write CSV header
+//             fprintf(ce_file, "CE_ID,Sample_ID,");
+//             for (int i=0; i<nnet->inputSize; i++) {
+//                 fprintf(ce_file, "Feature_%d_PA0,Feature_%d_PA1,", i, i);
+//             }
+//             fprintf(ce_file, "Output_PA0,Output_PA1,Decision_PA0,Decision_PA1\n");
+//         }
+//     }
+   
+//     float a0[nnet->inputSize];
+//     float a1[nnet->inputSize];
+//     struct Matrix adv0 = {a0, 1, nnet->inputSize};
+//     struct Matrix adv1 = {a1, 1, nnet->inputSize};
+   
+//     // trying 10 different samples
+//     for (int n=0; n<10; n++){
+//         // concrete data point is gender + some point for all other features
+//         for (int i=0; i<nnet->inputSize; i++) {
+//             if (i == nnet->sens_feature_idx){
+//                 a0[i] = nnet->mins[i];  //for PA=0
+//                 a1[i] = nnet->maxes[i]; //for PA=1
+//             }
+//             else {
+//                 int upper = (int) subp->input.upper_matrix.data[i];
+//                 int lower = (int) subp->input.lower_matrix.data[i];
+//                 int middle = n*(lower+upper)/10; // floor
+//                 a0[i] = (float) middle;
+//                 a1[i] = (float) middle;
+//             }
+//         }
+       
+//         float out0[nnet->outputSize];
+//         float out1[nnet->outputSize];
+//         struct Matrix output0 = {out0, nnet->outputSize, 1};
+//         struct Matrix output1 = {out1, nnet->outputSize, 1};
+       
+//         forward_prop(nnet, &adv0, &output0);
+//         forward_prop(nnet, &adv1, &output1);
+       
+//         // for sigmoid, one output node
+//         int out0Pos = (output0.data[0] > 0);
+//         int out1Pos = (output1.data[0] > 0);
+       
+//         // at any point, this sample is adv, then we can return here
+//         if (out0Pos != out1Pos) {
+//             counterexample_count++;
+           
+//             // Save to CSV file silently
+//             if (ce_file != NULL) {
+//                 fprintf(ce_file, "%d,%d,", counterexample_count, n+1);
+//                 for (int i=0; i<nnet->inputSize; i++) {
+//                     fprintf(ce_file, "%.4f,%.4f,", a0[i], a1[i]);
+//                 }
+//                 fprintf(ce_file, "%.6f,%.6f,%s,%s\n",
+//                         output0.data[0], output1.data[0],
+//                         out0Pos ? "POSITIVE" : "NEGATIVE",
+//                         out1Pos ? "POSITIVE" : "NEGATIVE");
+//                 fflush(ce_file);  // Ensure data is written immediately
+//             }
+           
+//             return 1;   //is_adv!
+//         }
+//     }
+//     return 0;
+// }
+
 int check_adv(struct NNet* nnet, struct Subproblem *subp)
 {
     static int counterexample_count = 0;  // Keep track of total counterexamples found
@@ -87,7 +162,11 @@ int check_adv(struct NNet* nnet, struct Subproblem *subp)
             // Write CSV header
             fprintf(ce_file, "CE_ID,Sample_ID,");
             for (int i=0; i<nnet->inputSize; i++) {
-                fprintf(ce_file, "Feature_%d_PA0,Feature_%d_PA1,", i, i);
+                if (i == nnet->sens_feature_idx) {
+                    fprintf(ce_file, "Protected_Attr_PA0,Protected_Attr_PA1,");
+                } else {
+                    fprintf(ce_file, "Feature_%d,", i);
+                }
             }
             fprintf(ce_file, "Output_PA0,Output_PA1,Decision_PA0,Decision_PA1\n");
         }
@@ -135,7 +214,13 @@ int check_adv(struct NNet* nnet, struct Subproblem *subp)
             if (ce_file != NULL) {
                 fprintf(ce_file, "%d,%d,", counterexample_count, n+1);
                 for (int i=0; i<nnet->inputSize; i++) {
-                    fprintf(ce_file, "%.4f,%.4f,", a0[i], a1[i]);
+                    if (i == nnet->sens_feature_idx) {
+                        // For protected attribute, show both values
+                        fprintf(ce_file, "%.4f,%.4f,", a0[i], a1[i]);
+                    } else {
+                        // For other features, they're identical, so show only once
+                        fprintf(ce_file, "%.4f,", a0[i]);
+                    }
                 }
                 fprintf(ce_file, "%.6f,%.6f,%s,%s\n",
                         output0.data[0], output1.data[0],

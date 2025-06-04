@@ -7,6 +7,7 @@ echo "Current directory: $(pwd)"
 # Download make and gcc
 sudo apt update
 sudo apt install -y build-essential
+sudo apt install csvtool
 
 echo "Verifying installation..."
 gcc --version
