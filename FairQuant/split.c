@@ -210,8 +210,11 @@ int check_adv(struct NNet* nnet, struct Subproblem *subp)
         struct Matrix adv1_denorm = {a1_denorm, 1, nnet->inputSize};
         
         // Denormalize the inputs for display purposes
-        denormalize_input(nnet, &adv0_denorm);
-        denormalize_input(nnet, &adv1_denorm);
+        // Use min-max denormalization: denormalized = normalized * (max - min) + min
+        for (int i = 0; i < nnet->inputSize; i++) {
+            a0_denorm[i] = a0_denorm[i] * (nnet->maxes[i] - nnet->mins[i]) + nnet->mins[i];
+            a1_denorm[i] = a1_denorm[i] * (nnet->maxes[i] - nnet->mins[i]) + nnet->mins[i];
+        }
         
         // Round categorical features after denormalization
         for (int i = 0; i < nnet->inputSize; i++) {
