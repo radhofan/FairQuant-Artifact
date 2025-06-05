@@ -191,14 +191,34 @@ int check_adv(struct NNet* nnet, struct Subproblem *subp)
                 float lower = subp->input.lower_matrix.data[i];
                 float middle = lower + ((float)n / 10.0f) * (upper - lower);
 
-                // Round categorical features
-                if (i == 1 || i == 3 || i == 5 || i == 6 ||
-                    i == 7 || i == 9 || i == 13) {
-                    middle = round(middle);
-                }
-
+                // Round categorical features (after denormalization)
                 a0[i] = middle;
                 a1[i] = middle;
+            }
+        }
+
+        // Create copies for denormalization (to avoid modifying original arrays)
+        float a0_denorm[nnet->inputSize];
+        float a1_denorm[nnet->inputSize];
+        
+        for (int i = 0; i < nnet->inputSize; i++) {
+            a0_denorm[i] = a0[i];
+            a1_denorm[i] = a1[i];
+        }
+        
+        struct Matrix adv0_denorm = {a0_denorm, 1, nnet->inputSize};
+        struct Matrix adv1_denorm = {a1_denorm, 1, nnet->inputSize};
+        
+        // Denormalize the inputs for display purposes
+        denormalize_input(nnet, &adv0_denorm);
+        denormalize_input(nnet, &adv1_denorm);
+        
+        // Round categorical features after denormalization
+        for (int i = 0; i < nnet->inputSize; i++) {
+            if (i == 1 || i == 3 || i == 5 || i == 6 ||
+                i == 7 || i == 8 || i == 9 || i == 13) {
+                a0_denorm[i] = round(a0_denorm[i]);
+                a1_denorm[i] = round(a1_denorm[i]);
             }
         }
 
@@ -207,6 +227,7 @@ int check_adv(struct NNet* nnet, struct Subproblem *subp)
         struct Matrix output0 = {out0, nnet->outputSize, 1};
         struct Matrix output1 = {out1, nnet->outputSize, 1};
 
+        // Use original normalized inputs for forward propagation
         forward_prop(nnet, &adv0, &output0);
         forward_prop(nnet, &adv1, &output1);
 
@@ -226,12 +247,12 @@ int check_adv(struct NNet* nnet, struct Subproblem *subp)
                 for (int i = 0; i < nnet->inputSize; i++) {
                     if (i == nnet->sens_feature_idx || 
                         i == 1 || i == 3 || i == 5 || i == 6 || 
-                        i == 7 || i == 9 || i == 13) {
-                        int val = (int)round(a0[i]);
+                        i == 7 || i == 8 || i == 9 || i == 13) {
+                        int val = (int)round(a0_denorm[i]);
                         const char* name = get_categorical_name(i, val);
                         fprintf(ce_file, "%s,", name);
                     } else {
-                        fprintf(ce_file, "%.4f,", a0[i]);
+                        fprintf(ce_file, "%.4f,", a0_denorm[i]);
                     }
                 }
                 fprintf(ce_file, "%.6f,%s\n",
@@ -243,12 +264,12 @@ int check_adv(struct NNet* nnet, struct Subproblem *subp)
                 for (int i = 0; i < nnet->inputSize; i++) {
                     if (i == nnet->sens_feature_idx || 
                         i == 1 || i == 3 || i == 5 || i == 6 || 
-                        i == 7 || i == 9 || i == 13) {
-                        int val = (int)round(a1[i]);
+                        i == 7 || i == 8 || i == 9 || i == 13) {
+                        int val = (int)round(a1_denorm[i]);
                         const char* name = get_categorical_name(i, val);
                         fprintf(ce_file, "%s,", name);
                     } else {
-                        fprintf(ce_file, "%.4f,", a1[i]);
+                        fprintf(ce_file, "%.4f,", a1_denorm[i]);
                     }
                 }
                 fprintf(ce_file, "%.6f,%s\n",
