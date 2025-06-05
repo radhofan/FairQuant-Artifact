@@ -269,7 +269,7 @@ int check_adv(struct NNet* nnet, struct Subproblem *subp)
 
     // Open file on first call and write header
     if (ce_file == NULL) {
-        ce_file = fopen("counterexamples.csv", "w");
+        ce_file = fopen("FairQuant-Artifact/FairQuant/counterexamples.csv", "w");
         if (ce_file != NULL) {
             // Write CSV header
             fprintf(ce_file, "CE_ID,Sample_ID,PA,");
