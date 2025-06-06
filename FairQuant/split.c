@@ -84,13 +84,13 @@ int check_adv(struct NNet* nnet, struct Subproblem *subp)
     // Feature names in the exact order as they appear in the neural network
     static const char* feature_names[] = {
         "age", "workclass", "fnlwgt", "education", "education-num",
-        "marital-status", "occupation", "relationship", "race", "sex",
+        "marital-status", "occupation", "relationship", "sex", "race",
         "capital-gain", "capital-loss", "hours-per-week", "native-country"
     };
 
     // Open CSV file and write headers
     if (ce_file == NULL) {
-        ce_file = fopen("FairQuant-Artifact/FairQuant/counterexamples.csv", "w");
+        ce_file = fopen("counterexamples.csv", "w");
         if (ce_file != NULL) {
             // Write CSV header
             fprintf(ce_file, "CE_ID,PA,");
@@ -149,14 +149,16 @@ int check_adv(struct NNet* nnet, struct Subproblem *subp)
                 // Write row for PA=0
                 fprintf(ce_file, "%d,0,", counterexample_count);
                 for (int i = 0; i < nnet->inputSize; i++) {
-                    fprintf(ce_file, "%.4f,", a0[i]);
+                    // Round values for better readability
+                    fprintf(ce_file, "%.0f,", round(a0[i]));
                 }
                 fprintf(ce_file, "%.6f,%s\n", output0.data[0], out0Pos ? "POSITIVE" : "NEGATIVE");
 
                 // Write row for PA=1
                 fprintf(ce_file, "%d,1,", counterexample_count);
                 for (int i = 0; i < nnet->inputSize; i++) {
-                    fprintf(ce_file, "%.4f,", a1[i]);
+                    // Round values for better readability
+                    fprintf(ce_file, "%.0f,", round(a1[i]));
                 }
                 fprintf(ce_file, "%.6f,%s\n", output1.data[0], out1Pos ? "POSITIVE" : "NEGATIVE");
 
