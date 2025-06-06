@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
+set -e
+set -x
+
 # Check if PA is provided
 if [ "$#" -ne 1 ]; then
     echo "Usage: $0 [Protected Attribute]"
