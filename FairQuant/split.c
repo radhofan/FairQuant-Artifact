@@ -76,42 +76,6 @@ struct timeval start, curr, finish, last_finish;
 // }
 
 
-// You need to add these arrays with the ACTUAL original data bounds
-// These should be the min/max values from your original dataset before normalization
-float original_mins[] = {
-    17.0,   // age
-    0.0,    // workclass (categorical, 0-7)
-    12285.0, // fnlwgt (example, check your actual data)
-    0.0,    // education (categorical, 0-15)
-    1.0,    // education-num
-    0.0,    // marital-status (categorical, 0-6)
-    0.0,    // occupation (categorical, 0-13)
-    0.0,    // relationship (categorical, 0-5)
-    0.0,    // race (categorical, 0-4)
-    0.0,    // sex (categorical, 0-1)
-    0.0,    // capital-gain
-    0.0,    // capital-loss
-    1.0,    // hours-per-week
-    0.0     // native-country (categorical, 0-41)
-};
-
-float original_maxes[] = {
-    90.0,   // age
-    7.0,    // workclass
-    1484705.0, // fnlwgt (example, check your actual data)
-    15.0,   // education
-    16.0,   // education-num
-    6.0,    // marital-status
-    13.0,   // occupation
-    5.0,    // relationship
-    4.0,    // race
-    1.0,    // sex
-    99999.0, // capital-gain (example)
-    4356.0, // capital-loss (example)
-    99.0,   // hours-per-week
-    41.0    // native-country
-};
-
 int check_adv(struct NNet* nnet, struct Subproblem *subp)
 {
     static int counterexample_count = 0;
@@ -147,9 +111,8 @@ int check_adv(struct NNet* nnet, struct Subproblem *subp)
         // Construct inputs for both protected groups
         for (int i = 0; i < nnet->inputSize; i++) {
             if (i == nnet->sens_feature_idx) {
-                // For sensitive feature, use the normalized min/max values directly
-                a0[i] = nnet->mins[i];  // PA=0 (normalized)
-                a1[i] = nnet->maxes[i]; // PA=1 (normalized)
+                a0[i] = nnet->mins[i];  // PA=0
+                a1[i] = nnet->maxes[i]; // PA=1
             } else {
                 float upper = subp->input.upper_matrix.data[i];
                 float lower = subp->input.lower_matrix.data[i];
@@ -159,16 +122,21 @@ int check_adv(struct NNet* nnet, struct Subproblem *subp)
             }
         }
 
-        // Create arrays for denormalized values
+        // Create copies for denormalization
         float a0_denorm[nnet->inputSize];
         float a1_denorm[nnet->inputSize];
         
-        // Denormalize using the original dataset bounds
         for (int i = 0; i < nnet->inputSize; i++) {
-            // Use proper denormalization formula with original bounds
-            a0_denorm[i] = a0[i] * (original_maxes[i] - original_mins[i]) + original_mins[i];
-            a1_denorm[i] = a1[i] * (original_maxes[i] - original_mins[i]) + original_mins[i];
+            a0_denorm[i] = a0[i];
+            a1_denorm[i] = a1[i];
         }
+        
+        struct Matrix adv0_denorm = {a0_denorm, 1, nnet->inputSize};
+        struct Matrix adv1_denorm = {a1_denorm, 1, nnet->inputSize};
+        
+        // Use the existing denormalize_input function
+        denormalize_input(nnet, &adv0_denorm);
+        denormalize_input(nnet, &adv1_denorm);
         
         // Round categorical features after denormalization
         int categorical_features[] = {1, 3, 5, 6, 7, 8, 9, 13};
@@ -180,11 +148,10 @@ int check_adv(struct NNet* nnet, struct Subproblem *subp)
                 a0_denorm[i] = round(a0_denorm[i]);
                 a1_denorm[i] = round(a1_denorm[i]);
                 
-                // Clamp to valid range for categorical features
-                if (a0_denorm[i] < original_mins[i]) a0_denorm[i] = original_mins[i];
-                if (a0_denorm[i] > original_maxes[i]) a0_denorm[i] = original_maxes[i];
-                if (a1_denorm[i] < original_mins[i]) a1_denorm[i] = original_mins[i];
-                if (a1_denorm[i] > original_maxes[i]) a1_denorm[i] = original_maxes[i];
+                // Ensure categorical values are within valid bounds
+                // This prevents negative indices in the mapping arrays
+                if (a0_denorm[i] < 0) a0_denorm[i] = 0;
+                if (a1_denorm[i] < 0) a1_denorm[i] = 0;
             }
         }
 
