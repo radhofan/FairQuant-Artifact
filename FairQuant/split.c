@@ -134,9 +134,12 @@ int check_adv(struct NNet* nnet, struct Subproblem *subp)
         struct Matrix adv0_denorm = {a0_denorm, 1, nnet->inputSize};
         struct Matrix adv1_denorm = {a1_denorm, 1, nnet->inputSize};
         
-        // Use the existing denormalize_input function
-        denormalize_input(nnet, &adv0_denorm);
-        denormalize_input(nnet, &adv1_denorm);
+        // Denormalize using the same formula as your denormalize_input function
+        // denormalized = normalized * range + mean
+        for (int i = 0; i < nnet->inputSize; i++) {
+            a0_denorm[i] = a0_denorm[i] * nnet->ranges[i] + nnet->means[i];
+            a1_denorm[i] = a1_denorm[i] * nnet->ranges[i] + nnet->means[i];
+        }
         
         // Round categorical features after denormalization
         int categorical_features[] = {1, 3, 5, 6, 7, 8, 9, 13};
