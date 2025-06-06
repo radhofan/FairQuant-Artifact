@@ -3,6 +3,9 @@
 set -e
 set -x
 
+exec > >(tee -a FairQuant-Artifact/FairQuant/experiment_output.log)
+exec 2>&1
+
 # Check if PA is provided
 if [ "$#" -ne 1 ]; then
     echo "Usage: $0 [Protected Attribute]"
