@@ -16,6 +16,70 @@
 #include <math.h>
 #include "split.h"
 
+static const char* workclass_map[] = {
+    "Private", "Self-emp-not-inc", "Self-emp-inc", "Federal-gov",
+    "Local-gov", "State-gov", "Without-pay", "Never-worked"
+};
+
+static const char* education_map[] = {
+    "Bachelors", "Some-college", "11th", "HS-grad", "Prof-school",
+    "Assoc-acdm", "Assoc-voc", "9th", "7th-8th", "12th", "Masters",
+    "1st-4th", "10th", "Doctorate", "5th-6th", "Preschool"
+};
+
+static const char* marital_status_map[] = {
+    "Married-civ-spouse", "Divorced", "Never-married", "Separated",
+    "Widowed", "Married-spouse-absent", "Married-AF-spouse"
+};
+
+static const char* occupation_map[] = {
+    "Tech-support", "Craft-repair", "Other-service", "Sales", "Exec-managerial",
+    "Prof-specialty", "Handlers-cleaners", "Machine-op-inspct", "Adm-clerical",
+    "Farming-fishing", "Transport-moving", "Priv-house-serv", "Protective-serv",
+    "Armed-Forces"
+};
+
+static const char* relationship_map[] = {
+    "Wife", "Own-child", "Husband", "Not-in-family", "Other-relative", "Unmarried"
+};
+
+static const char* sex_map[] = { "Female", "Male" };
+
+static const char* race_map[] = {
+    "White", "Asian-Pac-Islander", "Amer-Indian-Eskimo", "Other", "Black"
+};
+
+static const char* native_country_map[] = {
+    "United-States", "Cambodia", "England", "Puerto-Rico", "Canada",
+    "Germany", "Outlying-US(Guam-USVI-etc)", "India", "Japan", "Greece",
+    "South", "China", "Cuba", "Iran", "Honduras", "Philippines", "Italy",
+    "Poland", "Jamaica", "Vietnam", "Mexico", "Portugal", "Ireland",
+    "France", "Dominican-Republic", "Laos", "Ecuador", "Taiwan", "Haiti",
+    "Columbia", "Hungary", "Guatemala", "Nicaragua", "Scotland", "Thailand",
+    "Yugoslavia", "El-Salvador", "Trinadad&Tobago", "Peru", "Hong",
+    "Holand-Netherlands"
+};
+
+// Decoding function
+const char* decode_feature(int feature_index, float value) {
+    int idx = (int)round(value);
+    switch (feature_index) {
+        case 1: return workclass_map[idx];
+        case 3: return education_map[idx];
+        case 5: return marital_status_map[idx];
+        case 6: return occupation_map[idx];
+        case 7: return relationship_map[idx];
+        case 8: return sex_map[idx];
+        case 9: return race_map[idx];
+        case 13: return native_country_map[idx];
+        default: {
+            static char buffer[32];
+            snprintf(buffer, sizeof(buffer), "%.0f", value);
+            return buffer;
+        }
+    }
+}
+
 
 
 int main( int argc, char *argv[])
@@ -210,17 +274,71 @@ int main( int argc, char *argv[])
 
         // first check if this is a concrete data point (i.e. curr_vol = 1)
         if (curr_volume == 1) { // just do a concrete forward prop, it will be either fair or unfair            
+            static int counterexample_count = 0;
+            static FILE* ce_file = NULL;
+            
+            // Feature names in the exact order as they appear in the neural network
+            static const char* feature_names[] = {
+                "age", "workclass", "fnlwgt", "education", "education-num",
+                "marital-status", "occupation", "relationship", "sex", "race",
+                "capital-gain", "capital-loss", "hours-per-week", "native-country"
+            };
+
+            // Open CSV file and write headers (only once)
+            if (ce_file == NULL) {
+                ce_file = fopen("FairQuant-Artifact/FairQuant/counterexamples_forward.csv", "w");
+                if (ce_file != NULL) {
+                    // Write CSV header
+                    fprintf(ce_file, "CE_ID,PA,");
+                    for (int i = 0; i < nnet->inputSize; i++) {
+                        fprintf(ce_file, "%s,", feature_names[i]);
+                    }
+                    fprintf(ce_file, "Output,Decision\n");
+                    fflush(ce_file);
+                } else {
+                    printf("Failed to open counterexamples_forward.csv\n");
+                }
+            }
+            
+            // Forward propagation for both protected groups
             forward_prop(nnet, &input0_interval.lower_matrix, &output0_interval.lower_matrix);
             forward_prop(nnet, &input1_interval.lower_matrix, &output1_interval.lower_matrix);
-
+            
             int out0Pos = (output0_interval.lower_matrix.data[0] > 0);
             int out1Pos = (output1_interval.lower_matrix.data[0] > 0);
-
+            
             if (out0Pos == out1Pos) {
                 fairConc = 1;
             }
             else {
                 unfairConc = 1;
+                
+                // Counterexample detected! Write to CSV
+                if (ce_file != NULL) {
+                    counterexample_count++;
+                    
+                    // Write row for PA=0
+                    fprintf(ce_file, "%d,0,", counterexample_count);
+                    for (int i = 0; i < nnet->inputSize; i++) {
+                        const char* decoded_value = decode_feature(i, input0_interval.lower_matrix.data[i]);
+                        fprintf(ce_file, "%s,", decoded_value);
+                    }
+                    fprintf(ce_file, "%.6f,%s\n", 
+                        output0_interval.lower_matrix.data[0], 
+                        out0Pos ? "POSITIVE" : "NEGATIVE");
+
+                    // Write row for PA=1
+                    fprintf(ce_file, "%d,1,", counterexample_count);
+                    for (int i = 0; i < nnet->inputSize; i++) {
+                        const char* decoded_value = decode_feature(i, input1_interval.lower_matrix.data[i]);
+                        fprintf(ce_file, "%s,", decoded_value);
+                    }
+                    fprintf(ce_file, "%.6f,%s\n", 
+                        output1_interval.lower_matrix.data[0], 
+                        out1Pos ? "POSITIVE" : "NEGATIVE");
+
+                    fflush(ce_file);
+                }
             }
         }
         
