@@ -60,6 +60,25 @@ static const char* native_country_map[] = {
     "Holand-Netherlands"
 };
 
+const char* decode_feature_GG(int feature_index, float value) {
+    int idx = (int)round(value);
+    switch (feature_index) {
+        case 1: return workclass_map[idx];
+        case 3: return education_map[idx];
+        case 5: return marital_status_map[idx];
+        case 6: return occupation_map[idx];
+        case 7: return relationship_map[idx];
+        case 8: return sex_map[idx];
+        case 9: return race_map[idx];
+        case 13: return native_country_map[idx];
+        default: {
+            static char buffer[32];
+            snprintf(buffer, sizeof(buffer), "%.0f", value);
+            return buffer;
+        }
+    }
+}
+
 
 int main( int argc, char *argv[])
 {
@@ -265,49 +284,49 @@ int main( int argc, char *argv[])
             else {
                 unfairConc = 1;
 
-                // static int counterexample_count = 0;
-                // static FILE* ce_file = NULL;
+                static int counterexample_count = 0;
+                static FILE* ce_file = NULL;
 
-                // static const char* feature_names[] = {
-                //     "age", "workclass", "fnlwgt", "education", "education-num",
-                //     "marital-status", "occupation", "relationship", "sex", "race",
-                //     "capital-gain", "capital-loss", "hours-per-week", "native-country"
-                // };
+                static const char* feature_names[] = {
+                    "age", "workclass", "fnlwgt", "education", "education-num",
+                    "marital-status", "occupation", "relationship", "sex", "race",
+                    "capital-gain", "capital-loss", "hours-per-week", "native-country"
+                };
 
-                // if (ce_file == NULL) {
-                //     ce_file = fopen("FairQuant-Artifact/FairQuant/counterexamples_forward.csv", "w");
-                //     if (!ce_file) {
-                //         printf("Failed to open counterexamples_forward.csv\n");
-                //         return 0;
-                //     }
+                if (ce_file == NULL) {
+                    ce_file = fopen("FairQuant-Artifact/FairQuant/counterexamples_forward.csv", "w");
+                    if (!ce_file) {
+                        printf("Failed to open counterexamples_forward.csv\n");
+                        return 0;
+                    }
 
-                //     fprintf(ce_file, "CE_ID,PA,");
-                //     for (int i = 0; i < nnet->inputSize; i++) {
-                //         fprintf(ce_file, "%s,", feature_names[i]);
-                //     }
-                //     fprintf(ce_file, "Output,Decision\n");
-                //     fflush(ce_file);
-                // }
+                    fprintf(ce_file, "CE_ID,PA,");
+                    for (int i = 0; i < nnet->inputSize; i++) {
+                        fprintf(ce_file, "%s,", feature_names[i]);
+                    }
+                    fprintf(ce_file, "Output,Decision\n");
+                    fflush(ce_file);
+                }
 
-                // if (out0Pos != out1Pos) {
-                //     counterexample_count++;
+                if (out0Pos != out1Pos) {
+                    counterexample_count++;
 
-                //     // PA = 0
-                //     fprintf(ce_file, "%d,0,", counterexample_count);
-                //     for (int i = 0; i < nnet->inputSize; i++) {
-                //         fprintf(ce_file, "%d,", decode_feature(i, i0_lower[i]));
-                //     }
-                //     fprintf(ce_file, "%.6f,%s\n", output0_interval.lower_matrix.data[0], out0Pos ? "POSITIVE" : "NEGATIVE");
+                    // PA = 0
+                    fprintf(ce_file, "%d,0,", counterexample_count);
+                    for (int i = 0; i < nnet->inputSize; i++) {
+                        fprintf(ce_file, "%s,", decode_feature_GG(i, i0_lower[i]));
+                    }
+                    fprintf(ce_file, "%.6f,%s\n", output0_interval.lower_matrix.data[0], out0Pos ? "POSITIVE" : "NEGATIVE");
 
-                //     // PA = 1
-                //     fprintf(ce_file, "%d,1,", counterexample_count);
-                //     for (int i = 0; i < nnet->inputSize; i++) {
-                //         fprintf(ce_file, "%d,", decode_feature(i, i1_lower[i]));
-                //     }
-                //     fprintf(ce_file, "%.6f,%s\n", output1_interval.lower_matrix.data[0], out1Pos ? "POSITIVE" : "NEGATIVE");
+                    // PA = 1
+                    fprintf(ce_file, "%d,1,", counterexample_count);
+                    for (int i = 0; i < nnet->inputSize; i++) {
+                        fprintf(ce_file, "%s,", decode_feature_GG(i, i1_lower[i]));
+                    }
+                    fprintf(ce_file, "%.6f,%s\n", output1_interval.lower_matrix.data[0], out1Pos ? "POSITIVE" : "NEGATIVE");
 
-                //     fflush(ce_file);
-                // }
+                    fflush(ce_file);
+                }
             }
         }
         
@@ -346,49 +365,49 @@ int main( int argc, char *argv[])
             fals_volume += curr_volume;
             uncer_volume -= curr_volume;
 
-            static int counterexample_count = 0;
-            static FILE* ce_file = NULL;
+            // static int counterexample_count = 0;
+            // static FILE* ce_file = NULL;
 
-            static const char* feature_names[] = {
-                "age", "workclass", "fnlwgt", "education", "education-num",
-                "marital-status", "occupation", "relationship", "sex", "race",
-                "capital-gain", "capital-loss", "hours-per-week", "native-country"
-            };
+            // static const char* feature_names[] = {
+            //     "age", "workclass", "fnlwgt", "education", "education-num",
+            //     "marital-status", "occupation", "relationship", "sex", "race",
+            //     "capital-gain", "capital-loss", "hours-per-week", "native-country"
+            // };
 
-            if (ce_file == NULL) {
-                ce_file = fopen("FairQuant-Artifact/FairQuant/counterexamples_forward.csv", "w");
-                if (!ce_file) {
-                    printf("Failed to open counterexamples_forward.csv\n");
-                    return 0;
-                }
+            // if (ce_file == NULL) {
+            //     ce_file = fopen("FairQuant-Artifact/FairQuant/counterexamples_forward.csv", "w");
+            //     if (!ce_file) {
+            //         printf("Failed to open counterexamples_forward.csv\n");
+            //         return 0;
+            //     }
 
-                fprintf(ce_file, "CE_ID,PA,");
-                for (int i = 0; i < nnet->inputSize; i++) {
-                    fprintf(ce_file, "%s,", feature_names[i]);
-                }
-                fprintf(ce_file, "Output,Decision\n");
-                fflush(ce_file);
-            }
+            //     fprintf(ce_file, "CE_ID,PA,");
+            //     for (int i = 0; i < nnet->inputSize; i++) {
+            //         fprintf(ce_file, "%s,", feature_names[i]);
+            //     }
+            //     fprintf(ce_file, "Output,Decision\n");
+            //     fflush(ce_file);
+            // }
 
-            if (out0Pos != out1Pos) {
-                counterexample_count++;
+            // if (out0Pos != out1Pos) {
+            //     counterexample_count++;
 
-                // PA = 0
-                fprintf(ce_file, "%d,0,", counterexample_count);
-                for (int i = 0; i < nnet->inputSize; i++) {
-                    fprintf(ce_file, "%d,", decode_feature(i, i0_lower[i]));
-                }
-                fprintf(ce_file, "%.6f,%s\n", output0_interval.lower_matrix.data[0], out0Pos ? "POSITIVE" : "NEGATIVE");
+            //     // PA = 0
+            //     fprintf(ce_file, "%d,0,", counterexample_count);
+            //     for (int i = 0; i < nnet->inputSize; i++) {
+            //         fprintf(ce_file, "%d,", decode_feature(i, i0_lower[i]));
+            //     }
+            //     fprintf(ce_file, "%.6f,%s\n", output0_interval.lower_matrix.data[0], unfair0 ? "POSITIVE" : "NEGATIVE");
 
-                // PA = 1
-                fprintf(ce_file, "%d,1,", counterexample_count);
-                for (int i = 0; i < nnet->inputSize; i++) {
-                    fprintf(ce_file, "%d,", decode_feature(i, i1_lower[i]));
-                }
-                fprintf(ce_file, "%.6f,%s\n", output1_interval.lower_matrix.data[0], out1Pos ? "POSITIVE" : "NEGATIVE");
+            //     // PA = 1
+            //     fprintf(ce_file, "%d,1,", counterexample_count);
+            //     for (int i = 0; i < nnet->inputSize; i++) {
+            //         fprintf(ce_file, "%d,", decode_feature(i, i1_lower[i]));
+            //     }
+            //     fprintf(ce_file, "%.6f,%s\n", output1_interval.lower_matrix.data[0], unfair1 ? "POSITIVE" : "NEGATIVE");
 
-                fflush(ce_file);
-            }
+            //     fflush(ce_file);
+            // }
         }
 
         // if unknown (not determined to be fair or unfair)
