@@ -253,72 +253,84 @@ int main( int argc, char *argv[])
 
         // first check if this is a concrete data point (i.e. curr_vol = 1)
         if (curr_volume == 1) { // just do a concrete forward prop, it will be either fair or unfair            
-            static int counterexample_count = 0;
-            static FILE* ce_file = NULL;
-            
-            // Feature names in the exact order as they appear in the neural network
-            static const char* feature_names[] = {
-                "age", "workclass", "fnlwgt", "education", "education-num",
-                "marital-status", "occupation", "relationship", "sex", "race",
-                "capital-gain", "capital-loss", "hours-per-week", "native-country"
-            };
-
-            // Open CSV file and write headers (only once)
-            if (ce_file == NULL) {
-                ce_file = fopen("FairQuant-Artifact/FairQuant/counterexamples_forward.csv", "w");
-                if (ce_file != NULL) {
-                    // Write CSV header
-                    fprintf(ce_file, "CE_ID,PA,");
-                    for (int i = 0; i < nnet->inputSize; i++) {
-                        fprintf(ce_file, "%s,", feature_names[i]);
-                    }
-                    fprintf(ce_file, "Output,Decision\n");
-                    fflush(ce_file);
-                } else {
-                    printf("Failed to open counterexamples_forward.csv\n");
-                }
-            }
-            
-            // Forward propagation for both protected groups
             forward_prop(nnet, &input0_interval.lower_matrix, &output0_interval.lower_matrix);
             forward_prop(nnet, &input1_interval.lower_matrix, &output1_interval.lower_matrix);
-            
+
             int out0Pos = (output0_interval.lower_matrix.data[0] > 0);
             int out1Pos = (output1_interval.lower_matrix.data[0] > 0);
-            
+
             if (out0Pos == out1Pos) {
                 fairConc = 1;
             }
             else {
                 unfairConc = 1;
-                
-                // Counterexample detected! Write to CSV
-                if (ce_file != NULL) {
-                    counterexample_count++;
-                    
-                    // Write row for PA=0
-                    fprintf(ce_file, "%d,0,", counterexample_count);
-                    for (int i = 0; i < nnet->inputSize; i++) {
-                        const char* decoded_value = decode_feature(i, input0_interval.lower_matrix.data[i]);
-                        fprintf(ce_file, "%s,", decoded_value);
-                    }
-                    fprintf(ce_file, "%.6f,%s\n", 
-                        output0_interval.lower_matrix.data[0], 
-                        out0Pos ? "POSITIVE" : "NEGATIVE");
-
-                    // Write row for PA=1
-                    fprintf(ce_file, "%d,1,", counterexample_count);
-                    for (int i = 0; i < nnet->inputSize; i++) {
-                        const char* decoded_value = decode_feature(i, input1_interval.lower_matrix.data[i]);
-                        fprintf(ce_file, "%s,", decoded_value);
-                    }
-                    fprintf(ce_file, "%.6f,%s\n", 
-                        output1_interval.lower_matrix.data[0], 
-                        out1Pos ? "POSITIVE" : "NEGATIVE");
-
-                    fflush(ce_file);
-                }
             }
+            // static int counterexample_count = 0;
+            // static FILE* ce_file = NULL;
+            
+            // // Feature names in the exact order as they appear in the neural network
+            // static const char* feature_names[] = {
+            //     "age", "workclass", "fnlwgt", "education", "education-num",
+            //     "marital-status", "occupation", "relationship", "sex", "race",
+            //     "capital-gain", "capital-loss", "hours-per-week", "native-country"
+            // };
+
+            // // Open CSV file and write headers (only once)
+            // if (ce_file == NULL) {
+            //     ce_file = fopen("FairQuant-Artifact/FairQuant/counterexamples_forward.csv", "w");
+            //     if (ce_file != NULL) {
+            //         // Write CSV header
+            //         fprintf(ce_file, "CE_ID,PA,");
+            //         for (int i = 0; i < nnet->inputSize; i++) {
+            //             fprintf(ce_file, "%s,", feature_names[i]);
+            //         }
+            //         fprintf(ce_file, "Output,Decision\n");
+            //         fflush(ce_file);
+            //     } else {
+            //         printf("Failed to open counterexamples_forward.csv\n");
+            //     }
+            // }
+            
+            // // Forward propagation for both protected groups
+            // forward_prop(nnet, &input0_interval.lower_matrix, &output0_interval.lower_matrix);
+            // forward_prop(nnet, &input1_interval.lower_matrix, &output1_interval.lower_matrix);
+            
+            // int out0Pos = (output0_interval.lower_matrix.data[0] > 0);
+            // int out1Pos = (output1_interval.lower_matrix.data[0] > 0);
+            
+            // if (out0Pos == out1Pos) {
+            //     fairConc = 1;
+            // }
+            // else {
+            //     unfairConc = 1;
+                
+            //     // Counterexample detected! Write to CSV
+            //     if (ce_file != NULL) {
+            //         counterexample_count++;
+                    
+            //         // Write row for PA=0
+            //         fprintf(ce_file, "%d,0,", counterexample_count);
+            //         for (int i = 0; i < nnet->inputSize; i++) {
+            //             const char* decoded_value = decode_feature(i, input0_interval.lower_matrix.data[i]);
+            //             fprintf(ce_file, "%s,", decoded_value);
+            //         }
+            //         fprintf(ce_file, "%.6f,%s\n", 
+            //             output0_interval.lower_matrix.data[0], 
+            //             out0Pos ? "POSITIVE" : "NEGATIVE");
+
+            //         // Write row for PA=1
+            //         fprintf(ce_file, "%d,1,", counterexample_count);
+            //         for (int i = 0; i < nnet->inputSize; i++) {
+            //             const char* decoded_value = decode_feature(i, input1_interval.lower_matrix.data[i]);
+            //             fprintf(ce_file, "%s,", decoded_value);
+            //         }
+            //         fprintf(ce_file, "%.6f,%s\n", 
+            //             output1_interval.lower_matrix.data[0], 
+            //             out1Pos ? "POSITIVE" : "NEGATIVE");
+
+            //         fflush(ce_file);
+            //     }
+            // }
         }
         
         // otherwise we do a normal symbolic forward prop
