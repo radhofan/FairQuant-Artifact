@@ -297,14 +297,14 @@ int main( int argc, char *argv[])
                     for (int i = 0; i < nnet->inputSize; i++) {
                         fprintf(ce_file, "%s,", decode_feature(i, i0_lower[i]));
                     }
-                    fprintf(ce_file, "%.6f,%s\n", output0.data[0], out0Pos ? "POSITIVE" : "NEGATIVE");
+                    fprintf(ce_file, "%.6f,%s\n", output0_interval.lower_matrix.data[0], out0Pos ? "POSITIVE" : "NEGATIVE");
 
                     // PA = 1
                     fprintf(ce_file, "%d,1,", counterexample_count);
                     for (int i = 0; i < nnet->inputSize; i++) {
                         fprintf(ce_file, "%s,", decode_feature(i, i1_lower[i]));
                     }
-                    fprintf(ce_file, "%.6f,%s\n", output1.data[0], out1Pos ? "POSITIVE" : "NEGATIVE");
+                    fprintf(ce_file, "%.6f,%s\n", output1_interval.lower_matrix.data[0]], out1Pos ? "POSITIVE" : "NEGATIVE");
 
                     fflush(ce_file);
                 }
