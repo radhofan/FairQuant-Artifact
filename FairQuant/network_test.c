@@ -290,22 +290,36 @@ int main( int argc, char *argv[])
 
                 if (out0Pos != out1Pos) {
                     counterexample_count++;
+                    
+                   char debug_buffer[256]; // adjust size as needed
 
                     // PA = 0
                     fprintf(ce_file, "%d,0,", counterexample_count);
                     for (int i = 0; i < nnet->inputSize; i++) {
-                        fprintf(ce_file, "%s,", decode_feature(i, input0_interval.lower_matrix.data[i]));
-                        printf("[DEBUG] Feature %d: %s (raw=%.6f)\n", i, decode_feature(i, input0_interval.lower_matrix.data[i]), input0_interval.lower_matrix.data[i]); // Console
+                        const char* decoded = decode_feature(i, input0_interval.lower_matrix.data[i]);
+                        fprintf(ce_file, "%s,", decoded);
+                        
+                        snprintf(debug_buffer, sizeof(debug_buffer),
+                                "[DEBUG] Feature %d: %s (raw=%.6f)\n",
+                                i, decoded, input0_interval.lower_matrix.data[i]);
+                        printf("%s", debug_buffer); // print to console
                     }
-                    fprintf(ce_file, "%.6f,%s\n", output0_interval.lower_matrix.data[0], out0Pos ? "POSITIVE" : "NEGATIVE");
+                    fprintf(ce_file, "%.6f,%s\n", output0_interval.lower_matrix.data[0],
+                            out0Pos ? "POSITIVE" : "NEGATIVE");
 
                     // PA = 1
                     fprintf(ce_file, "%d,1,", counterexample_count);
                     for (int i = 0; i < nnet->inputSize; i++) {
-                        fprintf(ce_file, "%s,", decode_feature(i, input1_interval.lower_matrix.data[i]));
-                        printf("[DEBUG] Feature %d: %s (raw=%.6f)\n", i, decode_feature(i, input1_interval.lower_matrix.data[i]), input1_interval.lower_matrix.data[i]); // Console
+                        const char* decoded = decode_feature(i, input1_interval.lower_matrix.data[i]);
+                        fprintf(ce_file, "%s,", decoded);
+                        
+                        snprintf(debug_buffer, sizeof(debug_buffer),
+                                "[DEBUG] Feature %d: %s (raw=%.6f)\n",
+                                i, decoded, input1_interval.lower_matrix.data[i]);
+                        printf("%s", debug_buffer); // print to console
                     }
-                    fprintf(ce_file, "%.6f,%s\n", output1_interval.lower_matrix.data[0], out1Pos ? "POSITIVE" : "NEGATIVE");
+                    fprintf(ce_file, "%.6f,%s\n", output1_interval.lower_matrix.data[0],
+                            out1Pos ? "POSITIVE" : "NEGATIVE");
 
                     fflush(ce_file);
                 }
