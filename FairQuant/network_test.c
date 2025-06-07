@@ -304,7 +304,7 @@ int main( int argc, char *argv[])
                     for (int i = 0; i < nnet->inputSize; i++) {
                         fprintf(ce_file, "%s,", decode_feature(i, i1_lower[i]));
                     }
-                    fprintf(ce_file, "%.6f,%s\n", output1_interval.lower_matrix.data[0]], out1Pos ? "POSITIVE" : "NEGATIVE");
+                    fprintf(ce_file, "%.6f,%s\n", output1_interval.lower_matrix.data[0], out1Pos ? "POSITIVE" : "NEGATIVE");
 
                     fflush(ce_file);
                 }
