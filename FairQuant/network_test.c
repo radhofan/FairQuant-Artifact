@@ -355,6 +355,56 @@ int main( int argc, char *argv[])
         else if (unfair0 || unfair1 || unfairConc){
             fals_volume += curr_volume;
             uncer_volume -= curr_volume;
+
+            // Counterexample CSV generation for abstract (interval-based) unfair case
+            static int counterexample_count = 0;
+            static FILE* ce_file = NULL;
+
+            static const char* feature_names[] = {
+                "age", "workclass", "fnlwgt", "education", "education-num",
+                "marital-status", "occupation", "relationship", "sex", "race",
+                "capital-gain", "capital-loss", "hours-per-week", "native-country"
+            };
+
+            if (ce_file == NULL) {
+                ce_file = fopen("FairQuant-Artifact/FairQuant/counterexamples_forward.csv", "w");
+                if (ce_file != NULL) {
+                    fprintf(ce_file, "CE_ID,PA,");
+                    for (int i = 0; i < nnet->inputSize; i++) {
+                        fprintf(ce_file, "%s,", feature_names[i]);
+                    }
+                    fprintf(ce_file, "Output_LB,Output_UB,Decision\n");
+                    fflush(ce_file);
+                } else {
+                    printf("Failed to open counterexamples_forward.csv\n");
+                }
+            }
+
+            if (ce_file != NULL) {
+                counterexample_count++;
+
+                // Write PA = 0 (lower bound inputs)
+                fprintf(ce_file, "%d,0,", counterexample_count);
+                for (int i = 0; i < nnet->inputSize; i++) {
+                    const char* decoded = decode_feature(i, input0_interval.lower_matrix.data[i]);
+                    fprintf(ce_file, "%s,", decoded);
+                }
+                fprintf(ce_file, "%.6f,%.6f,UNCERTAIN\n",
+                    output0_interval.lower_matrix.data[0],
+                    output0_interval.upper_matrix.data[0]);
+
+                // Write PA = 1 (lower bound inputs)
+                fprintf(ce_file, "%d,1,", counterexample_count);
+                for (int i = 0; i < nnet->inputSize; i++) {
+                    const char* decoded = decode_feature(i, input1_interval.lower_matrix.data[i]);
+                    fprintf(ce_file, "%s,", decoded);
+                }
+                fprintf(ce_file, "%.6f,%.6f,UNCERTAIN\n",
+                    output1_interval.lower_matrix.data[0],
+                    output1_interval.upper_matrix.data[0]);
+
+                fflush(ce_file);
+            }
         }
 
         // if unknown (not determined to be fair or unfair)
