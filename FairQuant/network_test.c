@@ -400,8 +400,17 @@ int main( int argc, char *argv[])
                         i, decoded, input0_interval.lower_matrix.data[i]);
                 printf("%s", debug_buffer); // print to console
             }
-            fprintf(ce_file, "%.6f,%s\n", output0_interval.lower_matrix.data[0],
-                    out0Pos ? "POSITIVE" : "NEGATIVE");
+            // For PA = 0 (input0)
+            const char* label0;
+            if (unfair0)
+                label0 = "POSITIVE";
+            else if (unfair1)
+                label0 = "NEGATIVE";
+            else
+                label0 = (output0_interval.lower_matrix.data[0] > 0) ? "POSITIVE" : "NEGATIVE";
+
+            fprintf(ce_file, "%.6f,%s\n", output0_interval.lower_matrix.data[0], label0);
+
 
             // PA = 1
             fprintf(ce_file, "%d,1,", counterexample_count);
@@ -414,9 +423,18 @@ int main( int argc, char *argv[])
                         i, decoded, input1_interval.lower_matrix.data[i]);
                 printf("%s", debug_buffer); // print to console
             }
-            fprintf(ce_file, "%.6f,%s\n", output1_interval.lower_matrix.data[0],
-                    out1Pos ? "POSITIVE" : "NEGATIVE");
+            // For PA = 1 (input1)
+            const char* label1;
+            if (unfair1)
+                label1 = "POSITIVE";
+            else if (unfair0)
+                label1 = "NEGATIVE";
+            else
+                label1 = (output1_interval.lower_matrix.data[0] > 0) ? "POSITIVE" : "NEGATIVE";
 
+            fprintf(ce_file, "%.6f,%s\n", output1_interval.lower_matrix.data[0], label1);
+
+            
             fflush(ce_file);
         
         }
