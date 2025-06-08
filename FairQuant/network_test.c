@@ -178,7 +178,6 @@ int main( int argc, char *argv[])
     fprintf(stdout, "\nrunning network %s on sens_feature_idx = %d\n\n", FULL_NET_PATH, SENS_FEATURE_IDX);
 
     while (1){
-         fprintf( stdout, "WHILE CASE\n" );
         if (subproblem_remaining <= 0) {
             fprintf( stdout, "no more subproblems, complete termination\n" );
             break;
@@ -260,6 +259,7 @@ int main( int argc, char *argv[])
 
             if (out0Pos == out1Pos) {
                 fairConc = 1;
+                fprintf( stdout, "FAIR CASE\n" );
             }
             else {
                 unfairConc = 1;
