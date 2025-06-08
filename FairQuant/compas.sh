@@ -1,4 +1,10 @@
-#!/bin/bash
+#!/usr/bin/env bash
+
+set -e
+set -x
+
+exec > >(tee -a FairQuant-Artifact/FairQuant/experiment_output.log)
+exec 2>&1
 
 # Check if PA is provided
 if [ "$#" -ne 1 ]; then
@@ -22,5 +28,6 @@ fi
 
 for ((i=1; i<=7; i++)); do # for each model 1 to 7
     echo -e "\n-----Running network compas-$i on $PA-----"
-    ./network_test "../models/compas/compas-$i.nnet" "$idx"
+    # ./network_test "../models/compas/compas-$i.nnet" "$idx"
+    ./FairQuant-Artifact/FairQuant/network_test "FairQuant-Artifact/models/compas/compas-$i.nnet" "$idx"
 done

@@ -78,21 +78,37 @@ make -C "$FAIRQUANT_DIR" all
 # bucket_name="bare_metal_experiment_pattern_data"  # Simple, static bucket name
 # file_to_upload="FairQuant-Artifact/FairQuant/counterexamples.csv"
 
+# # Verify adult.sh exists and is executable
+# GERMAN_SCRIPT="./FairQuant-Artifact/FairQuant/german.sh"
+# if [ ! -f "$GERMAN_SCRIPT" ]; then
+#     echo "ERROR: $GERMAN_SCRIPT does not exist!" >&2
+#     exit 1
+# fi
+
+# if [ ! -x "$GERMAN_SCRIPT" ]; then
+#     echo "ERROR: $GERMAN_SCRIPT is not executable!" >&2
+#     chmod +x "$GERMAN_SCRIPT"
+# fi
+
+# # Run adult.sh
+# echo "Running $GERMAN_SCRIPT with argument 'sex'"
+# "$GERMAN_SCRIPT" age
+
 # Verify adult.sh exists and is executable
-GERMAN_SCRIPT="./FairQuant-Artifact/FairQuant/german.sh"
-if [ ! -f "$GERMAN_SCRIPT" ]; then
-    echo "ERROR: $GERMAN_SCRIPT does not exist!" >&2
+COMPAS_SCRIPT="./FairQuant-Artifact/FairQuant/compas.sh"
+if [ ! -f "$COMPAS_SCRIPT" ]; then
+    echo "ERROR: $COMPAS_SCRIPT does not exist!" >&2
     exit 1
 fi
 
-if [ ! -x "$GERMAN_SCRIPT" ]; then
-    echo "ERROR: $GERMAN_SCRIPT is not executable!" >&2
-    chmod +x "$GERMAN_SCRIPT"
+if [ ! -x "$COMPAS_SCRIPT" ]; then
+    echo "ERROR: $COMPAS_SCRIPT is not executable!" >&2
+    chmod +x "$COMPAS_SCRIPT"
 fi
 
 # Run adult.sh
-echo "Running $GERMAN_SCRIPT with argument 'sex'"
-"$GERMAN_SCRIPT" age
+echo "Running $COMPAS_SCRIPT with argument 'sex'"
+"$COMPAS_SCRIPT" age
 
 # echo
 # echo "Uploading results to the object store container $bucket_name"
