@@ -331,7 +331,7 @@ int main( int argc, char *argv[])
         
         // otherwise we do a normal symbolic forward prop
         else {
-            fprintf( stdout, "SECOND CASE\n" );
+            // fprintf( stdout, "SECOND CASE\n" );
             memset(R0, 0, sizeof(float)*numLayers*maxLayerSize);
             memset(R1, 0, sizeof(float)*numLayers*maxLayerSize);
 
