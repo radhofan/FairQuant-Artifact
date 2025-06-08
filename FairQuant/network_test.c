@@ -399,13 +399,13 @@ int main( int argc, char *argv[])
             // PA = 0
             fprintf(ce_file, "%d,0,", counterexample_count);
             for (int i = 0; i < nnet->inputSize; i++) {
-                const char* decoded = decode_feature(i, input0_interval.lower_matrix.data[i]);
-                fprintf(ce_file, "%s,", decoded);
+                // const char* decoded = decode_feature(i, input0_interval.lower_matrix.data[i]);
+                fprintf(ce_file, "%s,", input0_interval.lower_matrix.data[i]);
                 
-                snprintf(debug_buffer, sizeof(debug_buffer),
-                        "[DEBUG] Feature %d: %s (raw=%.6f)\n",
-                        i, decoded, input0_interval.lower_matrix.data[i]);
-                printf("%s", debug_buffer); // print to console
+                // snprintf(debug_buffer, sizeof(debug_buffer),
+                //         "[DEBUG] Feature %d: %s (raw=%.6f)\n",
+                //         i, decoded, input0_interval.lower_matrix.data[i]);
+                // printf("%s", debug_buffer); // print to console
             }
             // For PA = 0 (input0)
             const char* label0;
@@ -422,13 +422,13 @@ int main( int argc, char *argv[])
             // PA = 1
             fprintf(ce_file, "%d,1,", counterexample_count);
             for (int i = 0; i < nnet->inputSize; i++) {
-                const char* decoded = decode_feature(i, input1_interval.lower_matrix.data[i]);
-                fprintf(ce_file, "%s,", decoded);
+                // const char* decoded = decode_feature(i, input1_interval.lower_matrix.data[i]);
+                fprintf(ce_file, "%s,", input1_interval.lower_matrix.data[i]);
                 
-                snprintf(debug_buffer, sizeof(debug_buffer),
-                        "[DEBUG] Feature %d: %s (raw=%.6f)\n",
-                        i, decoded, input1_interval.lower_matrix.data[i]);
-                printf("%s", debug_buffer); // print to console
+                // snprintf(debug_buffer, sizeof(debug_buffer),
+                //         "[DEBUG] Feature %d: %s (raw=%.6f)\n",
+                //         i, decoded, input1_interval.lower_matrix.data[i]);
+                // printf("%s", debug_buffer); // print to console
             }
             // For PA = 1 (input1)
             const char* label1;
