@@ -378,7 +378,7 @@ int main( int argc, char *argv[])
             // };
 
             static const char* feature_names[] = {
-                "Two_yr_Recidivism", "Age", "Race", "Female", "Misdeameanor"
+                "two_yr_Recidivism", "age", "race", "female", "misdeameanor"
             };
 
             if (ce_file == NULL) {
