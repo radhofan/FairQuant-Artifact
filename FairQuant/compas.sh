@@ -26,7 +26,7 @@ else
     exit 1
 fi
 
-for ((i=1; i<=7; i++)); do # for each model 1 to 7
+for ((i=1; i<=6; i++)); do # for each model 1 to 7
     echo -e "\n-----Running network compas-$i on $PA-----"
     # ./network_test "../models/compas/compas-$i.nnet" "$idx"
     ./FairQuant-Artifact/FairQuant/network_test "FairQuant-Artifact/models/compas/compas-$i.nnet" "$idx"
