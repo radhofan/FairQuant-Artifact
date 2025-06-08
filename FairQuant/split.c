@@ -220,5 +220,9 @@ int check_adv(struct NNet* nnet, struct Subproblem *subp) {
         }
     }
 
+    if(counterexample == 0){
+        fprintf(stdout, "TIDAK ADA\n");
+    }
+
     return counterexample; // No counterexample found
 }
