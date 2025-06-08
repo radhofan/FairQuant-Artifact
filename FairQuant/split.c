@@ -75,69 +75,69 @@ struct timeval start, curr, finish, last_finish;
 //     return 0;
 // }
 
-// static const char* workclass_map[] = {
-//     "Private", "Self-emp-not-inc", "Self-emp-inc", "Federal-gov",
-//     "Local-gov", "State-gov", "Without-pay", "Never-worked"
-// };
+static const char* workclass_map[] = {
+    "Private", "Self-emp-not-inc", "Self-emp-inc", "Federal-gov",
+    "Local-gov", "State-gov", "Without-pay", "Never-worked"
+};
 
-// static const char* education_map[] = {
-//     "Bachelors", "Some-college", "11th", "HS-grad", "Prof-school",
-//     "Assoc-acdm", "Assoc-voc", "9th", "7th-8th", "12th", "Masters",
-//     "1st-4th", "10th", "Doctorate", "5th-6th", "Preschool"
-// };
+static const char* education_map[] = {
+    "Bachelors", "Some-college", "11th", "HS-grad", "Prof-school",
+    "Assoc-acdm", "Assoc-voc", "9th", "7th-8th", "12th", "Masters",
+    "1st-4th", "10th", "Doctorate", "5th-6th", "Preschool"
+};
 
-// static const char* marital_status_map[] = {
-//     "Married-civ-spouse", "Divorced", "Never-married", "Separated",
-//     "Widowed", "Married-spouse-absent", "Married-AF-spouse"
-// };
+static const char* marital_status_map[] = {
+    "Married-civ-spouse", "Divorced", "Never-married", "Separated",
+    "Widowed", "Married-spouse-absent", "Married-AF-spouse"
+};
 
-// static const char* occupation_map[] = {
-//     "Tech-support", "Craft-repair", "Other-service", "Sales", "Exec-managerial",
-//     "Prof-specialty", "Handlers-cleaners", "Machine-op-inspct", "Adm-clerical",
-//     "Farming-fishing", "Transport-moving", "Priv-house-serv", "Protective-serv",
-//     "Armed-Forces"
-// };
+static const char* occupation_map[] = {
+    "Tech-support", "Craft-repair", "Other-service", "Sales", "Exec-managerial",
+    "Prof-specialty", "Handlers-cleaners", "Machine-op-inspct", "Adm-clerical",
+    "Farming-fishing", "Transport-moving", "Priv-house-serv", "Protective-serv",
+    "Armed-Forces"
+};
 
-// static const char* relationship_map[] = {
-//     "Wife", "Own-child", "Husband", "Not-in-family", "Other-relative", "Unmarried"
-// };
+static const char* relationship_map[] = {
+    "Wife", "Own-child", "Husband", "Not-in-family", "Other-relative", "Unmarried"
+};
 
-// static const char* sex_map[] = { "Female", "Male" };
+static const char* sex_map[] = { "Female", "Male" };
 
-// static const char* race_map[] = {
-//     "White", "Asian-Pac-Islander", "Amer-Indian-Eskimo", "Other", "Black"
-// };
+static const char* race_map[] = {
+    "White", "Asian-Pac-Islander", "Amer-Indian-Eskimo", "Other", "Black"
+};
 
-// static const char* native_country_map[] = {
-//     "United-States", "Cambodia", "England", "Puerto-Rico", "Canada",
-//     "Germany", "Outlying-US(Guam-USVI-etc)", "India", "Japan", "Greece",
-//     "South", "China", "Cuba", "Iran", "Honduras", "Philippines", "Italy",
-//     "Poland", "Jamaica", "Vietnam", "Mexico", "Portugal", "Ireland",
-//     "France", "Dominican-Republic", "Laos", "Ecuador", "Taiwan", "Haiti",
-//     "Columbia", "Hungary", "Guatemala", "Nicaragua", "Scotland", "Thailand",
-//     "Yugoslavia", "El-Salvador", "Trinadad&Tobago", "Peru", "Hong",
-//     "Holand-Netherlands"
-// };
+static const char* native_country_map[] = {
+    "United-States", "Cambodia", "England", "Puerto-Rico", "Canada",
+    "Germany", "Outlying-US(Guam-USVI-etc)", "India", "Japan", "Greece",
+    "South", "China", "Cuba", "Iran", "Honduras", "Philippines", "Italy",
+    "Poland", "Jamaica", "Vietnam", "Mexico", "Portugal", "Ireland",
+    "France", "Dominican-Republic", "Laos", "Ecuador", "Taiwan", "Haiti",
+    "Columbia", "Hungary", "Guatemala", "Nicaragua", "Scotland", "Thailand",
+    "Yugoslavia", "El-Salvador", "Trinadad&Tobago", "Peru", "Hong",
+    "Holand-Netherlands"
+};
 
-// // Decoding function
-// const char* decode_feature(int feature_index, float value) {
-//     int idx = (int)round(value);
-//     switch (feature_index) {
-//         case 1: return workclass_map[idx];
-//         case 3: return education_map[idx];
-//         case 5: return marital_status_map[idx];
-//         case 6: return occupation_map[idx];
-//         case 7: return relationship_map[idx];
-//         case 8: return sex_map[idx];
-//         case 9: return race_map[idx];
-//         case 13: return native_country_map[idx];
-//         default: {
-//             static char buffer[32];
-//             snprintf(buffer, sizeof(buffer), "%.0f", value);
-//             return buffer;
-//         }
-//     }
-// }
+// Decoding function
+const char* decode_feature(int feature_index, float value) {
+    int idx = (int)round(value);
+    switch (feature_index) {
+        case 1: return workclass_map[idx];
+        case 3: return education_map[idx];
+        case 5: return marital_status_map[idx];
+        case 6: return occupation_map[idx];
+        case 7: return relationship_map[idx];
+        case 8: return sex_map[idx];
+        case 9: return race_map[idx];
+        case 13: return native_country_map[idx];
+        default: {
+            static char buffer[32];
+            snprintf(buffer, sizeof(buffer), "%.0f", value);
+            return buffer;
+        }
+    }
+}
 
 // Main check_adv function
 int check_adv(struct NNet* nnet, struct Subproblem *subp) {
