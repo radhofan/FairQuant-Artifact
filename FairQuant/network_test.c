@@ -394,7 +394,7 @@ int main( int argc, char *argv[])
 
             counterexample_count++;
             
-            char debug_buffer[256]; // adjust size as needed
+            // char debug_buffer[256]; // adjust size as needed
 
             // PA = 0
             fprintf(ce_file, "%d,0,", counterexample_count);
