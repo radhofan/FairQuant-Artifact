@@ -251,7 +251,7 @@ int main( int argc, char *argv[])
 
         // first check if this is a concrete data point (i.e. curr_vol = 1)
         if (curr_volume == 1) { // just do a concrete forward prop, it will be either fair or unfair       
-            fprintf( stdout, "FIRST CASE\n" );     
+            // fprintf( stdout, "FIRST CASE\n" );     
             forward_prop(nnet, &input0_interval.lower_matrix, &output0_interval.lower_matrix);
             forward_prop(nnet, &input1_interval.lower_matrix, &output1_interval.lower_matrix);
 
@@ -260,12 +260,12 @@ int main( int argc, char *argv[])
 
             if (out0Pos == out1Pos) {
                 fairConc = 1;
-                fprintf( stdout, "FAIR CASE\n" );
+                // fprintf( stdout, "FAIR CASE\n" );
             }
             else {
                 unfairConc = 1;
 
-                fprintf( stdout, "FIRST CASE\n" );
+                // fprintf( stdout, "FIRST CASE\n" );
 
                 // static int counterexample_count = 0;
                 // static FILE* ce_file = NULL;
@@ -358,6 +358,7 @@ int main( int argc, char *argv[])
         if (fair0 || fair1 || fairConc){
             cert_volume += curr_volume;
             uncer_volume -= curr_volume;
+            fprintf( stdout, "SECOND CASE FAIR\n" );
         }
 
         // if unfair
