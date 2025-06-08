@@ -371,12 +371,6 @@ int main( int argc, char *argv[])
             static int counterexample_count = 0;
             static FILE* ce_file = NULL;
 
-            // static const char* feature_names[] = {
-            //     "age", "workclass", "fnlwgt", "education", "education-num",
-            //     "marital-status", "occupation", "relationship", "sex", "race",
-            //     "capital-gain", "capital-loss", "hours-per-week", "native-country"
-            // };
-
             static const char* feature_names[] = {
                 "two_yr_Recidivism", "Number_of_Priors", "age", "race", "female", "misdeameanor"
             };

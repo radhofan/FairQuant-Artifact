@@ -69,46 +69,46 @@ make -C "$FAIRQUANT_DIR" all
 #     chmod +x "$BANK_SCRIPT"
 # fi
 
-# # Run adult.sh
-# echo "Running $BANK_SCRIPT with argument 'age'"
-# "$BANK_SCRIPT" age
-
-# # Verify adult.sh exists and is executable
-# GERMAN_SCRIPT="./FairQuant-Artifact/FairQuant/german.sh"
-# if [ ! -f "$GERMAN_SCRIPT" ]; then
-#     echo "ERROR: $GERMAN_SCRIPT does not exist!" >&2
-#     exit 1
-# fi
-
-# if [ ! -x "$GERMAN_SCRIPT" ]; then
-#     echo "ERROR: $GERMAN_SCRIPT is not executable!" >&2
-#     chmod +x "$GERMAN_SCRIPT"
-# fi
-
-# # Run adult.sh
-# echo "Running $GERMAN_SCRIPT with argument 'sex'"
-# "$GERMAN_SCRIPT" age
+# Run adult.sh
+echo "Running $BANK_SCRIPT with argument 'age'"
+"$BANK_SCRIPT" age
 
 # Verify adult.sh exists and is executable
-COMPAS_SCRIPT="./FairQuant-Artifact/FairQuant/compas.sh"
-if [ ! -f "$COMPAS_SCRIPT" ]; then
-    echo "ERROR: $COMPAS_SCRIPT does not exist!" >&2
+GERMAN_SCRIPT="./FairQuant-Artifact/FairQuant/german.sh"
+if [ ! -f "$GERMAN_SCRIPT" ]; then
+    echo "ERROR: $GERMAN_SCRIPT does not exist!" >&2
     exit 1
 fi
 
-if [ ! -x "$COMPAS_SCRIPT" ]; then
-    echo "ERROR: $COMPAS_SCRIPT is not executable!" >&2
-    chmod +x "$COMPAS_SCRIPT"
+if [ ! -x "$GERMAN_SCRIPT" ]; then
+    echo "ERROR: $GERMAN_SCRIPT is not executable!" >&2
+    chmod +x "$GERMAN_SCRIPT"
 fi
 
 # Run adult.sh
-echo "Running $COMPAS_SCRIPT with argument 'age'"
-"$COMPAS_SCRIPT" age
+echo "Running $GERMAN_SCRIPT with argument 'sex'"
+"$GERMAN_SCRIPT" age
+
+# Verify adult.sh exists and is executable
+# COMPAS_SCRIPT="./FairQuant-Artifact/FairQuant/compas.sh"
+# if [ ! -f "$COMPAS_SCRIPT" ]; then
+#     echo "ERROR: $COMPAS_SCRIPT does not exist!" >&2
+#     exit 1
+# fi
+
+# if [ ! -x "$COMPAS_SCRIPT" ]; then
+#     echo "ERROR: $COMPAS_SCRIPT is not executable!" >&2
+#     chmod +x "$COMPAS_SCRIPT"
+# fi
+
+# # Run adult.sh
+# echo "Running $COMPAS_SCRIPT with argument 'age'"
+# "$COMPAS_SCRIPT" age
 
 source ~/openrc
 
 bucket_name="bare_metal_experiment_pattern_data"  # Simple, static bucket name
-file_to_upload="FairQuant-Artifact/FairQuant/counterexamples_forward.csv"
+file_to_upload="FairQuant-Artifact/FairQuant/counterexamples.csv"
 
 echo
 echo "Uploading results to the object store container $bucket_name"
