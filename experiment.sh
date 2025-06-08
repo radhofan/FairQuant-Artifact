@@ -41,21 +41,21 @@ ls -la FairQuant-Artifact/FairQuant || echo "Directory missing!"
 FAIRQUANT_DIR="$PWD/FairQuant-Artifact/FairQuant"
 make -C "$FAIRQUANT_DIR" all
 
-# # Verify adult.sh exists and is executable
-# ADULT_SCRIPT="./FairQuant-Artifact/FairQuant/adult.sh"
-# if [ ! -f "$ADULT_SCRIPT" ]; then
-#     echo "ERROR: $ADULT_SCRIPT does not exist!" >&2
-#     exit 1
-# fi
+# Verify adult.sh exists and is executable
+ADULT_SCRIPT="./FairQuant-Artifact/FairQuant/adult.sh"
+if [ ! -f "$ADULT_SCRIPT" ]; then
+    echo "ERROR: $ADULT_SCRIPT does not exist!" >&2
+    exit 1
+fi
 
-# if [ ! -x "$ADULT_SCRIPT" ]; then
-#     echo "ERROR: $ADULT_SCRIPT is not executable!" >&2
-#     chmod +x "$ADULT_SCRIPT"
-# fi
+if [ ! -x "$ADULT_SCRIPT" ]; then
+    echo "ERROR: $ADULT_SCRIPT is not executable!" >&2
+    chmod +x "$ADULT_SCRIPT"
+fi
 
-# # Run adult.sh
-# echo "Running $ADULT_SCRIPT with argument 'sex'"
-# "$ADULT_SCRIPT" sex
+# Run adult.sh
+echo "Running $ADULT_SCRIPT with argument 'sex'"
+"$ADULT_SCRIPT" sex
 
 # # Verify adult.sh exists and is executable
 # BANK_SCRIPT="./FairQuant-Artifact/FairQuant/bank.sh"
@@ -74,20 +74,20 @@ make -C "$FAIRQUANT_DIR" all
 # "$BANK_SCRIPT" age
 
 # Verify adult.sh exists and is executable
-GERMAN_SCRIPT="./FairQuant-Artifact/FairQuant/german.sh"
-if [ ! -f "$GERMAN_SCRIPT" ]; then
-    echo "ERROR: $GERMAN_SCRIPT does not exist!" >&2
-    exit 1
-fi
+# GERMAN_SCRIPT="./FairQuant-Artifact/FairQuant/german.sh"
+# if [ ! -f "$GERMAN_SCRIPT" ]; then
+#     echo "ERROR: $GERMAN_SCRIPT does not exist!" >&2
+#     exit 1
+# fi
 
-if [ ! -x "$GERMAN_SCRIPT" ]; then
-    echo "ERROR: $GERMAN_SCRIPT is not executable!" >&2
-    chmod +x "$GERMAN_SCRIPT"
-fi
+# if [ ! -x "$GERMAN_SCRIPT" ]; then
+#     echo "ERROR: $GERMAN_SCRIPT is not executable!" >&2
+#     chmod +x "$GERMAN_SCRIPT"
+# fi
 
-# Run adult.sh
-echo "Running $GERMAN_SCRIPT with argument 'sex'"
-"$GERMAN_SCRIPT" age
+# # Run adult.sh
+# echo "Running $GERMAN_SCRIPT with argument 'sex'"
+# "$GERMAN_SCRIPT" age
 
 # Verify adult.sh exists and is executable
 # COMPAS_SCRIPT="./FairQuant-Artifact/FairQuant/compas.sh"
