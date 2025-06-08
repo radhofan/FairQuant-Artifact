@@ -267,6 +267,8 @@ int check_adv(struct NNet* nnet, struct Subproblem *subp) {
     struct Matrix adv0 = {a0, 1, nnet->inputSize};
     struct Matrix adv1 = {a1, 1, nnet->inputSize};
 
+    int counterexample = 0;
+
     for (int n = 0; n < 10; n++) {
         for (int i = 0; i < nnet->inputSize; i++) {
             if (i == nnet->sens_feature_idx) {
@@ -310,9 +312,10 @@ int check_adv(struct NNet* nnet, struct Subproblem *subp) {
             fprintf(ce_file, "%.6f,%s\n", output1.data[0], out1Pos ? "POSITIVE" : "NEGATIVE");
 
             fflush(ce_file);
-            return 1; // Found counterexample
+            counterexample++;
+            // return 1; // Found counterexample
         }
     }
 
-    return 0; // No counterexample found
+    return counterexample; // No counterexample found
 }
