@@ -73,11 +73,6 @@ make -C "$FAIRQUANT_DIR" all
 # echo "Running $BANK_SCRIPT with argument 'age'"
 # "$BANK_SCRIPT" age
 
-# source ~/openrc
-
-# bucket_name="bare_metal_experiment_pattern_data"  # Simple, static bucket name
-# file_to_upload="FairQuant-Artifact/FairQuant/counterexamples.csv"
-
 # # Verify adult.sh exists and is executable
 # GERMAN_SCRIPT="./FairQuant-Artifact/FairQuant/german.sh"
 # if [ ! -f "$GERMAN_SCRIPT" ]; then
@@ -107,8 +102,13 @@ if [ ! -x "$COMPAS_SCRIPT" ]; then
 fi
 
 # Run adult.sh
-echo "Running $COMPAS_SCRIPT with argument 'sex'"
+echo "Running $COMPAS_SCRIPT with argument 'age'"
 "$COMPAS_SCRIPT" age
+
+source ~/openrc
+
+bucket_name="bare_metal_experiment_pattern_data"  # Simple, static bucket name
+file_to_upload="FairQuant-Artifact/FairQuant/counterexamples_forward.csv"
 
 echo
 echo "Uploading results to the object store container $bucket_name"
