@@ -366,7 +366,7 @@ int main( int argc, char *argv[])
             fals_volume += curr_volume;
             uncer_volume -= curr_volume;
 
-            fprintf( stdout, "SECOND CASE UNFAIR\n" );
+            // fprintf( stdout, "SECOND CASE UNFAIR\n" );
 
             // static int counterexample_count = 0;
             // static FILE* ce_file = NULL;
@@ -573,6 +573,8 @@ int main( int argc, char *argv[])
     rateFals = (double) (fals_volume + num_adv) / (double) nnet->global_volume * 100; // region for which model is def unfair
     rateAdv = (double) (adv_volume - num_adv) / (double) nnet->global_volume * 100;   // region (minus the actual counterexamples) for which model outputs some counterexample - could be SAT/UNSAT
     rateUncer = (double) uncer_volume / (double) nnet->global_volume * 100;           // region for which we have not looked yet
+    
+    fprintf(stdout, "fals_volume = %llu, num_adv = %d\n", fals_volume, num_adv);
     
     char buffer1[256];
     snprintf(buffer1, sizeof(buffer1), "Took %.2f seconds | %d solved subproblems | %llu #Cex\n",
