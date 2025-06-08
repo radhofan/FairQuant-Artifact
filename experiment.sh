@@ -69,9 +69,9 @@ make -C "$FAIRQUANT_DIR" all
 #     chmod +x "$BANK_SCRIPT"
 # fi
 
-# Run adult.sh
-echo "Running $BANK_SCRIPT with argument 'age'"
-"$BANK_SCRIPT" age
+# # Run adult.sh
+# echo "Running $BANK_SCRIPT with argument 'age'"
+# "$BANK_SCRIPT" age
 
 # Verify adult.sh exists and is executable
 GERMAN_SCRIPT="./FairQuant-Artifact/FairQuant/german.sh"
