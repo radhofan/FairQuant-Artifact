@@ -250,7 +250,8 @@ int main( int argc, char *argv[])
         fairConc = unfairConc = fair0 = fair1 = unfair0 = unfair1 = 0;
 
         // first check if this is a concrete data point (i.e. curr_vol = 1)
-        if (curr_volume == 1) { // just do a concrete forward prop, it will be either fair or unfair            
+        if (curr_volume == 1) { // just do a concrete forward prop, it will be either fair or unfair       
+            fprintf( stdout, "FIRST CASE\n" );     
             forward_prop(nnet, &input0_interval.lower_matrix, &output0_interval.lower_matrix);
             forward_prop(nnet, &input1_interval.lower_matrix, &output1_interval.lower_matrix);
 
@@ -330,6 +331,7 @@ int main( int argc, char *argv[])
         
         // otherwise we do a normal symbolic forward prop
         else {
+            fprintf( stdout, "SECOND CASE\n" );
             memset(R0, 0, sizeof(float)*numLayers*maxLayerSize);
             memset(R1, 0, sizeof(float)*numLayers*maxLayerSize);
 
@@ -363,7 +365,7 @@ int main( int argc, char *argv[])
             fals_volume += curr_volume;
             uncer_volume -= curr_volume;
 
-            fprintf( stdout, "SECOND CASE\n" );
+            // fprintf( stdout, "SECOND CASE\n" );
 
             // static int counterexample_count = 0;
             // static FILE* ce_file = NULL;
@@ -451,7 +453,7 @@ int main( int argc, char *argv[])
             if (curr_subp.depth >= MIN_CHECK_DEPTH){
                 
                 int adv_found = check_adv(nnet, &curr_subp);
-                fprintf( stdout, "LAST CASE\n" );
+                // fprintf( stdout, "LAST CASE\n" );
                 // if this subp has adv, then we add to adv rate and dismiss this subp
                 if (adv_found) {
                     shouldSplit = 0; // no more splitting!
