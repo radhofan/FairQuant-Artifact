@@ -400,7 +400,7 @@ int main( int argc, char *argv[])
             fprintf(ce_file, "%d,0,", counterexample_count);
             for (int i = 0; i < nnet->inputSize; i++) {
                 // const char* decoded = decode_feature(i, input0_interval.lower_matrix.data[i]);
-                fprintf(ce_file, "%s,", input0_interval.lower_matrix.data[i]);
+                fprintf(ce_file, "%.6f,", input0_interval.lower_matrix.data[i]);
                 
                 // snprintf(debug_buffer, sizeof(debug_buffer),
                 //         "[DEBUG] Feature %d: %s (raw=%.6f)\n",
@@ -423,7 +423,7 @@ int main( int argc, char *argv[])
             fprintf(ce_file, "%d,1,", counterexample_count);
             for (int i = 0; i < nnet->inputSize; i++) {
                 // const char* decoded = decode_feature(i, input1_interval.lower_matrix.data[i]);
-                fprintf(ce_file, "%s,", input1_interval.lower_matrix.data[i]);
+                fprintf(ce_file, "%.6f,", input1_interval.lower_matrix.data[i]);
                 
                 // snprintf(debug_buffer, sizeof(debug_buffer),
                 //         "[DEBUG] Feature %d: %s (raw=%.6f)\n",
