@@ -358,7 +358,7 @@ int main( int argc, char *argv[])
         if (fair0 || fair1 || fairConc){
             cert_volume += curr_volume;
             uncer_volume -= curr_volume;
-            fprintf( stdout, "SECOND CASE FAIR\n" );
+            // fprintf( stdout, "SECOND CASE FAIR\n" );
         }
 
         // if unfair
@@ -366,7 +366,7 @@ int main( int argc, char *argv[])
             fals_volume += curr_volume;
             uncer_volume -= curr_volume;
 
-            // fprintf( stdout, "SECOND CASE\n" );
+            fprintf( stdout, "SECOND CASE UNFAIR\n" );
 
             // static int counterexample_count = 0;
             // static FILE* ce_file = NULL;
