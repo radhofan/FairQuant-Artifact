@@ -366,83 +366,83 @@ int main( int argc, char *argv[])
             fals_volume += curr_volume;
             uncer_volume -= curr_volume;
 
-            // fprintf( stdout, "SECOND CASE UNFAIR\n" );
+            fprintf( stdout, "SECOND CASE UNFAIR\n" );
 
-            // static int counterexample_count = 0;
-            // static FILE* ce_file = NULL;
+            static int counterexample_count = 0;
+            static FILE* ce_file = NULL;
 
-            // static const char* feature_names[] = {
-            //     "age", "workclass", "fnlwgt", "education", "education-num",
-            //     "marital-status", "occupation", "relationship", "sex", "race",
-            //     "capital-gain", "capital-loss", "hours-per-week", "native-country"
-            // };
+            static const char* feature_names[] = {
+                "age", "workclass", "fnlwgt", "education", "education-num",
+                "marital-status", "occupation", "relationship", "sex", "race",
+                "capital-gain", "capital-loss", "hours-per-week", "native-country"
+            };
 
-            // if (ce_file == NULL) {
-            //     ce_file = fopen("FairQuant-Artifact/FairQuant/counterexamples_forward.csv", "w");
-            //     if (!ce_file) {
-            //         printf("Failed to open counterexamples_forward.csv\n");
-            //         return 0;
-            //     }
+            if (ce_file == NULL) {
+                ce_file = fopen("FairQuant-Artifact/FairQuant/counterexamples_forward.csv", "w");
+                if (!ce_file) {
+                    printf("Failed to open counterexamples_forward.csv\n");
+                    return 0;
+                }
 
-            //     fprintf(ce_file, "CE_ID,PA,");
-            //     for (int i = 0; i < nnet->inputSize; i++) {
-            //         fprintf(ce_file, "%s,", feature_names[i]);
-            //     }
-            //     fprintf(ce_file, "Output,Decision\n");
-            //     fflush(ce_file);
-            // }
+                fprintf(ce_file, "CE_ID,PA,");
+                for (int i = 0; i < nnet->inputSize; i++) {
+                    fprintf(ce_file, "%s,", feature_names[i]);
+                }
+                fprintf(ce_file, "Output,Decision\n");
+                fflush(ce_file);
+            }
 
-            // counterexample_count++;
+            counterexample_count++;
             
-            // char debug_buffer[256]; // adjust size as needed
+            char debug_buffer[256]; // adjust size as needed
 
-            // // PA = 0
-            // fprintf(ce_file, "%d,0,", counterexample_count);
-            // for (int i = 0; i < nnet->inputSize; i++) {
-            //     const char* decoded = decode_feature(i, input0_interval.lower_matrix.data[i]);
-            //     fprintf(ce_file, "%s,", decoded);
+            // PA = 0
+            fprintf(ce_file, "%d,0,", counterexample_count);
+            for (int i = 0; i < nnet->inputSize; i++) {
+                const char* decoded = decode_feature(i, input0_interval.lower_matrix.data[i]);
+                fprintf(ce_file, "%s,", decoded);
                 
-            //     snprintf(debug_buffer, sizeof(debug_buffer),
-            //             "[DEBUG] Feature %d: %s (raw=%.6f)\n",
-            //             i, decoded, input0_interval.lower_matrix.data[i]);
-            //     printf("%s", debug_buffer); // print to console
-            // }
-            // // For PA = 0 (input0)
-            // const char* label0;
-            // if (unfair0)
-            //     label0 = "POSITIVE";
-            // else if (unfair1)
-            //     label0 = "NEGATIVE";
-            // else
-            //     label0 = (output0_interval.lower_matrix.data[0] > 0) ? "POSITIVE" : "NEGATIVE";
+                snprintf(debug_buffer, sizeof(debug_buffer),
+                        "[DEBUG] Feature %d: %s (raw=%.6f)\n",
+                        i, decoded, input0_interval.lower_matrix.data[i]);
+                printf("%s", debug_buffer); // print to console
+            }
+            // For PA = 0 (input0)
+            const char* label0;
+            if (unfair0)
+                label0 = "POSITIVE";
+            else if (unfair1)
+                label0 = "NEGATIVE";
+            else
+                label0 = (output0_interval.lower_matrix.data[0] > 0) ? "POSITIVE" : "NEGATIVE";
 
-            // fprintf(ce_file, "%.6f,%s\n", output0_interval.lower_matrix.data[0], label0);
+            fprintf(ce_file, "%.6f,%s\n", output0_interval.lower_matrix.data[0], label0);
 
 
-            // // PA = 1
-            // fprintf(ce_file, "%d,1,", counterexample_count);
-            // for (int i = 0; i < nnet->inputSize; i++) {
-            //     const char* decoded = decode_feature(i, input1_interval.lower_matrix.data[i]);
-            //     fprintf(ce_file, "%s,", decoded);
+            // PA = 1
+            fprintf(ce_file, "%d,1,", counterexample_count);
+            for (int i = 0; i < nnet->inputSize; i++) {
+                const char* decoded = decode_feature(i, input1_interval.lower_matrix.data[i]);
+                fprintf(ce_file, "%s,", decoded);
                 
-            //     snprintf(debug_buffer, sizeof(debug_buffer),
-            //             "[DEBUG] Feature %d: %s (raw=%.6f)\n",
-            //             i, decoded, input1_interval.lower_matrix.data[i]);
-            //     printf("%s", debug_buffer); // print to console
-            // }
-            // // For PA = 1 (input1)
-            // const char* label1;
-            // if (unfair1)
-            //     label1 = "POSITIVE";
-            // else if (unfair0)
-            //     label1 = "NEGATIVE";
-            // else
-            //     label1 = (output1_interval.lower_matrix.data[0] > 0) ? "POSITIVE" : "NEGATIVE";
+                snprintf(debug_buffer, sizeof(debug_buffer),
+                        "[DEBUG] Feature %d: %s (raw=%.6f)\n",
+                        i, decoded, input1_interval.lower_matrix.data[i]);
+                printf("%s", debug_buffer); // print to console
+            }
+            // For PA = 1 (input1)
+            const char* label1;
+            if (unfair1)
+                label1 = "POSITIVE";
+            else if (unfair0)
+                label1 = "NEGATIVE";
+            else
+                label1 = (output1_interval.lower_matrix.data[0] > 0) ? "POSITIVE" : "NEGATIVE";
 
-            // fprintf(ce_file, "%.6f,%s\n", output1_interval.lower_matrix.data[0], label1);
+            fprintf(ce_file, "%.6f,%s\n", output1_interval.lower_matrix.data[0], label1);
 
             
-            // fflush(ce_file);
+            fflush(ce_file);
         
         }
 
