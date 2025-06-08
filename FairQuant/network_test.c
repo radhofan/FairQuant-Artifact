@@ -264,8 +264,7 @@ int main( int argc, char *argv[])
             else {
                 unfairConc = 1;
 
-                char buffer1[256];
-                snprintf(buffer1, sizeof(buffer1), "DEBUG: FIRST CASE GOT EXECUTED");
+                fprintf( stdout, "FIRST CASE\n" );
 
                 // static int counterexample_count = 0;
                 // static FILE* ce_file = NULL;
@@ -364,8 +363,7 @@ int main( int argc, char *argv[])
             fals_volume += curr_volume;
             uncer_volume -= curr_volume;
 
-            char buffer1[256];
-            snprintf(buffer1, sizeof(buffer1), "DEBUG: SECOND CASE GOT EXECUTED");
+            fprintf( stdout, "SECOND CASE\n" );
 
             // static int counterexample_count = 0;
             // static FILE* ce_file = NULL;
