@@ -449,8 +449,9 @@ int main( int argc, char *argv[])
 
             // 1. if we have reached MIN_CHECK_DEPTH, then we check for adv
             if (curr_subp.depth >= MIN_CHECK_DEPTH){
+                
                 int adv_found = check_adv(nnet, &curr_subp);
-
+                fprintf( stdout, "LAST CASE\n" );
                 // if this subp has adv, then we add to adv rate and dismiss this subp
                 if (adv_found) {
                     shouldSplit = 0; // no more splitting!
