@@ -119,7 +119,15 @@ static const char* native_country_map[] = {
     "Holand-Netherlands"
 };
 
-// Decoding function
+const char* decode_bin(float value, float min_val, float max_val, int n_bins) {
+    static char buffer[32];
+    int idx = (int)round(value);
+    float bin_width = (max_val - min_val) / n_bins;
+    float midpoint = min_val + (idx + 0.5f) * bin_width;
+    snprintf(buffer, sizeof(buffer), "%d", (int)midpoint);
+    return buffer;
+}
+
 const char* decode_feature(int feature_index, float value) {
     int idx = (int)round(value);
     switch (feature_index) {
@@ -130,6 +138,8 @@ const char* decode_feature(int feature_index, float value) {
         case 6: return relationship_map[idx];
         case 7: return race_map[idx];
         case 8: return sex_map[idx];
+        case 9: return decode_bin(value, 0.0f, 100000.0f, 20);  // capital-gain (real max ≈ 99999)
+        case 10: return decode_bin(value, 0.0f, 4356.0f, 20);   // capital-loss (real max ≈ 4356)
         case 12: return native_country_map[idx];
         default: {
             static char buffer[32];
@@ -138,6 +148,7 @@ const char* decode_feature(int feature_index, float value) {
         }
     }
 }
+
 
 // Main check_adv function
 int check_adv(struct NNet* nnet, struct Subproblem *subp) {
