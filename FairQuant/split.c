@@ -130,7 +130,7 @@ const char* decode_feature(int feature_index, float value) {
         case 7: return relationship_map[idx];
         case 8: return sex_map[idx];
         case 9: return race_map[idx];
-        case 13: return native_country_map[idx];
+        case 12: return native_country_map[idx];
         default: {
             static char buffer[32];
             snprintf(buffer, sizeof(buffer), "%.0f", value);
