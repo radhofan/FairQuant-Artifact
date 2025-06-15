@@ -128,8 +128,8 @@ const char* decode_feature(int feature_index, float value) {
         case 4: return marital_status_map[idx];
         case 5: return occupation_map[idx];
         case 6: return relationship_map[idx];
-        case 7: return sex_map[idx];
-        case 8: return race_map[idx];
+        case 7: return race_map[idx];
+        case 8: return sex_map[idx];
         case 12: return native_country_map[idx];
         default: {
             static char buffer[32];
@@ -158,8 +158,8 @@ int check_adv(struct NNet* nnet, struct Subproblem *subp) {
         "marital-status",
         "occupation",
         "relationship",
-        "sex",
         "race",
+        "sex",
         "capital-gain",
         "capital-loss",
         "hours-per-week",
