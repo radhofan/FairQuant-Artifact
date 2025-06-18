@@ -243,7 +243,7 @@ int check_adv(struct NNet* nnet, struct Subproblem *subp) {
 
             fflush(ce_file);
             counterexample++;
-            // return 1; // Found counterexample
+            return 1; 
         }
     }
 
