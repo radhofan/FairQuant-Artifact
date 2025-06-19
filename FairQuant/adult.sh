@@ -35,4 +35,4 @@ fi
 #     ./FairQuant-Artifact/FairQuant/network_test "FairQuant-Artifact/models/adult/AC-$i.nnet" "$idx"
 # done
 
-./FairQuant-Artifact/FairQuant/network_test "FairQuant-Artifact/models/adult/AC-3.nnet" "$idx"
+./FairQuant-Artifact/FairQuant/network_test "FairQuant-Artifact/models/adult/AC-4.nnet" "$idx"
