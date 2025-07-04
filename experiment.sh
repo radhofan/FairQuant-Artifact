@@ -42,7 +42,7 @@ FAIRQUANT_DIR="$PWD/FairQuant-Artifact/FairQuant"
 make -C "$FAIRQUANT_DIR" all
 
 ############################################################
-# # Verify adult.sh exists and is executable
+
 # ADULT_SCRIPT="./FairQuant-Artifact/FairQuant/adult.sh"
 # if [ ! -f "$ADULT_SCRIPT" ]; then
 #     echo "ERROR: $ADULT_SCRIPT does not exist!" >&2
@@ -59,7 +59,6 @@ make -C "$FAIRQUANT_DIR" all
 # "$ADULT_SCRIPT" sex
 ############################################################
 
-# # Verify adult.sh exists and is executable
 # BANK_SCRIPT="./FairQuant-Artifact/FairQuant/bank.sh"
 # if [ ! -f "$BANK_SCRIPT" ]; then
 #     echo "ERROR: $BANK_SCRIPT does not exist!" >&2
@@ -77,7 +76,6 @@ make -C "$FAIRQUANT_DIR" all
 
 ############################################################
 
-Verify adult.sh exists and is executable
 GERMAN_SCRIPT="./FairQuant-Artifact/FairQuant/german.sh"
 if [ ! -f "$GERMAN_SCRIPT" ]; then
     echo "ERROR: $GERMAN_SCRIPT does not exist!" >&2
@@ -95,7 +93,6 @@ echo "Running $GERMAN_SCRIPT with argument 'sex'"
 
 ############################################################
 
-# Verify adult.sh exists and is executable
 # COMPAS_SCRIPT="./FairQuant-Artifact/FairQuant/compas.sh"
 # if [ ! -f "$COMPAS_SCRIPT" ]; then
 #     echo "ERROR: $COMPAS_SCRIPT does not exist!" >&2
