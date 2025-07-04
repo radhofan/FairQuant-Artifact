@@ -75,48 +75,234 @@ struct timeval start, curr, finish, last_finish;
 //     return 0;
 // }
 
-static const char* workclass_map[] = {
-    "Private", "Self-emp-not-inc", "Self-emp-inc", "Federal-gov",
-    "Local-gov", "State-gov", "Without-pay", "Never-worked"
+/////////////////////////////////////////////////////////////////////////////////////////////////// ADULT CENSUS 
+
+// static const char* workclass_map[] = {
+//     "Private", "Self-emp-not-inc", "Self-emp-inc", "Federal-gov",
+//     "Local-gov", "State-gov", "Without-pay", "Never-worked"
+// };
+
+// static const char* education_map[] = {
+//     "Bachelors", "Some-college", "11th", "HS-grad", "Prof-school",
+//     "Assoc-acdm", "Assoc-voc", "9th", "7th-8th", "12th", "Masters",
+//     "1st-4th", "10th", "Doctorate", "5th-6th", "Preschool"
+// };
+
+// static const char* marital_status_map[] = {
+//     "Married-civ-spouse", "Divorced", "Never-married", "Separated",
+//     "Widowed", "Married-spouse-absent", "Married-AF-spouse"
+// };
+
+// static const char* occupation_map[] = {
+//     "Tech-support", "Craft-repair", "Other-service", "Sales", "Exec-managerial",
+//     "Prof-specialty", "Handlers-cleaners", "Machine-op-inspct", "Adm-clerical",
+//     "Farming-fishing", "Transport-moving", "Priv-house-serv", "Protective-serv",
+//     "Armed-Forces"
+// };
+
+// static const char* relationship_map[] = {
+//     "Wife", "Own-child", "Husband", "Not-in-family", "Other-relative", "Unmarried"
+// };
+
+// static const char* sex_map[] = { "Female", "Male" };
+
+// static const char* race_map[] = {
+//     "White", "Asian-Pac-Islander", "Amer-Indian-Eskimo", "Other", "Black"
+// };
+
+// static const char* native_country_map[] = {
+//     "United-States", "Cambodia", "England", "Puerto-Rico", "Canada",
+//     "Germany", "Outlying-US(Guam-USVI-etc)", "India", "Japan", "Greece",
+//     "South", "China", "Cuba", "Iran", "Honduras", "Philippines", "Italy",
+//     "Poland", "Jamaica", "Vietnam", "Mexico", "Portugal", "Ireland",
+//     "France", "Dominican-Republic", "Laos", "Ecuador", "Taiwan", "Haiti",
+//     "Columbia", "Hungary", "Guatemala", "Nicaragua", "Scotland", "Thailand",
+//     "Yugoslavia", "El-Salvador", "Trinadad&Tobago", "Peru", "Hong",
+//     "Holand-Netherlands"
+// };
+
+// const char* decode_bin(float value, float min_val, float max_val, int n_bins) {
+//     static char buffer[32];
+//     int idx = (int)round(value);
+//     float bin_width = (max_val - min_val) / n_bins;
+//     float midpoint = min_val + (idx + 0.5f) * bin_width;
+//     snprintf(buffer, sizeof(buffer), "%d", (int)midpoint);
+//     return buffer;
+// }
+
+// const char* decode_feature(int feature_index, float value) {
+//     int idx = (int)round(value);
+//     switch (feature_index) {
+//         case 1: return workclass_map[idx];
+//         case 2: return education_map[idx];
+//         case 4: return marital_status_map[idx];
+//         case 5: return occupation_map[idx];
+//         case 6: return relationship_map[idx];
+//         case 7: return race_map[idx];
+//         case 8: return sex_map[idx];
+//         case 9: return decode_bin(value, 0.0f, 100000.0f, 20);  // capital-gain (real max ≈ 99999)
+//         case 10: return decode_bin(value, 0.0f, 4356.0f, 20);   // capital-loss (real max ≈ 4356)
+//         case 12: return native_country_map[idx];
+//         default: {
+//             static char buffer[32];
+//             snprintf(buffer, sizeof(buffer), "%.0f", value);
+//             return buffer;
+//         }
+//     }
+// }
+
+
+// // Main check_adv function
+// int check_adv(struct NNet* nnet, struct Subproblem *subp) {
+//     static int counterexample_count = 0;
+//     static FILE* ce_file = NULL;
+
+//     static const char* feature_names[] = {
+//         "age",
+//         "workclass",
+//         "education",
+//         "education-num",
+//         "marital-status",
+//         "occupation",
+//         "relationship",
+//         "race",
+//         "sex",
+//         "capital-gain",
+//         "capital-loss",
+//         "hours-per-week",
+//         "native-country"
+//     };
+
+//     if (ce_file == NULL) {
+//         ce_file = fopen("FairQuant-Artifact/FairQuant/counterexamples.csv", "w");
+//         if (!ce_file) {
+//             printf("Failed to open counterexamples.csv\n");
+//             return 0;
+//         }
+
+//         fprintf(ce_file, "CE_ID,PA,");
+//         for (int i = 0; i < nnet->inputSize; i++) {
+//             fprintf(ce_file, "%s,", feature_names[i]);
+//         }
+//         fprintf(ce_file, "Output,Decision\n");
+//         fflush(ce_file);
+//     }
+
+//     float a0[nnet->inputSize];
+//     float a1[nnet->inputSize];
+//     struct Matrix adv0 = {a0, 1, nnet->inputSize};
+//     struct Matrix adv1 = {a1, 1, nnet->inputSize};
+
+//     int counterexample = 0;
+
+//     for (int n = 0; n < 10; n++) {
+//         for (int i = 0; i < nnet->inputSize; i++) {
+//             if (i == nnet->sens_feature_idx) {
+//                 a0[i] = nnet->mins[i];  // PA = 0
+//                 a1[i] = nnet->maxes[i]; // PA = 1
+//             } else {
+//                 float lower = subp->input.lower_matrix.data[i];
+//                 float upper = subp->input.upper_matrix.data[i];
+//                 float middle = lower + ((float)n / 10.0f) * (upper - lower);
+//                 a0[i] = middle;
+//                 a1[i] = middle;
+//             }
+//         }
+
+//         float out0[nnet->outputSize];
+//         float out1[nnet->outputSize];
+//         struct Matrix output0 = {out0, nnet->outputSize, 1};
+//         struct Matrix output1 = {out1, nnet->outputSize, 1};
+
+//         forward_prop(nnet, &adv0, &output0);
+//         forward_prop(nnet, &adv1, &output1);
+
+//         int out0Pos = output0.data[0] > 0;
+//         int out1Pos = output1.data[0] > 0;
+
+//         if (out0Pos != out1Pos) {
+//             counterexample_count++;
+
+//             // PA = 0
+//             fprintf(ce_file, "%d,0,", counterexample_count);
+//             for (int i = 0; i < nnet->inputSize; i++) {
+//                 fprintf(ce_file, "%s,", decode_feature(i, a0[i]));
+//             }
+//             fprintf(ce_file, "%.6f,%s\n", output0.data[0], out0Pos ? "POSITIVE" : "NEGATIVE");
+
+//             // PA = 1
+//             fprintf(ce_file, "%d,1,", counterexample_count);
+//             for (int i = 0; i < nnet->inputSize; i++) {
+//                 fprintf(ce_file, "%s,", decode_feature(i, a1[i]));
+//             }
+//             fprintf(ce_file, "%.6f,%s\n", output1.data[0], out1Pos ? "POSITIVE" : "NEGATIVE");
+
+//             fflush(ce_file);
+//             counterexample++;
+//             return 1; 
+//         }
+//     }
+
+//     // if(counterexample == 0){
+//     //     // fprintf(stdout, "TIDAK ADA\n");
+//     // }
+
+//     // return counterexample; // No counterexample found
+//     return 0;
+// }
+
+/////////////////////////////////////////////////////////////////////////////////////////////////// GERMAN CREDIT
+
+static const char* status_map[] = {
+    "A11", "A12", "A13", "A14"  // checking account status
 };
 
-static const char* education_map[] = {
-    "Bachelors", "Some-college", "11th", "HS-grad", "Prof-school",
-    "Assoc-acdm", "Assoc-voc", "9th", "7th-8th", "12th", "Masters",
-    "1st-4th", "10th", "Doctorate", "5th-6th", "Preschool"
+static const char* credit_history_map[] = {
+    "A30", "A31", "A32", "A33", "A34"  // credit history
 };
 
-static const char* marital_status_map[] = {
-    "Married-civ-spouse", "Divorced", "Never-married", "Separated",
-    "Widowed", "Married-spouse-absent", "Married-AF-spouse"
+static const char* purpose_map[] = {
+    "A40", "A41", "A42", "A43", "A44", "A45", "A46", "A47", "A48", "A49", "A410"  // purpose
 };
 
-static const char* occupation_map[] = {
-    "Tech-support", "Craft-repair", "Other-service", "Sales", "Exec-managerial",
-    "Prof-specialty", "Handlers-cleaners", "Machine-op-inspct", "Adm-clerical",
-    "Farming-fishing", "Transport-moving", "Priv-house-serv", "Protective-serv",
-    "Armed-Forces"
+static const char* savings_map[] = {
+    "A61", "A62", "A63", "A64", "A65"  // savings account/bonds
 };
 
-static const char* relationship_map[] = {
-    "Wife", "Own-child", "Husband", "Not-in-family", "Other-relative", "Unmarried"
+static const char* employment_map[] = {
+    "A71", "A72", "A73", "A74", "A75"  // present employment since
 };
 
-static const char* sex_map[] = { "Female", "Male" };
-
-static const char* race_map[] = {
-    "White", "Asian-Pac-Islander", "Amer-Indian-Eskimo", "Other", "Black"
+static const char* other_debtors_map[] = {
+    "A101", "A102", "A103"  // other debtors / guarantors
 };
 
-static const char* native_country_map[] = {
-    "United-States", "Cambodia", "England", "Puerto-Rico", "Canada",
-    "Germany", "Outlying-US(Guam-USVI-etc)", "India", "Japan", "Greece",
-    "South", "China", "Cuba", "Iran", "Honduras", "Philippines", "Italy",
-    "Poland", "Jamaica", "Vietnam", "Mexico", "Portugal", "Ireland",
-    "France", "Dominican-Republic", "Laos", "Ecuador", "Taiwan", "Haiti",
-    "Columbia", "Hungary", "Guatemala", "Nicaragua", "Scotland", "Thailand",
-    "Yugoslavia", "El-Salvador", "Trinadad&Tobago", "Peru", "Hong",
-    "Holand-Netherlands"
+static const char* property_map[] = {
+    "A121", "A122", "A123", "A124"  // property
+};
+
+static const char* installment_plans_map[] = {
+    "A141", "A142", "A143"  // other installment plans
+};
+
+static const char* housing_map[] = {
+    "A151", "A152", "A153"  // housing
+};
+
+static const char* skill_level_map[] = {
+    "A171", "A172", "A173", "A174"  // job/skill level
+};
+
+static const char* telephone_map[] = {
+    "A191", "A192"  // telephone
+};
+
+static const char* foreign_worker_map[] = {
+    "A201", "A202"  // foreign worker
+};
+
+static const char* sex_map[] = {
+    "A91", "A92", "A93", "A94", "A95"  // personal status and sex
 };
 
 const char* decode_bin(float value, float min_val, float max_val, int n_bins) {
@@ -131,16 +317,26 @@ const char* decode_bin(float value, float min_val, float max_val, int n_bins) {
 const char* decode_feature(int feature_index, float value) {
     int idx = (int)round(value);
     switch (feature_index) {
-        case 1: return workclass_map[idx];
-        case 2: return education_map[idx];
-        case 4: return marital_status_map[idx];
-        case 5: return occupation_map[idx];
-        case 6: return relationship_map[idx];
-        case 7: return race_map[idx];
-        case 8: return sex_map[idx];
-        case 9: return decode_bin(value, 0.0f, 100000.0f, 20);  // capital-gain (real max ≈ 99999)
-        case 10: return decode_bin(value, 0.0f, 4356.0f, 20);   // capital-loss (real max ≈ 4356)
-        case 12: return native_country_map[idx];
+        case 0: return status_map[idx];                                    // status
+        //case 1: return decode_bin(value, 1.0f, 72.0f, 20);               // month (duration)
+        case 2: return credit_history_map[idx];                           // credit_history
+        case 3: return purpose_map[idx];                                  // purpose
+        //case 4: return decode_bin(value, 250.0f, 18424.0f, 20);         // credit_amount
+        case 5: return savings_map[idx];                                  // savings
+        case 6: return employment_map[idx];                               // employment
+        //case 7: return decode_bin(value, 1.0f, 4.0f, 4);                // investment_as_income_percentage
+        case 8: return other_debtors_map[idx];                           // other_debtors
+        //case 9: return decode_bin(value, 1.0f, 4.0f, 4);                // residence_since
+        case 10: return property_map[idx];                               // property
+        //case 11: return decode_bin(value, 19.0f, 75.0f, 20);            // age
+        case 12: return installment_plans_map[idx];                      // installment_plans
+        case 13: return housing_map[idx];                                // housing
+        //case 14: return decode_bin(value, 1.0f, 4.0f, 4);               // number_of_credits
+        case 15: return skill_level_map[idx];                            // skill_level
+        //case 16: return decode_bin(value, 1.0f, 2.0f, 2);               // people_liable_for
+        case 17: return telephone_map[idx];                              // telephone
+        case 18: return foreign_worker_map[idx];                         // foreign_worker
+        case 19: return sex_map[idx];                                    // sex (personal status and sex)
         default: {
             static char buffer[32];
             snprintf(buffer, sizeof(buffer), "%.0f", value);
@@ -149,32 +345,32 @@ const char* decode_feature(int feature_index, float value) {
     }
 }
 
-
 // Main check_adv function
 int check_adv(struct NNet* nnet, struct Subproblem *subp) {
     static int counterexample_count = 0;
     static FILE* ce_file = NULL;
 
-    // static const char* feature_names[] = {
-    //     "age", "workclass", "fnlwgt", "education", "education-num",
-    //     "marital-status", "occupation", "relationship", "sex", "race",
-    //     "capital-gain", "capital-loss", "hours-per-week", "native-country"
-    // };
-
     static const char* feature_names[] = {
+        "status",
+        "month",
+        "credit_history",
+        "purpose",
+        "credit_amount",
+        "savings",
+        "employment",
+        "investment_as_income_percentage",
+        "other_debtors",
+        "residence_since",
+        "property",
         "age",
-        "workclass",
-        "education",
-        "education-num",
-        "marital-status",
-        "occupation",
-        "relationship",
-        "race",
-        "sex",
-        "capital-gain",
-        "capital-loss",
-        "hours-per-week",
-        "native-country"
+        "installment_plans",
+        "housing",
+        "number_of_credits",
+        "skill_level",
+        "people_liable_for",
+        "telephone",
+        "foreign_worker",
+        "sex"
     };
 
     if (ce_file == NULL) {

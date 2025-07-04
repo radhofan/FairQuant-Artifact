@@ -16,49 +16,49 @@
 #include <math.h>
 #include "split.h"
 
-static const char* workclass_map[] = {
-    "Private", "Self-emp-not-inc", "Self-emp-inc", "Federal-gov",
-    "Local-gov", "State-gov", "Without-pay", "Never-worked"
-};
+// static const char* workclass_map[] = {
+//     "Private", "Self-emp-not-inc", "Self-emp-inc", "Federal-gov",
+//     "Local-gov", "State-gov", "Without-pay", "Never-worked"
+// };
 
-static const char* education_map[] = {
-    "Bachelors", "Some-college", "11th", "HS-grad", "Prof-school",
-    "Assoc-acdm", "Assoc-voc", "9th", "7th-8th", "12th", "Masters",
-    "1st-4th", "10th", "Doctorate", "5th-6th", "Preschool"
-};
+// static const char* education_map[] = {
+//     "Bachelors", "Some-college", "11th", "HS-grad", "Prof-school",
+//     "Assoc-acdm", "Assoc-voc", "9th", "7th-8th", "12th", "Masters",
+//     "1st-4th", "10th", "Doctorate", "5th-6th", "Preschool"
+// };
 
-static const char* marital_status_map[] = {
-    "Married-civ-spouse", "Divorced", "Never-married", "Separated",
-    "Widowed", "Married-spouse-absent", "Married-AF-spouse"
-};
+// static const char* marital_status_map[] = {
+//     "Married-civ-spouse", "Divorced", "Never-married", "Separated",
+//     "Widowed", "Married-spouse-absent", "Married-AF-spouse"
+// };
 
-static const char* occupation_map[] = {
-    "Tech-support", "Craft-repair", "Other-service", "Sales", "Exec-managerial",
-    "Prof-specialty", "Handlers-cleaners", "Machine-op-inspct", "Adm-clerical",
-    "Farming-fishing", "Transport-moving", "Priv-house-serv", "Protective-serv",
-    "Armed-Forces"
-};
+// static const char* occupation_map[] = {
+//     "Tech-support", "Craft-repair", "Other-service", "Sales", "Exec-managerial",
+//     "Prof-specialty", "Handlers-cleaners", "Machine-op-inspct", "Adm-clerical",
+//     "Farming-fishing", "Transport-moving", "Priv-house-serv", "Protective-serv",
+//     "Armed-Forces"
+// };
 
-static const char* relationship_map[] = {
-    "Wife", "Own-child", "Husband", "Not-in-family", "Other-relative", "Unmarried"
-};
+// static const char* relationship_map[] = {
+//     "Wife", "Own-child", "Husband", "Not-in-family", "Other-relative", "Unmarried"
+// };
 
-static const char* sex_map[] = { "Female", "Male" };
+// static const char* sex_map[] = { "Female", "Male" };
 
-static const char* race_map[] = {
-    "White", "Asian-Pac-Islander", "Amer-Indian-Eskimo", "Other", "Black"
-};
+// static const char* race_map[] = {
+//     "White", "Asian-Pac-Islander", "Amer-Indian-Eskimo", "Other", "Black"
+// };
 
-static const char* native_country_map[] = {
-    "United-States", "Cambodia", "England", "Puerto-Rico", "Canada",
-    "Germany", "Outlying-US(Guam-USVI-etc)", "India", "Japan", "Greece",
-    "South", "China", "Cuba", "Iran", "Honduras", "Philippines", "Italy",
-    "Poland", "Jamaica", "Vietnam", "Mexico", "Portugal", "Ireland",
-    "France", "Dominican-Republic", "Laos", "Ecuador", "Taiwan", "Haiti",
-    "Columbia", "Hungary", "Guatemala", "Nicaragua", "Scotland", "Thailand",
-    "Yugoslavia", "El-Salvador", "Trinadad&Tobago", "Peru", "Hong",
-    "Holand-Netherlands"
-};
+// static const char* native_country_map[] = {
+//     "United-States", "Cambodia", "England", "Puerto-Rico", "Canada",
+//     "Germany", "Outlying-US(Guam-USVI-etc)", "India", "Japan", "Greece",
+//     "South", "China", "Cuba", "Iran", "Honduras", "Philippines", "Italy",
+//     "Poland", "Jamaica", "Vietnam", "Mexico", "Portugal", "Ireland",
+//     "France", "Dominican-Republic", "Laos", "Ecuador", "Taiwan", "Haiti",
+//     "Columbia", "Hungary", "Guatemala", "Nicaragua", "Scotland", "Thailand",
+//     "Yugoslavia", "El-Salvador", "Trinadad&Tobago", "Peru", "Hong",
+//     "Holand-Netherlands"
+// };
 
 int main( int argc, char *argv[])
 {
@@ -366,81 +366,81 @@ int main( int argc, char *argv[])
             fals_volume += curr_volume;
             uncer_volume -= curr_volume;
 
-            fprintf( stdout, "SECOND CASE UNFAIR\n" );
+            // fprintf( stdout, "SECOND CASE UNFAIR\n" );
 
-            static int counterexample_count = 0;
-            static FILE* ce_file = NULL;
+            // static int counterexample_count = 0;
+            // static FILE* ce_file = NULL;
 
-            static const char* feature_names[] = {
-                "two_yr_Recidivism", "Number_of_Priors", "age", "race", "female", "misdeameanor"
-            };
+            // static const char* feature_names[] = {
+            //     "two_yr_Recidivism", "Number_of_Priors", "age", "race", "female", "misdeameanor"
+            // };
 
-            if (ce_file == NULL) {
-                ce_file = fopen("FairQuant-Artifact/FairQuant/counterexamples_forward.csv", "w");
-                if (!ce_file) {
-                    printf("Failed to open counterexamples_forward.csv\n");
-                    return 0;
-                }
+            // if (ce_file == NULL) {
+            //     ce_file = fopen("FairQuant-Artifact/FairQuant/counterexamples_forward.csv", "w");
+            //     if (!ce_file) {
+            //         printf("Failed to open counterexamples_forward.csv\n");
+            //         return 0;
+            //     }
 
-                fprintf(ce_file, "CE_ID,PA,");
-                for (int i = 0; i < nnet->inputSize; i++) {
-                    fprintf(ce_file, "%s,", feature_names[i]);
-                }
-                fprintf(ce_file, "Output,Decision\n");
-                fflush(ce_file);
-            }
+            //     fprintf(ce_file, "CE_ID,PA,");
+            //     for (int i = 0; i < nnet->inputSize; i++) {
+            //         fprintf(ce_file, "%s,", feature_names[i]);
+            //     }
+            //     fprintf(ce_file, "Output,Decision\n");
+            //     fflush(ce_file);
+            // }
 
-            counterexample_count++;
+            // counterexample_count++;
             
-            // char debug_buffer[256]; // adjust size as needed
+            // // char debug_buffer[256]; // adjust size as needed
 
-            // PA = 0
-            fprintf(ce_file, "%d,0,", counterexample_count);
-            for (int i = 0; i < nnet->inputSize; i++) {
-                // const char* decoded = decode_feature(i, input0_interval.lower_matrix.data[i]);
-                fprintf(ce_file, "%.6f,", input0_interval.lower_matrix.data[i]);
+            // // PA = 0
+            // fprintf(ce_file, "%d,0,", counterexample_count);
+            // for (int i = 0; i < nnet->inputSize; i++) {
+            //     // const char* decoded = decode_feature(i, input0_interval.lower_matrix.data[i]);
+            //     fprintf(ce_file, "%.6f,", input0_interval.lower_matrix.data[i]);
                 
-                // snprintf(debug_buffer, sizeof(debug_buffer),
-                //         "[DEBUG] Feature %d: %s (raw=%.6f)\n",
-                //         i, decoded, input0_interval.lower_matrix.data[i]);
-                // printf("%s", debug_buffer); // print to console
-            }
-            // For PA = 0 (input0)
-            const char* label0;
-            if (unfair0)
-                label0 = "POSITIVE";
-            else if (unfair1)
-                label0 = "NEGATIVE";
-            else
-                label0 = (output0_interval.lower_matrix.data[0] > 0) ? "POSITIVE" : "NEGATIVE";
+            //     // snprintf(debug_buffer, sizeof(debug_buffer),
+            //     //         "[DEBUG] Feature %d: %s (raw=%.6f)\n",
+            //     //         i, decoded, input0_interval.lower_matrix.data[i]);
+            //     // printf("%s", debug_buffer); // print to console
+            // }
+            // // For PA = 0 (input0)
+            // const char* label0;
+            // if (unfair0)
+            //     label0 = "POSITIVE";
+            // else if (unfair1)
+            //     label0 = "NEGATIVE";
+            // else
+            //     label0 = (output0_interval.lower_matrix.data[0] > 0) ? "POSITIVE" : "NEGATIVE";
 
-            fprintf(ce_file, "%.6f,%s\n", output0_interval.lower_matrix.data[0], label0);
+            // fprintf(ce_file, "%.6f,%s\n", output0_interval.lower_matrix.data[0], label0);
 
 
-            // PA = 1
-            fprintf(ce_file, "%d,1,", counterexample_count);
-            for (int i = 0; i < nnet->inputSize; i++) {
-                // const char* decoded = decode_feature(i, input1_interval.lower_matrix.data[i]);
-                fprintf(ce_file, "%.6f,", input1_interval.lower_matrix.data[i]);
+            // // PA = 1
+            // fprintf(ce_file, "%d,1,", counterexample_count);
+            // for (int i = 0; i < nnet->inputSize; i++) {
+            //     // const char* decoded = decode_feature(i, input1_interval.lower_matrix.data[i]);
+            //     fprintf(ce_file, "%.6f,", input1_interval.lower_matrix.data[i]);
                 
-                // snprintf(debug_buffer, sizeof(debug_buffer),
-                //         "[DEBUG] Feature %d: %s (raw=%.6f)\n",
-                //         i, decoded, input1_interval.lower_matrix.data[i]);
-                // printf("%s", debug_buffer); // print to console
-            }
-            // For PA = 1 (input1)
-            const char* label1;
-            if (unfair1)
-                label1 = "POSITIVE";
-            else if (unfair0)
-                label1 = "NEGATIVE";
-            else
-                label1 = (output1_interval.lower_matrix.data[0] > 0) ? "POSITIVE" : "NEGATIVE";
+            //     // snprintf(debug_buffer, sizeof(debug_buffer),
+            //     //         "[DEBUG] Feature %d: %s (raw=%.6f)\n",
+            //     //         i, decoded, input1_interval.lower_matrix.data[i]);
+            //     // printf("%s", debug_buffer); // print to console
+            // }
+            // // For PA = 1 (input1)
+            // const char* label1;
+            // if (unfair1)
+            //     label1 = "POSITIVE";
+            // else if (unfair0)
+            //     label1 = "NEGATIVE";
+            // else
+            //     label1 = (output1_interval.lower_matrix.data[0] > 0) ? "POSITIVE" : "NEGATIVE";
 
-            fprintf(ce_file, "%.6f,%s\n", output1_interval.lower_matrix.data[0], label1);
+            // fprintf(ce_file, "%.6f,%s\n", output1_interval.lower_matrix.data[0], label1);
 
             
-            fflush(ce_file);
+            // fflush(ce_file);
         
         }
 
