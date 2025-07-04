@@ -384,7 +384,7 @@ int check_adv(struct NNet* nnet, struct Subproblem *subp) {
         for (int i = 0; i < nnet->inputSize; i++) {
             fprintf(ce_file, "%s,", feature_names[i]);
         }
-        fprintf(ce_file, "Output,Decision\n");
+        fprintf(ce_file, "output,decision\n");
         fflush(ce_file);
     }
 
