@@ -22,8 +22,10 @@ else
     exit 1
 fi
 
-for ((i=1; i<=8; i++)); do # for each model 1 to 8
-    echo -e "\n-----Running network BM-$i on $PA-----"
-    # ./network_test "../models/bank/BM-$i.nnet" "$idx"
-    ./FairQuant-Artifact/FairQuant/network_test "FairQuant-Artifact/models/bank/BM-$i.nnet" "$idx"
-done
+# for ((i=1; i<=8; i++)); do # for each model 1 to 8
+#     echo -e "\n-----Running network BM-$i on $PA-----"
+#     # ./network_test "../models/bank/BM-$i.nnet" "$idx"
+#     ./FairQuant-Artifact/FairQuant/network_test "FairQuant-Artifact/models/bank/BM-$i.nnet" "$idx"
+# done
+
+ ./FairQuant-Artifact/FairQuant/network_test "FairQuant-Artifact/models/bank/BM-$1.nnet" "$idx"
