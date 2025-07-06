@@ -513,7 +513,9 @@ const char* decode_feature(int feature_index, float value) {
             snprintf(buffer, sizeof(buffer), "%.0f", value);
             return buffer;
         }
+    }
 }
+
 // Main check_adv function
 int check_adv(struct NNet* nnet, struct Subproblem *subp) {
     static int counterexample_count = 0;
