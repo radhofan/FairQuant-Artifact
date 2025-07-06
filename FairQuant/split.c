@@ -500,13 +500,12 @@ const char* decode_feature(int feature_index, float value) {
         case 6: return contact_map[idx];                                 // contact
         case 7: return month_map[idx];                                   // month
         case 8: return day_of_week_map[idx];                             // day_of_week
-        case 9: return poutcome_map[idx];                                // poutcome
-        // You can uncomment and adjust these if needed:
-        // case 10: return decode_bin(value, 0.0f, 4918.0f, 50);           // duration
-        // case 11: return decode_bin(value, -3.4f, 1.4f, 20);             // emp.var.rate
-        // case 12: return decode_bin(value, 1.0f, 56.0f, 20);             // campaign
-        // case 13: return decode_bin(value, 0.0f, 999.0f, 20);            // pdays
-        // case 14: return decode_bin(value, 0.0f, 7.0f, 8);               // previous
+        // case 9: return decode_bin(value, -3.4f, 1.4f, 20);               // emp.var.rate
+        // case 10: return decode_bin(value, 0.0f, 4918.0f, 50);            // duration
+        // case 11: return decode_bin(value, 1.0f, 56.0f, 20);              // campaign
+        // case 12: return decode_bin(value, 0.0f, 999.0f, 20);             // pdays
+        // case 13: return decode_bin(value, 0.0f, 7.0f, 8);                // previous
+        case 14: return poutcome_map[idx];                               // poutcome
         // case 15: return decode_bin(value, 17.0f, 98.0f, 20);             // age
         default: {
             static char buffer[32];
@@ -515,7 +514,6 @@ const char* decode_feature(int feature_index, float value) {
         }
     }
 }
-
 // Main check_adv function
 int check_adv(struct NNet* nnet, struct Subproblem *subp) {
     static int counterexample_count = 0;
