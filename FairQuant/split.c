@@ -491,35 +491,34 @@ const char* decode_bin(float value, float min_val, float max_val, int n_bins) {
 const char* decode_feature(int feature_index, float value) {
     int idx = (int)round(value);
     switch (feature_index) {
-        // case 0: return decode_bin(value, 17.0f, 98.0f, 20);           // age
-        case 1: return job_map[idx];                                     // job
-        case 2: return marital_map[idx];                                 // marital
-        case 3: return education_map[idx];                               // education
-        case 4: return default_map[idx];                                 // default
-        case 5: return housing_map[idx];                                 // housing
-        case 6: return loan_map[idx];                                    // loan
-        case 7: return contact_map[idx];                                 // contact
-        case 8: return month_map[idx];                                   // month
-        case 9: return day_of_week_map[idx];                            // day_of_week
-        // case 10: return decode_bin(value, 0.0f, 4918.0f, 50);          // duration
+        case 0: return job_map[idx];                                     // job
+        case 1: return marital_map[idx];                                 // marital
+        case 2: return education_map[idx];                               // education
+        case 3: return default_map[idx];                                 // default
+        case 4: return housing_map[idx];                                 // housing
+        case 5: return loan_map[idx];                                    // loan
+        case 6: return contact_map[idx];                                 // contact
+        case 7: return month_map[idx];                                   // month
+        case 8: return day_of_week_map[idx];                             // day_of_week
+        case 9: return poutcome_map[idx];                                // poutcome
+        // You can uncomment and adjust these if needed:
+        // case 10: return decode_bin(value, 0.0f, 4918.0f, 50);           // duration
         // case 11: return decode_bin(value, -3.4f, 1.4f, 20);             // emp.var.rate
-        // case 12: return decode_bin(value, 1.0f, 56.0f, 20);            // campaign
-        // case 13: return decode_bin(value, 0.0f, 999.0f, 20);           // pdays
-        // case 14: return decode_bin(value, 0.0f, 7.0f, 8);              // previous
-        case 15: return poutcome_map[idx];                              // poutcome
+        // case 12: return decode_bin(value, 1.0f, 56.0f, 20);             // campaign
+        // case 13: return decode_bin(value, 0.0f, 999.0f, 20);            // pdays
+        // case 14: return decode_bin(value, 0.0f, 7.0f, 8);               // previous
+        // case 15: return decode_bin(value, 17.0f, 98.0f, 20);             // age
         default: {
             static char buffer[32];
             snprintf(buffer, sizeof(buffer), "%.0f", value);
             return buffer;
         }
-    }
 }
 // Main check_adv function
 int check_adv(struct NNet* nnet, struct Subproblem *subp) {
     static int counterexample_count = 0;
     static FILE* ce_file = NULL;
     static const char* feature_names[] = {
-        "age",
         "job",
         "marital",
         "education",
@@ -534,7 +533,8 @@ int check_adv(struct NNet* nnet, struct Subproblem *subp) {
         "campaign",
         "pdays",
         "previous",
-        "poutcome"
+        "poutcome",
+        "age",
     };
     if (ce_file == NULL) {
         ce_file = fopen("FairQuant-Artifact/FairQuant/counterexamples.csv", "w");
