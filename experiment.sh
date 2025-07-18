@@ -43,36 +43,37 @@ make -C "$FAIRQUANT_DIR" all
 
 ############################################################
 
-# ADULT_SCRIPT="./FairQuant-Artifact/FairQuant/adult.sh"
-# if [ ! -f "$ADULT_SCRIPT" ]; then
-#     echo "ERROR: $ADULT_SCRIPT does not exist!" >&2
-#     exit 1
-# fi
-
-# if [ ! -x "$ADULT_SCRIPT" ]; then
-#     echo "ERROR: $ADULT_SCRIPT is not executable!" >&2
-#     chmod +x "$ADULT_SCRIPT"
-# fi
-
-# # Run adult.sh
-# echo "Running $ADULT_SCRIPT with argument 'sex'"
-# "$ADULT_SCRIPT" sex
-############################################################
-
-BANK_SCRIPT="./FairQuant-Artifact/FairQuant/bank.sh"
-if [ ! -f "$BANK_SCRIPT" ]; then
-    echo "ERROR: $BANK_SCRIPT does not exist!" >&2
+ADULT_SCRIPT="./FairQuant-Artifact/FairQuant/adult.sh"
+if [ ! -f "$ADULT_SCRIPT" ]; then
+    echo "ERROR: $ADULT_SCRIPT does not exist!" >&2
     exit 1
 fi
 
-if [ ! -x "$BANK_SCRIPT" ]; then
-    echo "ERROR: $BANK_SCRIPT is not executable!" >&2
-    chmod +x "$BANK_SCRIPT"
+if [ ! -x "$ADULT_SCRIPT" ]; then
+    echo "ERROR: $ADULT_SCRIPT is not executable!" >&2
+    chmod +x "$ADULT_SCRIPT"
 fi
 
 # Run adult.sh
-echo "Running $BANK_SCRIPT with argument 'age'"
-"$BANK_SCRIPT" age
+echo "Running $ADULT_SCRIPT with argument 'sex'"
+"$ADULT_SCRIPT" sex
+
+############################################################
+
+# BANK_SCRIPT="./FairQuant-Artifact/FairQuant/bank.sh"
+# if [ ! -f "$BANK_SCRIPT" ]; then
+#     echo "ERROR: $BANK_SCRIPT does not exist!" >&2
+#     exit 1
+# fi
+
+# if [ ! -x "$BANK_SCRIPT" ]; then
+#     echo "ERROR: $BANK_SCRIPT is not executable!" >&2
+#     chmod +x "$BANK_SCRIPT"
+# fi
+
+# # Run adult.sh
+# echo "Running $BANK_SCRIPT with argument 'age'"
+# "$BANK_SCRIPT" age
 
 ############################################################
 
