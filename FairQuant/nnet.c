@@ -306,14 +306,64 @@ struct NNet *load_network(const char* filename, int sens_feature_idx)
     fflush(stdout);
 
     //first four inputs are number of layers, inputs, outputs, and max layer size
+    printf("DEBUG: About to parse network parameters\n");
+    fflush(stdout);
+    
     record = strtok(line,",\n");
+    if (record == NULL) {
+        printf("DEBUG: ERROR - strtok returned NULL for first parameter\n");
+        fflush(stdout);
+        exit(1);
+    }
+    printf("DEBUG: First token: %s\n", record);
+    fflush(stdout);
+    
     nnet->numLayers = atoi(record);
-    nnet->inputSize = atoi(strtok(NULL,",\n"));
-    nnet->outputSize = atoi(strtok(NULL,",\n"));
-    nnet->maxLayerSize = atoi(strtok(NULL,",\n"));
+    printf("DEBUG: numLayers parsed: %d\n", nnet->numLayers);
+    fflush(stdout);
+    
+    record = strtok(NULL,",\n");
+    if (record == NULL) {
+        printf("DEBUG: ERROR - strtok returned NULL for second parameter\n");
+        fflush(stdout);
+        exit(1);
+    }
+    printf("DEBUG: Second token: %s\n", record);
+    fflush(stdout);
+    
+    nnet->inputSize = atoi(record);
+    printf("DEBUG: inputSize parsed: %d\n", nnet->inputSize);
+    fflush(stdout);
+    
+    record = strtok(NULL,",\n");
+    if (record == NULL) {
+        printf("DEBUG: ERROR - strtok returned NULL for third parameter\n");
+        fflush(stdout);
+        exit(1);
+    }
+    printf("DEBUG: Third token: %s\n", record);
+    fflush(stdout);
+    
+    nnet->outputSize = atoi(record);
+    printf("DEBUG: outputSize parsed: %d\n", nnet->outputSize);
+    fflush(stdout);
+    
+    record = strtok(NULL,",\n");
+    if (record == NULL) {
+        printf("DEBUG: ERROR - strtok returned NULL for fourth parameter\n");
+        fflush(stdout);
+        exit(1);
+    }
+    printf("DEBUG: Fourth token: %s\n", record);
+    fflush(stdout);
+    
+    nnet->maxLayerSize = atoi(record);
+    printf("DEBUG: maxLayerSize parsed: %d\n", nnet->maxLayerSize);
+    fflush(stdout);
 
     printf("DEBUG: Network parameters - numLayers: %d, inputSize: %d, outputSize: %d, maxLayerSize: %d\n", 
            nnet->numLayers, nnet->inputSize, nnet->outputSize, nnet->maxLayerSize);
+    fflush(stdout);
 
     //read array sizes
     nnet->layerSizes = (int*)malloc(sizeof(int)*(nnet->numLayers+1));
