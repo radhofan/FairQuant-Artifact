@@ -283,10 +283,27 @@ struct NNet *load_network(const char* filename, int sens_feature_idx)
     fflush(stdout);
 
     //skip comments in the beginning
+    printf("DEBUG: Starting comment skip loop\n");
+    fflush(stdout);
+    
     while (strstr(line, "//") != NULL) {
-        printf("DEBUG: Skipping comment line: %s", line);
-        line = fgets(buffer,bufferSize,fstream); 
+        printf("DEBUG: Found comment line, skipping: %s", line);
+        fflush(stdout);
+        
+        line = fgets(buffer,bufferSize,fstream);
+        
+        if (line == NULL) {
+            printf("DEBUG: ERROR - fgets returned NULL during comment skip\n");
+            fflush(stdout);
+            exit(1);
+        }
+        
+        printf("DEBUG: Read next line during skip: %s", line);
+        fflush(stdout);
     }
+    
+    printf("DEBUG: Finished skipping comments, current line: %s", line);
+    fflush(stdout);
 
     //first four inputs are number of layers, inputs, outputs, and max layer size
     record = strtok(line,",\n");
