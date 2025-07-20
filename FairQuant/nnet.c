@@ -366,7 +366,7 @@ struct NNet *load_network(const char* filename, int sens_feature_idx)
     fflush(stdout);
 
     //read array sizes
-    nnet->layerSizes = (int**)malloc(sizeof(int*) * (nnet->numLayers + 1));
+    nnet->layerSizes = (int**)malloc(sizeof(int) * (nnet->numLayers + 1));
     if (nnet->layerSizes == NULL) {
         fprintf(stderr, "ERROR: Memory allocation failed for layerSizes\n");
         return -1; // or appropriate error handling
