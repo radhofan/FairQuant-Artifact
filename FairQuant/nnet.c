@@ -366,42 +366,19 @@ struct NNet *load_network(const char* filename, int sens_feature_idx)
     fflush(stdout);
 
     //read array sizes
-    nnet->layerSizes = (int**)malloc(sizeof(int) * (nnet->numLayers + 1));
-    if (nnet->layerSizes == NULL) {
-        fprintf(stderr, "ERROR: Memory allocation failed for layerSizes\n");
-        return -1; // or appropriate error handling
-    }
-
+    nnet->layerSizes = (int*)malloc(sizeof(int)*(nnet->numLayers+1));
     line = fgets(buffer, bufferSize, fstream);
     if (line == NULL) {
-        fprintf(stderr, "ERROR: Failed to read line from file\n");
-        free(nnet->layerSizes);
+        fprintf(stderr, "ERROR: Failed to read layer size line from file\n");
         return -1;
     }
-
     record = strtok(line, ",\n");
-    if (record == NULL) {
-        fprintf(stderr, "ERROR: No data found in line\n");
-        free(nnet->layerSizes);
-        return -1;
-    }
-
+    
     printf("DEBUG: Reading layer sizes: ");
-    for (i = 0; i < (nnet->numLayers + 1); i++) {
-        if (record == NULL) {
-            fprintf(stderr, "ERROR: Not enough values in input line (expected %d, got %d)\n", 
-                    nnet->numLayers + 1, i);
-            free(nnet->layerSizes);
-            return -1;
-        }
-        
+    for (i = 0;i<((nnet->numLayers)+1);i++) {
         nnet->layerSizes[i] = atoi(record);
         printf("%d ", nnet->layerSizes[i]);
-        
-        // Get next token for next iteration (except on last iteration)
-        if (i < nnet->numLayers) {
-            record = strtok(NULL, ",\n");
-        }
+        record = strtok(NULL,",\n");
     }
     printf("\n");
 
