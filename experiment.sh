@@ -9,7 +9,7 @@ sudo apt update
 sudo apt install -y build-essential
 sudo apt install csvtool
 sudo apt install -y python3-swiftclient
-sudo apt install gdb
+sudo apt install -y gdb
 
 echo "Verifying installation..."
 gcc --version
