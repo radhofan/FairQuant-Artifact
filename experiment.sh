@@ -41,7 +41,7 @@ ls -la FairQuant-Artifact/FairQuant || echo "Directory missing!"
 # Build FairQuant
 FAIRQUANT_DIR="$PWD/FairQuant-Artifact/FairQuant"
 make -C "$FAIRQUANT_DIR" all
-make CFLAGS="-g -O0" all
+make -C "$FAIRQUANT_DIR" CFLAGS="-g -O0" all
 
 ############################################################
 
