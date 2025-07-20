@@ -369,7 +369,7 @@ struct NNet *load_network(const char* filename, int sens_feature_idx)
     nnet->layerSizes = (int*)malloc(sizeof(int)*(nnet->numLayers+1));
     line = fgets(buffer, bufferSize, fstream);
     if (line == NULL) {
-        fprintf(stderr, "ERROR: Failed to read layer size line from file\n");
+        printf("ERROR: Failed to read layer size line from file\n");
         fflush(stdout);
         return -1;
     }
