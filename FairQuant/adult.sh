@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-
+ulimit -c unlimited
 set -e
 set -x
 
