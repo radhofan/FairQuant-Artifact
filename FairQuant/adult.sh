@@ -38,5 +38,4 @@ fi
 # Set AddressSanitizer options for detailed debugging
 export ASAN_OPTIONS="abort_on_error=1:print_stacktrace=1:symbolize=1:print_module_map=1:check_initialization_order=1:strict_init_order=1:halt_on_error=1"
 
-# Run with AddressSanitizer and GDB for maximum debugging info
-gdb --batch --ex "set environment ASAN_OPTIONS=abort_on_error=1:print_stacktrace=1:symbolize=1:print_module_map=1:check_initialization_order=1:strict_init_order=1:halt_on_error=1" --ex run --ex bt --ex "info registers" --ex "disassemble" --ex quit --args ./FairQuant-Artifact/FairQuant/network_test "FairQuant-Artifact/models/adult/AC-13.nnet" "$idx"
+gdb --batch --ex "set environment ASAN_OPTIONS=abort_on_error=1:print_stacktrace=1:symbolize=1:print_module_map=1:check_initialization_order=1:strict_init_order=1:halt_on_error=1" --ex run --ex bt --ex quit --args ./FairQuant-Artifact/FairQuant/network_test "FairQuant-Artifact/models/adult/AC-13.nnet" "$idx"
