@@ -1,16 +1,18 @@
 #!/usr/bin/env bash
+
 set -e
 set -x
+
 exec > >(tee -a FairQuant-Artifact/FairQuant/experiment_output.log)
 exec 2>&1
 
 # Check if PA is provided
 if [ "$#" -ne 1 ]; then
-    echo "Usage: *$0* [Protected Attribute]"
+    echo "Usage: $0 [Protected Attribute]"
     exit 1
 fi
 
-PA="*$1*"
+PA="$1"
 idx=-1
 
 if [ "$PA" == "sex" ]; then
@@ -33,9 +35,13 @@ fi
 #     ./FairQuant-Artifact/FairQuant/network_test "FairQuant-Artifact/models/adult/AC-$i.nnet" "$idx"
 # done
 
+# Original direct run:
 # ./FairQuant-Artifact/FairQuant/network_test "FairQuant-Artifact/models/adult/AC-13.nnet" "$idx"
 
-# Set AddressSanitizer options for detailed debugging
-export ASAN_OPTIONS="abort_on_error=1:print_stacktrace=1:symbolize=1:print_module_map=1:check_initialization_order=1:strict_init_order=1:halt_on_error=1"
-
-gdb --batch --ex "set environment ASAN_OPTIONS=abort_on_error=1:print_stacktrace=1:symbolize=1:print_module_map=1:check_initialization_order=1:strict_init_order=1:halt_on_error=1" --ex run --ex bt --ex quit --args ./FairQuant-Artifact/FairQuant/network_test "FairQuant-Artifact/models/adult/AC-13.nnet" "$idx"
+# === Run under GDB with full backtrace ===
+ASAN_OPTIONS=detect_leaks=1 \
+gdb --batch \
+    --ex run \
+    --ex "bt full" \
+    --ex quit \
+    --args ./FairQuant-Artifact/FairQuant/network_test "FairQuant-Artifact/models/adult/AC-13.nnet" "$idx"
