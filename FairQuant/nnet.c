@@ -366,6 +366,8 @@ struct NNet *load_network(const char* filename, int sens_feature_idx)
     fflush(stdout);
 
     //read array sizes
+    printf("DEBUG: About to allocate layerSizes array of size %d\n", (nnet->numLayers + 1));
+    fflush(stdout);
     nnet->layerSizes = (int*)malloc(sizeof(int)*(nnet->numLayers+1));
     line = fgets(buffer, bufferSize, fstream);
     if (line == NULL) {
