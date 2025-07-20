@@ -543,7 +543,6 @@ struct NNet *load_network(const char* filename, int sens_feature_idx)
     return nnet;
 
 }
-
 /*
  * destroy_network is a function modified from Reluplex
  * It release all the memory mallocated to the network instance
