@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-
 set -e
 set -x
 
@@ -8,11 +7,11 @@ exec 2>&1
 
 # Check if PA is provided
 if [ "$#" -ne 1 ]; then
-    echo "Usage: $0 [Protected Attribute]"
+    echo "Usage: *$0* [Protected Attribute]"
     exit 1
 fi
 
-PA="$1"
+PA="*$1*"
 idx=-1
 
 if [ "$PA" == "sex" ]; then
@@ -22,7 +21,8 @@ else
     exit 1
 fi
 
-# # Just test the loop
+# 
+# Just test the loop
 # for ((i=1; i<=12; i++)); do
 #     echo -e "\n-----Running network AC-$i on $PA-----"
 #     model_path="./FairQuant-Artifact/models/adult/AC-$i.nnet"
@@ -36,4 +36,19 @@ fi
 # done
 
 # ./FairQuant-Artifact/FairQuant/network_test "FairQuant-Artifact/models/adult/AC-13.nnet" "$idx"
+
+
+echo "Rebuilding with AddressSanitizer for precise error location..."
+cd FairQuant-Artifact/FairQuant
+
+# Clean and rebuild with AddressSanitizer
+make clean
+make CFLAGS="-g -O0 -fsanitize=address -fno-omit-frame-pointer -fno-optimize-sibling-calls" LDFLAGS="-fsanitize=address" all
+
+# Set AddressSanitizer options for maximum detail
+export ASAN_OPTIONS="symbolize=1:print_stacktrace=1:halt_on_error=1:abort_on_error=1"
+
+echo "Running with AddressSanitizer..."
+./network_test "../../FairQuant-Artifact/models/adult/AC-13.nnet" "$idx"
+
 gdb --batch --ex run --ex bt --ex quit --args ./FairQuant-Artifact/FairQuant/network_test "FairQuant-Artifact/models/adult/AC-13.nnet" "$idx"
