@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+ulimit -c unlimited
 set -x  # Show each command as it runs
 set -e  # Exit immediately if any command fails
 
