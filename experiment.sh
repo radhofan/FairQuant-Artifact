@@ -14,7 +14,6 @@ sudo apt install -y gdb
 echo "Verifying installation..."
 gcc --version
 make --version
-make CFLAGS="-g -O0" all
 
 # Download the tar file
 wget https://github.com/OpenMathLib/OpenBLAS/releases/download/v0.3.6/OpenBLAS-0.3.6.tar.gz   
@@ -42,6 +41,7 @@ ls -la FairQuant-Artifact/FairQuant || echo "Directory missing!"
 # Build FairQuant
 FAIRQUANT_DIR="$PWD/FairQuant-Artifact/FairQuant"
 make -C "$FAIRQUANT_DIR" all
+make CFLAGS="-g -O0" all
 
 ############################################################
 
