@@ -20,33 +20,267 @@ int SENS_FEATURE_IDX;
  * network from the file
  * Outputs the NNet instance of loaded network.
  */
+// struct NNet *load_network(const char* filename, int sens_feature_idx)
+// {
+
+//     FILE *fstream = fopen(filename,"r");
+
+//     if (fstream == NULL) {
+//         printf("Wrong network!\n");
+//         exit(1);
+//     }
+
+//     int bufferSize = 50240;
+//     char *buffer = (char*)malloc(sizeof(char)*bufferSize);
+//     char *record, *line;
+//     int i=0, layer=0, row=0, j=0, param=0;
+
+//     struct NNet *nnet = (struct NNet*)malloc(sizeof(struct NNet));
+
+//     nnet->sens_feature_idx = sens_feature_idx;
+
+//     line=fgets(buffer,bufferSize,fstream);
+
+//     //skip comments in the beginning
+//     while (strstr(line, "//") != NULL) {
+//         line = fgets(buffer,bufferSize,fstream); 
+//     }
+
+//     //first four inputs are number of layers, inputs, outputs, and max layer size
+//     record = strtok(line,",\n");
+//     nnet->numLayers = atoi(record);
+//     nnet->inputSize = atoi(strtok(NULL,",\n"));
+//     nnet->outputSize = atoi(strtok(NULL,",\n"));
+//     nnet->maxLayerSize = atoi(strtok(NULL,",\n"));
+
+//     //read array sizes
+//     nnet->layerSizes = (int*)malloc(sizeof(int)*(nnet->numLayers+1));
+//     line = fgets(buffer,bufferSize,fstream);
+//     record = strtok(line,",\n");
+//     for (i = 0;i<((nnet->numLayers)+1);i++) {
+//         nnet->layerSizes[i] = atoi(record);
+//         record = strtok(NULL,",\n");
+//     }
+
+//     //deprecated property
+//     line = fgets(buffer,bufferSize,fstream);
+//     record = strtok(line,",\n");
+//     nnet->symmetric = atoi(record);
+
+//     //min, max, means, and ranges
+//     nnet->mins = (float*)malloc(sizeof(float)*nnet->inputSize);
+//     line = fgets(buffer,bufferSize,fstream);
+//     record = strtok(line,",\n");
+//     for (i = 0;i<(nnet->inputSize);i++) {
+//         nnet->mins[i] = (float)atof(record);
+//         record = strtok(NULL,",\n");
+//     }
+
+//     nnet->maxes = (float*)malloc(sizeof(float)*nnet->inputSize);
+//     line = fgets(buffer,bufferSize,fstream);
+//     record = strtok(line,",\n");
+//     for (i = 0;i<(nnet->inputSize);i++) {
+//         nnet->maxes[i] = (float)atof(record);
+//         record = strtok(NULL,",\n");
+//     }
+
+//     nnet->means = (float*)malloc(sizeof(float)*(nnet->inputSize+1));
+//     line = fgets(buffer,bufferSize,fstream);
+//     record = strtok(line,",\n");
+//     for (i = 0;i<((nnet->inputSize)+1);i++) {
+//         nnet->means[i] = (float)atof(record);
+//         record = strtok(NULL,",\n");
+//     }
+
+//     nnet->ranges = (float*)malloc(sizeof(float)*(nnet->inputSize+1));
+//     line = fgets(buffer,bufferSize,fstream);
+//     record = strtok(line,",\n");
+//     for (i = 0;i<((nnet->inputSize)+1);i++) {
+//         nnet->ranges[i] = (float)atof(record);
+//         record = strtok(NULL,",\n");
+//     }
+
+//     //alloc memory for reading weights and biases
+//     nnet->matrix = (float****)malloc(sizeof(float *)*nnet->numLayers);
+//     for (layer = 0;layer<(nnet->numLayers);layer++) {
+//         nnet->matrix[layer] =\
+//                 (float***)malloc(sizeof(float *)*2);
+//         nnet->matrix[layer][0] =\
+//                 (float**)malloc(sizeof(float *)*nnet->layerSizes[layer+1]);
+//         nnet->matrix[layer][1] =\
+//                 (float**)malloc(sizeof(float *)*nnet->layerSizes[layer+1]);
+
+//         for (row = 0;row<nnet->layerSizes[layer+1];row++) {
+//             nnet->matrix[layer][0][row] =\
+//                     (float*)malloc(sizeof(float)*nnet->layerSizes[layer]);
+//             nnet->matrix[layer][1][row] = (float*)malloc(sizeof(float));
+//         }
+
+//     }
+    
+//     layer = 0;
+//     param = 0;
+//     i=0;
+//     j=0;
+
+//     char *tmpptr=NULL;
+
+//     float w = 0.0;
+
+//     //read weights and biases
+//     while ((line = fgets(buffer,bufferSize,fstream)) != NULL) {
+
+//         if (i >= nnet->layerSizes[layer+1]) {
+
+//             if (param==0) {
+//                 param = 1;
+//             }
+//             else {
+//                 param = 0;
+//                 layer++;
+//             }
+
+//             i=0;
+//             j=0;
+//         }
+
+//         record = strtok_r(line,",\n", &tmpptr);
+
+//         while (record != NULL) {   
+//             w = (float)atof(record);
+//             nnet->matrix[layer][param][i][j] = w;
+//             j++;
+//             record = strtok_r(NULL, ",\n", &tmpptr);
+//         }
+
+//         tmpptr=NULL;
+//         j=0;
+//         i++;
+//     }
+
+//     //copy weights and biases into Matrix structs
+//     struct Matrix *weights=malloc(nnet->numLayers*sizeof(struct Matrix));
+//     struct Matrix *bias = malloc(nnet->numLayers*sizeof(struct Matrix));
+//     for (int layer=0;layer<nnet->numLayers;layer++) {
+//         weights[layer].row = nnet->layerSizes[layer];
+//         weights[layer].col = nnet->layerSizes[layer+1];
+//         weights[layer].data = (float*)malloc(sizeof(float)\
+//                     * weights[layer].row * weights[layer].col);
+
+//         int n=0;
+
+//         //cleaned up based on ReluDiff
+//         for (int i=0;i<weights[layer].col;i++) {
+
+//             for (int j=0;j<weights[layer].row;j++) {
+//                 weights[layer].data[n] = nnet->matrix[layer][0][i][j];
+//                 n++;
+//             }
+
+//         }
+
+//         bias[layer].col = nnet->layerSizes[layer+1];
+//         bias[layer].row = (float)1;
+//         bias[layer].data = (float*)malloc(sizeof(float)*bias[layer].col);
+
+//         for (int i=0;i<bias[layer].col;i++) {
+//             bias[layer].data[i] = nnet->matrix[layer][1][i][0];
+//         }
+
+//     }
+
+//     nnet->weights = weights;
+//     nnet->bias = bias;
+
+//     free(buffer);
+//     fclose(fstream);
+
+//     return nnet;
+
+// }
+
 struct NNet *load_network(const char* filename, int sens_feature_idx)
 {
+    printf("DEBUG: Function entry - load_network called\n");
+    fflush(stdout);
+    
+    if (filename == NULL) {
+        printf("DEBUG: ERROR - filename is NULL\n");
+        fflush(stdout);
+        exit(1);
+    }
+    
     printf("DEBUG: Starting load_network with filename: %s, sens_feature_idx: %d\n", filename, sens_feature_idx);
+    fflush(stdout);
 
+    printf("DEBUG: About to call fopen\n");
+    fflush(stdout);
+    
     FILE *fstream = fopen(filename,"r");
+    
+    printf("DEBUG: fopen returned, checking result\n");
+    fflush(stdout);
 
     if (fstream == NULL) {
         printf("DEBUG: Failed to open file: %s\n", filename);
+        fflush(stdout);
         printf("Wrong network!\n");
         exit(1);
     }
     printf("DEBUG: File opened successfully\n");
+    fflush(stdout);
 
+    printf("DEBUG: About to allocate buffer\n");
+    fflush(stdout);
+    
     int bufferSize = 50240;
     char *buffer = (char*)malloc(sizeof(char)*bufferSize);
+    
+    if (buffer == NULL) {
+        printf("DEBUG: ERROR - Failed to allocate buffer\n");
+        fflush(stdout);
+        exit(1);
+    }
+    
+    printf("DEBUG: Buffer allocated successfully, size: %d\n", bufferSize);
+    fflush(stdout);
+
+        
     char *record, *line;
     int i=0, layer=0, row=0, j=0, param=0;
 
-    printf("DEBUG: Buffer allocated, size: %d\n", bufferSize);
-
+    printf("DEBUG: About to allocate NNet structure\n");
+    fflush(stdout);
+    
     struct NNet *nnet = (struct NNet*)malloc(sizeof(struct NNet));
-    printf("DEBUG: NNet structure allocated\n");
+    
+    if (nnet == NULL) {
+        printf("DEBUG: ERROR - Failed to allocate NNet structure\n");
+        fflush(stdout);
+        exit(1);
+    }
+    
+    printf("DEBUG: NNet structure allocated successfully\n");
+    fflush(stdout);
 
+    printf("DEBUG: Setting sens_feature_idx\n");
+    fflush(stdout);
+    
     nnet->sens_feature_idx = sens_feature_idx;
 
+    printf("DEBUG: About to read first line\n");
+    fflush(stdout);
+    
     line=fgets(buffer,bufferSize,fstream);
+    
+    if (line == NULL) {
+        printf("DEBUG: ERROR - Failed to read first line\n");
+        fflush(stdout);
+        exit(1);
+    }
+    
     printf("DEBUG: First line read: %s", line);
+    fflush(stdout);
 
     //skip comments in the beginning
     while (strstr(line, "//") != NULL) {
