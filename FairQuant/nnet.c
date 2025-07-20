@@ -370,6 +370,7 @@ struct NNet *load_network(const char* filename, int sens_feature_idx)
     line = fgets(buffer, bufferSize, fstream);
     if (line == NULL) {
         fprintf(stderr, "ERROR: Failed to read layer size line from file\n");
+        fflush(stdout);
         return -1;
     }
     record = strtok(line, ",\n");
