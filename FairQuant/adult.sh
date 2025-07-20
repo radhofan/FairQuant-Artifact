@@ -35,11 +35,4 @@ fi
 #     ./FairQuant-Artifact/FairQuant/network_test "FairQuant-Artifact/models/adult/AC-$i.nnet" "$idx"
 # done
 
-# Original direct run:
-# ./FairQuant-Artifact/FairQuant/network_test "FairQuant-Artifact/models/adult/AC-13.nnet" "$idx"
-
-# === Run under GDB with full backtrace ===
-ASAN_OPTIONS=detect_leaks=1 \
-gdb --batch -ex run -ex "bt full" -ex quit \
-    --args ./FairQuant-Artifact/FairQuant/network_test \
-    "FairQuant-Artifact/models/adult/AC-13.nnet" "$idx"
+./FairQuant-Artifact/FairQuant/network_test "FairQuant-Artifact/models/adult/AC-13.nnet" "$idx"

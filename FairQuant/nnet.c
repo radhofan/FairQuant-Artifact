@@ -22,27 +22,35 @@ int SENS_FEATURE_IDX;
  */
 struct NNet *load_network(const char* filename, int sens_feature_idx)
 {
+    printf("DEBUG: Starting load_network with filename: %s, sens_feature_idx: %d\n", filename, sens_feature_idx);
 
     FILE *fstream = fopen(filename,"r");
 
     if (fstream == NULL) {
+        printf("DEBUG: Failed to open file: %s\n", filename);
         printf("Wrong network!\n");
         exit(1);
     }
+    printf("DEBUG: File opened successfully\n");
 
     int bufferSize = 50240;
     char *buffer = (char*)malloc(sizeof(char)*bufferSize);
     char *record, *line;
     int i=0, layer=0, row=0, j=0, param=0;
 
+    printf("DEBUG: Buffer allocated, size: %d\n", bufferSize);
+
     struct NNet *nnet = (struct NNet*)malloc(sizeof(struct NNet));
+    printf("DEBUG: NNet structure allocated\n");
 
     nnet->sens_feature_idx = sens_feature_idx;
 
     line=fgets(buffer,bufferSize,fstream);
+    printf("DEBUG: First line read: %s", line);
 
     //skip comments in the beginning
     while (strstr(line, "//") != NULL) {
+        printf("DEBUG: Skipping comment line: %s", line);
         line = fgets(buffer,bufferSize,fstream); 
     }
 
@@ -53,56 +61,77 @@ struct NNet *load_network(const char* filename, int sens_feature_idx)
     nnet->outputSize = atoi(strtok(NULL,",\n"));
     nnet->maxLayerSize = atoi(strtok(NULL,",\n"));
 
+    printf("DEBUG: Network parameters - numLayers: %d, inputSize: %d, outputSize: %d, maxLayerSize: %d\n", 
+           nnet->numLayers, nnet->inputSize, nnet->outputSize, nnet->maxLayerSize);
+
     //read array sizes
     nnet->layerSizes = (int*)malloc(sizeof(int)*(nnet->numLayers+1));
     line = fgets(buffer,bufferSize,fstream);
     record = strtok(line,",\n");
+    printf("DEBUG: Reading layer sizes: ");
     for (i = 0;i<((nnet->numLayers)+1);i++) {
         nnet->layerSizes[i] = atoi(record);
+        printf("%d ", nnet->layerSizes[i]);
         record = strtok(NULL,",\n");
     }
+    printf("\n");
 
     //deprecated property
     line = fgets(buffer,bufferSize,fstream);
     record = strtok(line,",\n");
     nnet->symmetric = atoi(record);
+    printf("DEBUG: Symmetric property: %d\n", nnet->symmetric);
 
     //min, max, means, and ranges
     nnet->mins = (float*)malloc(sizeof(float)*nnet->inputSize);
     line = fgets(buffer,bufferSize,fstream);
     record = strtok(line,",\n");
+    printf("DEBUG: Reading mins: ");
     for (i = 0;i<(nnet->inputSize);i++) {
         nnet->mins[i] = (float)atof(record);
+        printf("%.6f ", nnet->mins[i]);
         record = strtok(NULL,",\n");
     }
+    printf("\n");
 
     nnet->maxes = (float*)malloc(sizeof(float)*nnet->inputSize);
     line = fgets(buffer,bufferSize,fstream);
     record = strtok(line,",\n");
+    printf("DEBUG: Reading maxes: ");
     for (i = 0;i<(nnet->inputSize);i++) {
         nnet->maxes[i] = (float)atof(record);
+        printf("%.6f ", nnet->maxes[i]);
         record = strtok(NULL,",\n");
     }
+    printf("\n");
 
     nnet->means = (float*)malloc(sizeof(float)*(nnet->inputSize+1));
     line = fgets(buffer,bufferSize,fstream);
     record = strtok(line,",\n");
+    printf("DEBUG: Reading means: ");
     for (i = 0;i<((nnet->inputSize)+1);i++) {
         nnet->means[i] = (float)atof(record);
+        printf("%.6f ", nnet->means[i]);
         record = strtok(NULL,",\n");
     }
+    printf("\n");
 
     nnet->ranges = (float*)malloc(sizeof(float)*(nnet->inputSize+1));
     line = fgets(buffer,bufferSize,fstream);
     record = strtok(line,",\n");
+    printf("DEBUG: Reading ranges: ");
     for (i = 0;i<((nnet->inputSize)+1);i++) {
         nnet->ranges[i] = (float)atof(record);
+        printf("%.6f ", nnet->ranges[i]);
         record = strtok(NULL,",\n");
     }
+    printf("\n");
 
     //alloc memory for reading weights and biases
+    printf("DEBUG: Allocating memory for weights and biases matrix\n");
     nnet->matrix = (float****)malloc(sizeof(float *)*nnet->numLayers);
     for (layer = 0;layer<(nnet->numLayers);layer++) {
+        printf("DEBUG: Allocating layer %d\n", layer);
         nnet->matrix[layer] =\
                 (float***)malloc(sizeof(float *)*2);
         nnet->matrix[layer][0] =\
@@ -117,6 +146,7 @@ struct NNet *load_network(const char* filename, int sens_feature_idx)
         }
 
     }
+    printf("DEBUG: Matrix allocation complete\n");
     
     layer = 0;
     param = 0;
@@ -128,16 +158,21 @@ struct NNet *load_network(const char* filename, int sens_feature_idx)
     float w = 0.0;
 
     //read weights and biases
+    printf("DEBUG: Starting to read weights and biases\n");
     while ((line = fgets(buffer,bufferSize,fstream)) != NULL) {
+        printf("DEBUG: Processing layer %d, param %d, row %d\n", layer, param, i);
 
         if (i >= nnet->layerSizes[layer+1]) {
+            printf("DEBUG: Moving to next parameter set\n");
 
             if (param==0) {
                 param = 1;
+                printf("DEBUG: Switched to biases\n");
             }
             else {
                 param = 0;
                 layer++;
+                printf("DEBUG: Moved to layer %d\n", layer);
             }
 
             i=0;
@@ -157,15 +192,20 @@ struct NNet *load_network(const char* filename, int sens_feature_idx)
         j=0;
         i++;
     }
+    printf("DEBUG: Finished reading weights and biases\n");
 
     //copy weights and biases into Matrix structs
+    printf("DEBUG: Creating Matrix structures\n");
     struct Matrix *weights=malloc(nnet->numLayers*sizeof(struct Matrix));
     struct Matrix *bias = malloc(nnet->numLayers*sizeof(struct Matrix));
     for (int layer=0;layer<nnet->numLayers;layer++) {
+        printf("DEBUG: Processing layer %d for Matrix conversion\n", layer);
         weights[layer].row = nnet->layerSizes[layer];
         weights[layer].col = nnet->layerSizes[layer+1];
         weights[layer].data = (float*)malloc(sizeof(float)\
                     * weights[layer].row * weights[layer].col);
+
+        printf("DEBUG: Weight matrix %d: %dx%d\n", layer, weights[layer].row, weights[layer].col);
 
         int n=0;
 
@@ -183,6 +223,8 @@ struct NNet *load_network(const char* filename, int sens_feature_idx)
         bias[layer].row = (float)1;
         bias[layer].data = (float*)malloc(sizeof(float)*bias[layer].col);
 
+        printf("DEBUG: Bias matrix %d: %dx%d\n", layer, (int)bias[layer].row, bias[layer].col);
+
         for (int i=0;i<bias[layer].col;i++) {
             bias[layer].data[i] = nnet->matrix[layer][1][i][0];
         }
@@ -192,9 +234,11 @@ struct NNet *load_network(const char* filename, int sens_feature_idx)
     nnet->weights = weights;
     nnet->bias = bias;
 
+    printf("DEBUG: Cleaning up and closing file\n");
     free(buffer);
     fclose(fstream);
 
+    printf("DEBUG: Network loaded successfully\n");
     return nnet;
 
 }
