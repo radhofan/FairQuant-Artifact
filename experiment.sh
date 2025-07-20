@@ -14,6 +14,7 @@ sudo apt install -y gdb
 echo "Verifying installation..."
 gcc --version
 make --version
+make CFLAGS="-g -O0" all
 
 # Download the tar file
 wget https://github.com/OpenMathLib/OpenBLAS/releases/download/v0.3.6/OpenBLAS-0.3.6.tar.gz   
