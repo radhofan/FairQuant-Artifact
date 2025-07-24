@@ -41,8 +41,8 @@ fi
 # ./FairQuant-Artifact/FairQuant/network_test "FairQuant-Artifact/models/adult/AC-7.nnet" "$idx"
 # ./FairQuant-Artifact/FairQuant/network_test "FairQuant-Artifact/models/adult/AC-8.nnet" "$idx"
 # ./FairQuant-Artifact/FairQuant/network_test "FairQuant-Artifact/models/adult/AC-9.nnet" "$idx"
-./FairQuant-Artifact/FairQuant/network_test "FairQuant-Artifact/models/adult/AC-10.nnet" "$idx"
-# ./FairQuant-Artifact/FairQuant/network_test "FairQuant-Artifact/models/adult/AC-11.nnet" "$idx"
+# ./FairQuant-Artifact/FairQuant/network_test "FairQuant-Artifact/models/adult/AC-10.nnet" "$idx"
+./FairQuant-Artifact/FairQuant/network_test "FairQuant-Artifact/models/adult/AC-11.nnet" "$idx"
 # ./FairQuant-Artifact/FairQuant/network_test "FairQuant-Artifact/models/adult/AC-12.nnet" "$idx"                
 
 
