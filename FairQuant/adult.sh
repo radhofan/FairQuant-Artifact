@@ -35,11 +35,22 @@ fi
 #     ./FairQuant-Artifact/FairQuant/network_test "FairQuant-Artifact/models/adult/AC-$i.nnet" "$idx"
 # done
 
-./FairQuant-Artifact/FairQuant/network_test "FairQuant-Artifact/models/adult/AC-13.nnet" "$idx"        # Done
-# ./FairQuant-Artifact/FairQuant/network_test "FairQuant-Artifact/models/adult/AC-13-Biased.nnet" "$idx" # Done
+./FairQuant-Artifact/FairQuant/network_test "FairQuant-Artifact/models/adult/AC-4.nnet" "$idx"
+# ./FairQuant-Artifact/FairQuant/network_test "FairQuant-Artifact/models/adult/AC-5.nnet" "$idx"  
+# ./FairQuant-Artifact/FairQuant/network_test "FairQuant-Artifact/models/adult/AC-6.nnet" "$idx"
+# ./FairQuant-Artifact/FairQuant/network_test "FairQuant-Artifact/models/adult/AC-7.nnet" "$idx"
+# ./FairQuant-Artifact/FairQuant/network_test "FairQuant-Artifact/models/adult/AC-8.nnet" "$idx"
+# ./FairQuant-Artifact/FairQuant/network_test "FairQuant-Artifact/models/adult/AC-9.nnet" "$idx"
+# ./FairQuant-Artifact/FairQuant/network_test "FairQuant-Artifact/models/adult/AC-10.nnet" "$idx"
+# ./FairQuant-Artifact/FairQuant/network_test "FairQuant-Artifact/models/adult/AC-11.nnet" "$idx"
+# ./FairQuant-Artifact/FairQuant/network_test "FairQuant-Artifact/models/adult/AC-12.nnet" "$idx"                
 
-# ./FairQuant-Artifact/FairQuant/network_test "FairQuant-Artifact/models/adult/AC-14.nnet" "$idx"        # Done
-# ./FairQuant-Artifact/FairQuant/network_test "FairQuant-Artifact/models/adult/AC-14-Biased.nnet" "$idx" # Done
 
-# ./FairQuant-Artifact/FairQuant/network_test "FairQuant-Artifact/models/adult/AC-15.nnet" "$idx"        #
-# ./FairQuant-Artifact/FairQuant/network_test "FairQuant-Artifact/models/adult/AC-15-Biased.nnet" "$idx" #
+# ./FairQuant-Artifact/FairQuant/network_test "FairQuant-Artifact/models/adult/AC-13.nnet" "$idx"        
+# ./FairQuant-Artifact/FairQuant/network_test "FairQuant-Artifact/models/adult/AC-13-Biased.nnet" "$idx" 
+
+# ./FairQuant-Artifact/FairQuant/network_test "FairQuant-Artifact/models/adult/AC-14.nnet" "$idx"        
+# ./FairQuant-Artifact/FairQuant/network_test "FairQuant-Artifact/models/adult/AC-14-Biased.nnet" "$idx" 
+
+# ./FairQuant-Artifact/FairQuant/network_test "FairQuant-Artifact/models/adult/AC-15.nnet" "$idx"        
+# ./FairQuant-Artifact/FairQuant/network_test "FairQuant-Artifact/models/adult/AC-15-Biased.nnet" "$idx" 
