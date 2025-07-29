@@ -30,4 +30,4 @@ fi
 #     ./FairQuant-Artifact/FairQuant/network_test "FairQuant-Artifact/models/german/GC-$i.nnet" "$idx"
 # done
 
-./FairQuant-Artifact/FairQuant/network_test "FairQuant-Artifact/models/german/GC-8.nnet" "$idx"
+./FairQuant-Artifact/FairQuant/network_test "FairQuant-Artifact/models/german/GC-9.nnet" "$idx"
