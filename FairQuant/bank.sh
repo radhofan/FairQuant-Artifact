@@ -16,7 +16,7 @@ PA="$1"
 idx=-1
 
 if [ "$PA" == "age" ]; then
-    idx=15 # 0 stands for age
+    idx=0 # 0 stands for age
 else
     echo "Error: invalid PA provided for bank: age"
     exit 1
@@ -28,4 +28,4 @@ fi
 #     ./FairQuant-Artifact/FairQuant/network_test "FairQuant-Artifact/models/bank/BM-$i.nnet" "$idx"
 # done
 
- ./FairQuant-Artifact/FairQuant/network_test "FairQuant-Artifact/models/bank/BM-8.nnet" "$idx"
+ ./FairQuant-Artifact/FairQuant/network_test "FairQuant-Artifact/models/bank/BM-9.nnet" "$idx"
