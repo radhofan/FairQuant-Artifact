@@ -16,7 +16,7 @@ PA="$1"
 idx=-1
 
 if [ "$PA" == "age" ]; then
-    idx=0 # 0 stands for age
+    idx=15 # 0 stands for age
 else
     echo "Error: invalid PA provided for bank: age"
     exit 1
