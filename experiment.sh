@@ -123,7 +123,6 @@ echo
 echo "Uploading results to the object store container $bucket_name"
 # Create the bucket if it doesn't exist
 swift post $bucket_name
-swift delete bare_metal_experiment_pattern_data counterexample.csv
 
 # Upload just the counterexamples.csv file
 if [ -f "$file_to_upload" ]; then
