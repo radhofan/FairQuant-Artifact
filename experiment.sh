@@ -118,6 +118,7 @@ source ~/openrc
 
 bucket_name="bare_metal_experiment_pattern_data"  # Simple, static bucket name
 file_to_upload="FairQuant-Artifact/FairQuant/counterexamples.csv"
+object_name="counterexamples.csv" 
 
 echo
 echo "Uploading results to the object store container $bucket_name"
