@@ -510,6 +510,11 @@ const char* decode_feature(int feature_index, float value) {
         }
     }
 }
+
+float sigmoid(float x) {
+    return 1.0f / (1.0f + expf(-x));
+}
+
 // Main check_adv function
 int check_adv(struct NNet* nnet, struct Subproblem *subp) {
     static int counterexample_count = 0;
@@ -568,8 +573,18 @@ int check_adv(struct NNet* nnet, struct Subproblem *subp) {
         struct Matrix output1 = {out1, nnet->outputSize, 1};
         forward_prop(nnet, &adv0, &output0);
         forward_prop(nnet, &adv1, &output1);
-        int out0Pos = output0.data[0] > 0;
-        int out1Pos = output1.data[0] > 0;
+
+        // Apply sigmoid to get probabilities between 0 and 1
+        float sigmoid_out0 = sigmoid(output0.data[0]);
+        float sigmoid_out1 = sigmoid(output1.data[0]);
+        
+        // Decision based on sigmoid output (threshold = 0.5)
+        int out0Pos = sigmoid_out0 > 0.5f;
+        int out1Pos = sigmoid_out1 > 0.5f;
+
+        // int out0Pos = output0.data[0] > 0;
+        // int out1Pos = output1.data[0] > 0;
+
         if (out0Pos != out1Pos) {
             counterexample_count++;
             // PA = 0
