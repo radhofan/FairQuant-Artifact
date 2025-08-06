@@ -591,12 +591,12 @@ int check_adv(struct NNet* nnet, struct Subproblem *subp) {
             for (int i = 0; i < nnet->inputSize; i++) {
                 fprintf(ce_file, "%s,", decode_feature(i, a0[i]));
             }
-            fprintf(ce_file, "%.6f,%s\n", output0.data[0], out0Pos ? "POSITIVE" : "NEGATIVE");
+            fprintf(ce_file, "%.6f,%s\n", sigmoid_out0, out0Pos ? "POSITIVE" : "NEGATIVE");
             // PA = 1
             for (int i = 0; i < nnet->inputSize; i++) {
                 fprintf(ce_file, "%s,", decode_feature(i, a1[i]));
             }
-            fprintf(ce_file, "%.6f,%s\n", output1.data[0], out1Pos ? "POSITIVE" : "NEGATIVE");
+            fprintf(ce_file, "%.6f,%s\n", sigmoid_out1, out1Pos ? "POSITIVE" : "NEGATIVE");
             fflush(ce_file);
             counterexample++;
             return 1;
