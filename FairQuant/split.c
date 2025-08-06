@@ -518,7 +518,7 @@ float sigmoid(float x) {
 // Main check_adv function
 int check_adv(struct NNet* nnet, struct Subproblem *subp) {
     static int counterexample_count = 0;
-    FILE* ce_file = NULL;
+    static FILE* ce_file = NULL;
     static const char* feature_names[] = {
         "job",
         "marital",
