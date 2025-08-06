@@ -124,6 +124,8 @@ echo "Uploading results to the object store container $bucket_name"
 # Create the bucket if it doesn't exist
 swift post $bucket_name
 
+swift delete "$bucket_name" "$object_name" 2>/dev/null || true
+
 # Upload just the counterexamples.csv file
 if [ -f "$file_to_upload" ]; then
     echo "Uploading $file_to_upload"
