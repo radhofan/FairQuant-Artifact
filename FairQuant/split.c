@@ -341,6 +341,10 @@ const char* decode_feature(int feature_index, float value) {
     }
 }
 
+float sigmoid(float x) {
+    return 1.0f / (1.0f + expf(-x));
+}
+
 // Main check_adv function
 int check_adv(struct NNet* nnet, struct Subproblem *subp) {
     static int counterexample_count = 0;
