@@ -55,4 +55,4 @@ fi
 # ./FairQuant-Artifact/FairQuant/network_test "FairQuant-Artifact/models/adult/AC-15.nnet" "$idx"        
 # ./FairQuant-Artifact/FairQuant/network_test "FairQuant-Artifact/models/adult/AC-15-Biased.nnet" "$idx" 
 
-./FairQuant-Artifact/FairQuant/network_test "FairQuant-Artifact/models/adult/AC-6.nnet" "$idx" 
+./FairQuant-Artifact/FairQuant/network_test "FairQuant-Artifact/models/adult/AC-7.nnet" "$idx" 
