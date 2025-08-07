@@ -28,4 +28,4 @@ fi
 #     ./FairQuant-Artifact/FairQuant/network_test "FairQuant-Artifact/models/bank/BM-$i.nnet" "$idx"
 # done
 
- ./FairQuant-Artifact/FairQuant/network_test "FairQuant-Artifact/models/bank/BM-6.nnet" "$idx"
+ ./FairQuant-Artifact/FairQuant/network_test "FairQuant-Artifact/models/bank/BM-7.nnet" "$idx"
