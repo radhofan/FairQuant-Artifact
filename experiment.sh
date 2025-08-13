@@ -126,7 +126,7 @@ echo "Uploading results to the object store container $bucket_name"
 swift post "$bucket_name"
 
 # Correctly delete the previous object
-swift delete "$bucket_name" "$object_name" 2>/dev/null || true
+# swift delete "$bucket_name" "$object_name" 2>/dev/null || true
 
 if [ -f "$file_to_upload" ]; then
     echo "Uploading $file_to_upload"
