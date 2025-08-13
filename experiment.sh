@@ -114,6 +114,7 @@ echo "Running $ADULT_SCRIPT with argument 'sex'"
 
 ############################################################
 
+# cc-generate-openrc
 source ~/openrc
 
 bucket_name="bare_metal_experiment_pattern_data"
