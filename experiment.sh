@@ -46,20 +46,20 @@ make -C "$FAIRQUANT_DIR" CFLAGS="-g -O0" all
 
 ############################################################
 
-ADULT_SCRIPT="./FairQuant-Artifact/FairQuant/adult.sh"
-if [ ! -f "$ADULT_SCRIPT" ]; then
-    echo "ERROR: $ADULT_SCRIPT does not exist!" >&2
-    exit 1
-fi
+# ADULT_SCRIPT="./FairQuant-Artifact/FairQuant/adult.sh"
+# if [ ! -f "$ADULT_SCRIPT" ]; then
+#     echo "ERROR: $ADULT_SCRIPT does not exist!" >&2
+#     exit 1
+# fi
 
-if [ ! -x "$ADULT_SCRIPT" ]; then
-    echo "ERROR: $ADULT_SCRIPT is not executable!" >&2
-    chmod +x "$ADULT_SCRIPT"
-fi
+# if [ ! -x "$ADULT_SCRIPT" ]; then
+#     echo "ERROR: $ADULT_SCRIPT is not executable!" >&2
+#     chmod +x "$ADULT_SCRIPT"
+# fi
 
-# Run adult.sh
-echo "Running $ADULT_SCRIPT with argument 'sex'"
-"$ADULT_SCRIPT" sex
+# # Run adult.sh
+# echo "Running $ADULT_SCRIPT with argument 'sex'"
+# "$ADULT_SCRIPT" sex
 
 ############################################################
 
@@ -111,6 +111,23 @@ echo "Running $ADULT_SCRIPT with argument 'sex'"
 # # Run adult.sh
 # echo "Running $COMPAS_SCRIPT with argument 'age'"
 # "$COMPAS_SCRIPT" age
+
+############################################################
+
+DEFAULT_SCRIPT="./FairQuant-Artifact/FairQuant/default.sh"
+if [ ! -f "$DEFAULT_SCRIPT" ]; then
+    echo "ERROR: $DEFAULT_SCRIPT does not exist!" >&2
+    exit 1
+fi
+
+if [ ! -x "$DEFAULT_SCRIPT" ]; then
+    echo "ERROR: $DEFAULT_SCRIPT is not executable!" >&2
+    chmod +x "$DEFAULT_SCRIPT"
+fi
+
+# Run adult.sh
+echo "Running $GERMAN_SCRIPT with argument 'sex'"
+"$GERMAN_SCRIPT" SEX_2
 
 ############################################################
 

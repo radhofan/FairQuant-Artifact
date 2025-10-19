@@ -75,189 +75,189 @@ struct timeval start, curr, finish, last_finish;
 //     return 0;
 // }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////// ADULT CENSUS 
+// /////////////////////////////////////////////////////////////////////////////////////////////////// ADULT CENSUS 
 
-static const char* workclass_map[] = {
-    "Private", "Self-emp-not-inc", "Self-emp-inc", "Federal-gov",
-    "Local-gov", "State-gov", "Without-pay", "Never-worked"
-};
+// static const char* workclass_map[] = {
+//     "Private", "Self-emp-not-inc", "Self-emp-inc", "Federal-gov",
+//     "Local-gov", "State-gov", "Without-pay", "Never-worked"
+// };
 
-static const char* education_map[] = {
-    "Bachelors", "Some-college", "11th", "HS-grad", "Prof-school",
-    "Assoc-acdm", "Assoc-voc", "9th", "7th-8th", "12th", "Masters",
-    "1st-4th", "10th", "Doctorate", "5th-6th", "Preschool"
-};
+// static const char* education_map[] = {
+//     "Bachelors", "Some-college", "11th", "HS-grad", "Prof-school",
+//     "Assoc-acdm", "Assoc-voc", "9th", "7th-8th", "12th", "Masters",
+//     "1st-4th", "10th", "Doctorate", "5th-6th", "Preschool"
+// };
 
-static const char* marital_status_map[] = {
-    "Married-civ-spouse", "Divorced", "Never-married", "Separated",
-    "Widowed", "Married-spouse-absent", "Married-AF-spouse"
-};
+// static const char* marital_status_map[] = {
+//     "Married-civ-spouse", "Divorced", "Never-married", "Separated",
+//     "Widowed", "Married-spouse-absent", "Married-AF-spouse"
+// };
 
-static const char* occupation_map[] = {
-    "Tech-support", "Craft-repair", "Other-service", "Sales", "Exec-managerial",
-    "Prof-specialty", "Handlers-cleaners", "Machine-op-inspct", "Adm-clerical",
-    "Farming-fishing", "Transport-moving", "Priv-house-serv", "Protective-serv",
-    "Armed-Forces"
-};
+// static const char* occupation_map[] = {
+//     "Tech-support", "Craft-repair", "Other-service", "Sales", "Exec-managerial",
+//     "Prof-specialty", "Handlers-cleaners", "Machine-op-inspct", "Adm-clerical",
+//     "Farming-fishing", "Transport-moving", "Priv-house-serv", "Protective-serv",
+//     "Armed-Forces"
+// };
 
-static const char* relationship_map[] = {
-    "Wife", "Own-child", "Husband", "Not-in-family", "Other-relative", "Unmarried"
-};
+// static const char* relationship_map[] = {
+//     "Wife", "Own-child", "Husband", "Not-in-family", "Other-relative", "Unmarried"
+// };
 
-static const char* sex_map[] = { "Female", "Male" };
+// static const char* sex_map[] = { "Female", "Male" };
 
-static const char* race_map[] = {
-    "White", "Asian-Pac-Islander", "Amer-Indian-Eskimo", "Other", "Black"
-};
+// static const char* race_map[] = {
+//     "White", "Asian-Pac-Islander", "Amer-Indian-Eskimo", "Other", "Black"
+// };
 
-static const char* native_country_map[] = {
-    "United-States", "Cambodia", "England", "Puerto-Rico", "Canada",
-    "Germany", "Outlying-US(Guam-USVI-etc)", "India", "Japan", "Greece",
-    "South", "China", "Cuba", "Iran", "Honduras", "Philippines", "Italy",
-    "Poland", "Jamaica", "Vietnam", "Mexico", "Portugal", "Ireland",
-    "France", "Dominican-Republic", "Laos", "Ecuador", "Taiwan", "Haiti",
-    "Columbia", "Hungary", "Guatemala", "Nicaragua", "Scotland", "Thailand",
-    "Yugoslavia", "El-Salvador", "Trinadad&Tobago", "Peru", "Hong",
-    "Holand-Netherlands"
-};
+// static const char* native_country_map[] = {
+//     "United-States", "Cambodia", "England", "Puerto-Rico", "Canada",
+//     "Germany", "Outlying-US(Guam-USVI-etc)", "India", "Japan", "Greece",
+//     "South", "China", "Cuba", "Iran", "Honduras", "Philippines", "Italy",
+//     "Poland", "Jamaica", "Vietnam", "Mexico", "Portugal", "Ireland",
+//     "France", "Dominican-Republic", "Laos", "Ecuador", "Taiwan", "Haiti",
+//     "Columbia", "Hungary", "Guatemala", "Nicaragua", "Scotland", "Thailand",
+//     "Yugoslavia", "El-Salvador", "Trinadad&Tobago", "Peru", "Hong",
+//     "Holand-Netherlands"
+// };
 
-const char* decode_bin(float value, float min_val, float max_val, int n_bins) {
-    static char buffer[32];
-    int idx = (int)round(value);
-    float bin_width = (max_val - min_val) / n_bins;
-    float midpoint = min_val + (idx + 0.5f) * bin_width;
-    snprintf(buffer, sizeof(buffer), "%d", (int)midpoint);
-    return buffer;
-}
+// const char* decode_bin(float value, float min_val, float max_val, int n_bins) {
+//     static char buffer[32];
+//     int idx = (int)round(value);
+//     float bin_width = (max_val - min_val) / n_bins;
+//     float midpoint = min_val + (idx + 0.5f) * bin_width;
+//     snprintf(buffer, sizeof(buffer), "%d", (int)midpoint);
+//     return buffer;
+// }
 
-const char* decode_feature(int feature_index, float value) {
-    int idx = (int)round(value);
-    switch (feature_index) {
-        case 1: return workclass_map[idx];
-        case 2: return education_map[idx];
-        case 4: return marital_status_map[idx];
-        case 5: return occupation_map[idx];
-        case 6: return relationship_map[idx];
-        case 7: return race_map[idx];
-        case 8: return sex_map[idx];
-        case 9: return decode_bin(value, 0.0f, 100000.0f, 20);  // capital-gain (real max ≈ 99999)
-        case 10: return decode_bin(value, 0.0f, 4356.0f, 20);   // capital-loss (real max ≈ 4356)
-        case 12: return native_country_map[idx];
-        default: {
-            static char buffer[32];
-            snprintf(buffer, sizeof(buffer), "%.0f", value);
-            return buffer;
-        }
-    }
-}
+// const char* decode_feature(int feature_index, float value) {
+//     int idx = (int)round(value);
+//     switch (feature_index) {
+//         case 1: return workclass_map[idx];
+//         case 2: return education_map[idx];
+//         case 4: return marital_status_map[idx];
+//         case 5: return occupation_map[idx];
+//         case 6: return relationship_map[idx];
+//         case 7: return race_map[idx];
+//         case 8: return sex_map[idx];
+//         case 9: return decode_bin(value, 0.0f, 100000.0f, 20);  // capital-gain (real max ≈ 99999)
+//         case 10: return decode_bin(value, 0.0f, 4356.0f, 20);   // capital-loss (real max ≈ 4356)
+//         case 12: return native_country_map[idx];
+//         default: {
+//             static char buffer[32];
+//             snprintf(buffer, sizeof(buffer), "%.0f", value);
+//             return buffer;
+//         }
+//     }
+// }
 
-float sigmoid(float x) {
-    return 1.0f / (1.0f + expf(-x));
-}
+// float sigmoid(float x) {
+//     return 1.0f / (1.0f + expf(-x));
+// }
 
 
-// Main check_adv function
-int check_adv(struct NNet* nnet, struct Subproblem *subp) {
-    static int counterexample_count = 0;
-    static FILE* ce_file = NULL;
+// // Main check_adv function
+// int check_adv(struct NNet* nnet, struct Subproblem *subp) {
+//     static int counterexample_count = 0;
+//     static FILE* ce_file = NULL;
 
-    static const char* feature_names[] = {
-        "age",
-        "workclass",
-        "education",
-        "education-num",
-        "marital-status",
-        "occupation",
-        "relationship",
-        "race",
-        "sex",
-        "capital-gain",
-        "capital-loss",
-        "hours-per-week",
-        "native-country"
-    };
+//     static const char* feature_names[] = {
+//         "age",
+//         "workclass",
+//         "education",
+//         "education-num",
+//         "marital-status",
+//         "occupation",
+//         "relationship",
+//         "race",
+//         "sex",
+//         "capital-gain",
+//         "capital-loss",
+//         "hours-per-week",
+//         "native-country"
+//     };
 
-    if (ce_file == NULL) {
-        ce_file = fopen("FairQuant-Artifact/FairQuant/counterexamples.csv", "w");
-        if (!ce_file) {
-            printf("Failed to open counterexamples.csv\n");
-            return 0;
-        }
-        for (int i = 0; i < nnet->inputSize; i++) {
-            fprintf(ce_file, "%s,", feature_names[i]);
-        }
-        fprintf(ce_file, "output,decision\n");
-        fflush(ce_file);
-    }
+//     if (ce_file == NULL) {
+//         ce_file = fopen("FairQuant-Artifact/FairQuant/counterexamples.csv", "w");
+//         if (!ce_file) {
+//             printf("Failed to open counterexamples.csv\n");
+//             return 0;
+//         }
+//         for (int i = 0; i < nnet->inputSize; i++) {
+//             fprintf(ce_file, "%s,", feature_names[i]);
+//         }
+//         fprintf(ce_file, "output,decision\n");
+//         fflush(ce_file);
+//     }
 
-    float a0[nnet->inputSize];
-    float a1[nnet->inputSize];
-    struct Matrix adv0 = {a0, 1, nnet->inputSize};
-    struct Matrix adv1 = {a1, 1, nnet->inputSize};
+//     float a0[nnet->inputSize];
+//     float a1[nnet->inputSize];
+//     struct Matrix adv0 = {a0, 1, nnet->inputSize};
+//     struct Matrix adv1 = {a1, 1, nnet->inputSize};
 
-    int counterexample = 0;
+//     int counterexample = 0;
 
-    for (int n = 0; n < 10; n++) {
-        for (int i = 0; i < nnet->inputSize; i++) {
-            if (i == nnet->sens_feature_idx) {
-                a0[i] = nnet->mins[i];  // PA = 0
-                a1[i] = nnet->maxes[i]; // PA = 1
-            } else {
-                float lower = subp->input.lower_matrix.data[i];
-                float upper = subp->input.upper_matrix.data[i];
-                float middle = lower + ((float)n / 10.0f) * (upper - lower);
-                a0[i] = middle;
-                a1[i] = middle;
-            }
-        }
+//     for (int n = 0; n < 10; n++) {
+//         for (int i = 0; i < nnet->inputSize; i++) {
+//             if (i == nnet->sens_feature_idx) {
+//                 a0[i] = nnet->mins[i];  // PA = 0
+//                 a1[i] = nnet->maxes[i]; // PA = 1
+//             } else {
+//                 float lower = subp->input.lower_matrix.data[i];
+//                 float upper = subp->input.upper_matrix.data[i];
+//                 float middle = lower + ((float)n / 10.0f) * (upper - lower);
+//                 a0[i] = middle;
+//                 a1[i] = middle;
+//             }
+//         }
 
-        float out0[nnet->outputSize];
-        float out1[nnet->outputSize];
-        struct Matrix output0 = {out0, nnet->outputSize, 1};
-        struct Matrix output1 = {out1, nnet->outputSize, 1};
+//         float out0[nnet->outputSize];
+//         float out1[nnet->outputSize];
+//         struct Matrix output0 = {out0, nnet->outputSize, 1};
+//         struct Matrix output1 = {out1, nnet->outputSize, 1};
 
-        forward_prop(nnet, &adv0, &output0);
-        forward_prop(nnet, &adv1, &output1);
+//         forward_prop(nnet, &adv0, &output0);
+//         forward_prop(nnet, &adv1, &output1);
 
-        // Apply sigmoid to get probabilities between 0 and 1
-        float sigmoid_out0 = sigmoid(output0.data[0]);
-        float sigmoid_out1 = sigmoid(output1.data[0]);
+//         // Apply sigmoid to get probabilities between 0 and 1
+//         float sigmoid_out0 = sigmoid(output0.data[0]);
+//         float sigmoid_out1 = sigmoid(output1.data[0]);
         
-        // Decision based on sigmoid output (threshold = 0.5)
-        int out0Pos = sigmoid_out0 > 0.5f;
-        int out1Pos = sigmoid_out1 > 0.5f;
+//         // Decision based on sigmoid output (threshold = 0.5)
+//         int out0Pos = sigmoid_out0 > 0.5f;
+//         int out1Pos = sigmoid_out1 > 0.5f;
 
-        // int out0Pos = output0.data[0] > 0;
-        // int out1Pos = output1.data[0] > 0;
+//         // int out0Pos = output0.data[0] > 0;
+//         // int out1Pos = output1.data[0] > 0;
 
-        if (out0Pos != out1Pos) {
-            counterexample_count++;
+//         if (out0Pos != out1Pos) {
+//             counterexample_count++;
 
-            // PA = 0
-            for (int i = 0; i < nnet->inputSize; i++) {
-                fprintf(ce_file, "%s,", decode_feature(i, a0[i]));
-            }
-            fprintf(ce_file, "%.6f,%s\n", sigmoid_out0, out0Pos ? "POSITIVE" : "NEGATIVE");
+//             // PA = 0
+//             for (int i = 0; i < nnet->inputSize; i++) {
+//                 fprintf(ce_file, "%s,", decode_feature(i, a0[i]));
+//             }
+//             fprintf(ce_file, "%.6f,%s\n", sigmoid_out0, out0Pos ? "POSITIVE" : "NEGATIVE");
 
-            // PA = 1
-            for (int i = 0; i < nnet->inputSize; i++) {
-                fprintf(ce_file, "%s,", decode_feature(i, a1[i]));
-            }
-            fprintf(ce_file, "%.6f,%s\n", sigmoid_out1, out1Pos ? "POSITIVE" : "NEGATIVE");
+//             // PA = 1
+//             for (int i = 0; i < nnet->inputSize; i++) {
+//                 fprintf(ce_file, "%s,", decode_feature(i, a1[i]));
+//             }
+//             fprintf(ce_file, "%.6f,%s\n", sigmoid_out1, out1Pos ? "POSITIVE" : "NEGATIVE");
 
-            fflush(ce_file);
-            counterexample++;
-            return 1; 
-        }
-    }
+//             fflush(ce_file);
+//             counterexample++;
+//             return 1; 
+//         }
+//     }
 
-    // if(counterexample == 0){
-    //     // fprintf(stdout, "TIDAK ADA\n");
-    // }
+//     // if(counterexample == 0){
+//     //     // fprintf(stdout, "TIDAK ADA\n");
+//     // }
 
-    // return counterexample; // No counterexample found
-    return 0;
-}
+//     // return counterexample; // No counterexample found
+//     return 0;
+// }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////// GERMAN CREDIT
 
@@ -634,3 +634,186 @@ int check_adv(struct NNet* nnet, struct Subproblem *subp) {
 //     // return counterexample; // No counterexample found
 //     return 0;
 // }
+
+/////////////////////////////////////////////////////////////////////////////////////////////////// DEFAULT_CREDIT
+
+
+static const char* sex_map[] = { "Male", "Female" };
+
+static const char* education_map[] = {
+    "Graduate", "University", "High-school", "Others", "Unknown-5", "Unknown-6"
+};
+
+static const char* marriage_map[] = {
+    "Married", "Single", "Others"
+};
+
+static const char* payment_status_map[] = { "No-delay", "Delay" };
+
+const char* decode_bin(float value, float min_val, float max_val, int n_bins) {
+    static char buffer[32];
+    int idx = (int)round(value);
+    float bin_width = (max_val - min_val) / n_bins;
+    float midpoint = min_val + (idx + 0.5f) * bin_width;
+    snprintf(buffer, sizeof(buffer), "%.0f", midpoint);
+    return buffer;
+}
+
+const char* decode_feature(int feature_index, float value) {
+    int idx = (int)round(value);
+    switch (feature_index) {
+        case 0: return decode_bin(value, 10000.0f, 1000000.0f, 20);  // LIMIT_BAL
+        case 1: return decode_bin(value, 21.0f, 79.0f, 20);  // AGE
+        case 2: return payment_status_map[idx];  // PAY_1
+        case 3: return payment_status_map[idx];  // PAY_2
+        case 4: return payment_status_map[idx];  // PAY_3
+        case 5: return payment_status_map[idx];  // PAY_4
+        case 6: return payment_status_map[idx];  // PAY_5
+        case 7: return payment_status_map[idx];  // PAY_6
+        case 8: return decode_bin(value, -165580.0f, 964511.0f, 20);  // BILL_AMT1
+        case 9: return decode_bin(value, -69777.0f, 983931.0f, 20);  // BILL_AMT2
+        case 10: return decode_bin(value, -157264.0f, 1664089.0f, 20);  // BILL_AMT3
+        case 11: return decode_bin(value, -170000.0f, 891586.0f, 20);  // BILL_AMT4
+        case 12: return decode_bin(value, -81334.0f, 927171.0f, 20);  // BILL_AMT5
+        case 13: return decode_bin(value, -339603.0f, 961664.0f, 20);  // BILL_AMT6
+        case 14: return decode_bin(value, 0.0f, 873552.0f, 20);  // PAY_AMT1
+        case 15: return decode_bin(value, 0.0f, 1684259.0f, 20);  // PAY_AMT2
+        case 16: return decode_bin(value, 0.0f, 896040.0f, 20);  // PAY_AMT3
+        case 17: return decode_bin(value, 0.0f, 621000.0f, 20);  // PAY_AMT4
+        case 18: return decode_bin(value, 0.0f, 426529.0f, 20);  // PAY_AMT5
+        case 19: return decode_bin(value, 0.0f, 528666.0f, 20);  // PAY_AMT6
+        case 20: return sex_map[idx];  // SEX_2
+        case 21: case 22: case 23: case 24: case 25: case 26: {  // EDUCATION_1 to EDUCATION_6
+            static char buffer[32];
+            snprintf(buffer, sizeof(buffer), "Edu-%d=%d", feature_index-20, idx);
+            return buffer;
+        }
+        case 27: case 28: case 29: {  // MARRIAGE_1 to MARRIAGE_3
+            static char buffer[32];
+            snprintf(buffer, sizeof(buffer), "Mar-%d=%d", feature_index-26, idx);
+            return buffer;
+        }
+        default: {
+            static char buffer[32];
+            snprintf(buffer, sizeof(buffer), "%.0f", value);
+            return buffer;
+        }
+    }
+}
+
+float sigmoid(float x) {
+    return 1.0f / (1.0f + expf(-x));
+}
+
+
+// Main check_adv function
+int check_adv(struct NNet* nnet, struct Subproblem *subp) {
+    static int counterexample_count = 0;
+    static FILE* ce_file = NULL;
+
+    static const char* feature_names[] = {
+        "LIMIT_BAL",
+        "AGE",
+        "PAY_1",
+        "PAY_2",
+        "PAY_3",
+        "PAY_4",
+        "PAY_5",
+        "PAY_6",
+        "BILL_AMT1",
+        "BILL_AMT2",
+        "BILL_AMT3",
+        "BILL_AMT4",
+        "BILL_AMT5",
+        "BILL_AMT6",
+        "PAY_AMT1",
+        "PAY_AMT2",
+        "PAY_AMT3",
+        "PAY_AMT4",
+        "PAY_AMT5",
+        "PAY_AMT6",
+        "SEX_2",
+        "EDUCATION_1",
+        "EDUCATION_2",
+        "EDUCATION_3",
+        "EDUCATION_4",
+        "EDUCATION_5",
+        "EDUCATION_6",
+        "MARRIAGE_1",
+        "MARRIAGE_2",
+        "MARRIAGE_3"
+    };
+
+    if (ce_file == NULL) {
+        ce_file = fopen("FairQuant-Artifact/FairQuant/counterexamples.csv", "w");
+        if (!ce_file) {
+            printf("Failed to open counterexamples.csv\n");
+            return 0;
+        }
+        for (int i = 0; i < nnet->inputSize; i++) {
+            fprintf(ce_file, "%s,", feature_names[i]);
+        }
+        fprintf(ce_file, "output,decision\n");
+        fflush(ce_file);
+    }
+
+    float a0[nnet->inputSize];
+    float a1[nnet->inputSize];
+    struct Matrix adv0 = {a0, 1, nnet->inputSize};
+    struct Matrix adv1 = {a1, 1, nnet->inputSize};
+
+    int counterexample = 0;
+
+    for (int n = 0; n < 10; n++) {
+        for (int i = 0; i < nnet->inputSize; i++) {
+            if (i == nnet->sens_feature_idx) {
+                a0[i] = nnet->mins[i];  // SEX_2 = 0 (Male)
+                a1[i] = nnet->maxes[i]; // SEX_2 = 1 (Female)
+            } else {
+                float lower = subp->input.lower_matrix.data[i];
+                float upper = subp->input.upper_matrix.data[i];
+                float middle = lower + ((float)n / 10.0f) * (upper - lower);
+                a0[i] = middle;
+                a1[i] = middle;
+            }
+        }
+
+        float out0[nnet->outputSize];
+        float out1[nnet->outputSize];
+        struct Matrix output0 = {out0, nnet->outputSize, 1};
+        struct Matrix output1 = {out1, nnet->outputSize, 1};
+
+        forward_prop(nnet, &adv0, &output0);
+        forward_prop(nnet, &adv1, &output1);
+
+        // Apply sigmoid to get probabilities between 0 and 1
+        float sigmoid_out0 = sigmoid(output0.data[0]);
+        float sigmoid_out1 = sigmoid(output1.data[0]);
+        
+        // Decision based on sigmoid output (threshold = 0.5)
+        int out0Pos = sigmoid_out0 > 0.5f;
+        int out1Pos = sigmoid_out1 > 0.5f;
+
+        if (out0Pos != out1Pos) {
+            counterexample_count++;
+
+            // SEX_2 = 0
+            for (int i = 0; i < nnet->inputSize; i++) {
+                fprintf(ce_file, "%s,", decode_feature(i, a0[i]));
+            }
+            fprintf(ce_file, "%.6f,%s\n", sigmoid_out0, out0Pos ? "POSITIVE" : "NEGATIVE");
+
+            // SEX_2 = 1
+            for (int i = 0; i < nnet->inputSize; i++) {
+                fprintf(ce_file, "%s,", decode_feature(i, a1[i]));
+            }
+            fprintf(ce_file, "%.6f,%s\n", sigmoid_out1, out1Pos ? "POSITIVE" : "NEGATIVE");
+
+            fflush(ce_file);
+            counterexample++;
+            return 1; 
+        }
+    }
+
+    return 0;
+}
